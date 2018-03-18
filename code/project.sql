@@ -280,3 +280,113 @@ values(9);
 insert into Traveler
 values(10);
 
+insert into Posting
+values(1, '2018-01-01', '2018-01-30', 'test1', 1);
+
+insert into Posting
+values(2, '2018-02-01', '2018-02-28', 'test2', 2);
+
+insert into Posting
+values(3, '2017-03-01', '2017-03-30', 'test3', 2);
+
+insert into Posting
+values(4, '2017-04-01', '2017-04-30', 'test4', 3);
+
+insert into Posting
+values(5, '2017-05-01', '2017-05-30', 'test5', 3);
+
+insert into Posting
+values(6, '2017-06-01', '2017-06-30', 'test6', 3);
+
+insert into Posting
+values(7, '2017-07-01', '2017-07-30', 'test7', 4);
+
+insert into Posting
+values(8, '2017-08-01', '2017-08-30', 'test8', 4);
+
+insert into Posting
+values(9, '2017-09-01', '2017-09-30', 'test9', 4);
+
+insert into Posting
+values(10, '2017-10-01', '2017-10-30', 'test10', 4);
+
+insert into Host_Reviews
+values(1, 2, 3);
+
+insert into Host_Reviews
+values(3, 2, 2);
+
+insert into Host_Reviews
+values(4, 2, 5);
+
+insert into Host_Reviews
+values(5, 2, 1);
+
+insert into Host_Reviews
+values(6, 2, 3);
+
+insert into Host_Reviews
+values(7, 2, 9);
+
+insert into Host_Reviews
+values(2, 4, 3);
+
+insert into Host_Reviews
+values(3, 4, 8);
+
+insert into Host_Reviews
+values(5, 4, 10);
+
+insert into Host_Reviews
+values(8, 4, 9);
+
+insert into Host_Reviews
+values(9, 4, 5);
+
+insert into Traveler_Reviews
+values(9, 'V6T1Z4', '2324 Wesbrook Mall', 8);
+
+insert into Traveler_Reviews
+values(8, 'M5S3G3', '100 St. George St.', 5);
+
+insert into Traveler_Reviews
+values(7, 'N2L3G1', '200 University Ave W', 3);
+
+insert into Traveler_Reviews
+values(6, 'H3A0G4', '845 Sherbrooke St W', 9);
+
+insert into Traveler_Reviews
+values(5, 'L8S4L8', '1280 Main St W', 2);
+
+insert into Traveler_Reviews
+values(4, 'K7L3N6', '99 University Ave', 7);
+
+insert into Traveler_Reviews
+values(3, 'V5A1S6', '8888 University Dr', 9);
+
+insert into Traveler_Reviews
+values(2, 'V8P5C2', '3800 Finnerty Rd', 6);
+
+insert into Traveler_Reviews
+values(1, 'T6G2R3', '116 St and 85 Ave', 8);
+
+insert into Traveler_Reviews
+values(5, 'T2N1N4', '2500 University Dr NW', 7);
+
+insert into Contract_Signs
+values(1, '2018-01-01', '2018-01-30', 0, 1, 2);
+
+insert into Contract_Signs
+values(2, '2018-01-01', '2018-01-30', 0, 1, 2);
+
+insert into Contract_Signs
+values(3, '2018-01-01', '2018-01-30', 0, 1, 2);
+
+insert into Contract_Signs
+values(4, '2018-01-01', '2018-01-30', 0, 1, 2);
+
+insert into Contract_Signs
+values(5, '2018-01-01', '2018-01-30', 0, 1, 2);
+
+ 
+
