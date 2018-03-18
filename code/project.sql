@@ -11,15 +11,15 @@ drop table LICENSE;
 drop table DRIVER;
 drop table BRANCH;
 
-drop table University;
-drop table Student;
-drop table Hosts;
-drop table Traveler;
-drop table Residence;
 drop table Host_Reviews;
 drop table Traveler_Reviews;
-drop table Posting;
 drop table Contract_Signs;
+drop table Posting;
+drop table Residence;
+drop table Hosts;
+drop table Traveler;
+drop table Student;
+drop table University;
 
 
 CREATE TABLE University (
