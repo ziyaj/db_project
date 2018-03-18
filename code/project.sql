@@ -13,7 +13,7 @@ CREATE TABLE University (
 unid INTEGER,
 name CHAR(50),
 PRIMARY KEY (unid)
-;
+);
 
 grant select on University to public;
 
