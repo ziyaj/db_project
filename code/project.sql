@@ -81,7 +81,7 @@ hostid INTEGER,
 rating INTEGER,
 PRIMARY KEY (traveler_id, hostid),
 FOREIGN KEY (traveler_id) REFERENCES Traveler (cid),
-FOREIGN KEY (hostid) REFERENCES Host (cid)
+FOREIGN KEY (hostid) REFERENCES Hosts (cid)
 ON DELETE CASCADE
 );
 grant select on Host_Reviews to public;
@@ -107,7 +107,7 @@ todate DATE NOT NULL,
 description CHAR(140),
 hostid INTEGER NOT NULL,
 PRIMARY KEY (pid),
-FOREIGN KEY (hostid) REFERENCES Host (cid)
+FOREIGN KEY (hostid) REFERENCES Hosts (cid)
 ON DELETE CASCADE
 );
 grant select on Posting to public;
@@ -122,7 +122,7 @@ hostid INTEGER NOT NULL,
 traveler_id INTEGER NOT NULL,
 PRIMARY KEY (contract_id),
 FOREIGN KEY (postal_code, address) REFERENCES Residence,
-FOREIGN KEY (hostid) REFERENCES Host (cid),
+FOREIGN KEY (hostid) REFERENCES Hosts (cid),
 FOREIGN KEY (traveler_id) REFERENCES Traveler (cid)
 );
 grant select on Contract_Signs to public;
