@@ -27,7 +27,7 @@ is_active INTEGER NOT NULL,
 PRIMARY KEY (cid),
 FOREIGN KEY (unid) REFERENCES University
 ON UPDATE CASCADE
-)
+);
 
 grant select on Student to public;
 
@@ -39,7 +39,7 @@ address CHAR(30) NOT NULL,
 PRIMARY KEY (cid),
 FOREIGN KEY (cid) REFERENCES Student,
 FOREIGN KEY (postal_code, address) REFERENCES Residence
-)
+);
 
 grant select on Hosts to public;
 
@@ -47,7 +47,7 @@ CREATE TABLE Traveler (
 cid INTEGER,
 PRIMARY KEY (cid),
 FOREIGN KEY (cid) REFERENCES Student
-)
+);
 
 grant select on Traveler to public;
 
@@ -59,7 +59,7 @@ link CHAR(50),
 gender CHAR(1),
 daily_rate INTEGER NOT NULL,
 PRIMARY KEY (postal_code, address)
-)
+);
 
 grant select on Residence to public;
 
@@ -71,7 +71,7 @@ PRIMARY KEY (traveler_id, hostid),
 FOREIGN KEY (traveler_id) REFERENCES Traveler (cid),
 FOREIGN KEY (hostid) REFERENCES Host (cid)
 ON DELETE CASCADE
-)
+);
 
 grant select on Host_Reviews to public;
 
@@ -84,7 +84,7 @@ PRIMARY KEY (traveler_id, postal_code, address),
 FOREIGN KEY (postal_code, address) REFERENCES Residence
 ON DELETE CASCADE,
 FOREIGN KEY (traveler_id) REFERENCES Traveler (cid)
-)
+);
 
 grant select on Traveler_Reviews to public;
 
@@ -97,7 +97,7 @@ hostid INTEGER NOT NULL,
 PRIMARY KEY (pid),
 FOREIGN KEY (hostid) REFERENCES Host (cid)
 ON DELETE CASCADE
-)
+);
 
 grant select on Posting to public;
 
@@ -112,7 +112,7 @@ PRIMARY KEY (contract_id),
 FOREIGN KEY (postal_code, address) REFERENCES Residence,
 FOREIGN KEY (hostid) REFERENCES Host (cid),
 FOREIGN KEY (traveler_id) REFERENCES Traveler (cid)
-)
+);
 
 grant select on Contract_Signs to public;
 
