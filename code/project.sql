@@ -6,6 +6,10 @@ drop table titles;
 drop table publishers;
 drop table authors;
 drop table editors;
+drop table EXAM;
+drop table LICENSE;
+drop table DRIVER;
+drop table BRANCH;
 
 drop table University;
 drop table Student;
@@ -44,7 +48,7 @@ CREATE TABLE Hosts (
 cid INTEGER,
 is_checked INTEGER NOT NULL,
 postal_code CHAR(6) NOT NULL,
-address CHAR(30) NOT NULL,
+address CHAR(50) NOT NULL,
 PRIMARY KEY (cid),
 FOREIGN KEY (cid) REFERENCES Student,
 FOREIGN KEY (postal_code, address) REFERENCES Residence
@@ -63,7 +67,7 @@ grant select on Traveler to public;
 
 CREATE TABLE Residence (
 postal_code CHAR(6),
-address CHAR(30),
+address CHAR(50),
 link CHAR(50),
 gender CHAR(1),
 daily_rate INTEGER NOT NULL,
@@ -87,7 +91,7 @@ grant select on Host_Reviews to public;
 CREATE TABLE Traveler_Reviews (
 traveler_id INTEGER,
 postal_code CHAR(6),
-address CHAR(30),
+address CHAR(50),
 rating INTEGER NOT NULL,
 PRIMARY KEY (traveler_id, postal_code, address),
 FOREIGN KEY (postal_code, address) REFERENCES Residence
