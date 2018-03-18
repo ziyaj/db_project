@@ -3,4 +3,6 @@
 *.aux
 *.gz
 *.zip
+.idea/*
+*.class
 
