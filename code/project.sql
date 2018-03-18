@@ -1,3 +1,4 @@
+-- Drop pre-existing tables
 drop table salesdetails;
 drop table sales;
 drop table titleditors;
@@ -22,6 +23,7 @@ drop table Student;
 drop table University;
 
 
+-- Create tables
 CREATE TABLE University (
 unid INTEGER,
 name CHAR(50),
@@ -121,12 +123,13 @@ is_cancelled INTEGER NOT NULL,
 hostid INTEGER NOT NULL,
 traveler_id INTEGER NOT NULL,
 PRIMARY KEY (contract_id),
-FOREIGN KEY (postal_code, address) REFERENCES Residence,
 FOREIGN KEY (hostid) REFERENCES Hosts (cid),
 FOREIGN KEY (traveler_id) REFERENCES Traveler (cid)
 );
 grant select on Contract_Signs to public;
 
+
+-- Populate data
 insert into University
 values(1, 'UBC');
 
