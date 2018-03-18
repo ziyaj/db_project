@@ -1,3 +1,12 @@
+drop table salesdetails;
+drop table sales;
+drop table titleditors;
+drop table titleauthors;
+drop table titles;
+drop table publishers;
+drop table authors;
+drop table editors;
+
 drop table University;
 drop table Student;
 drop table Hosts;
@@ -147,34 +156,34 @@ insert into University
 values(10, 'University of Waterloo');
 
 insert into Student
-values(1, 'Harry Potter', 'M', 1, 70, 1, 1);
+values(1, 'Harry Potter', 'M', 70, 1, 1);
 
 insert into Student
-values(2, 'Cersei Lannister', 'F', 1, 5, 2, 1);
+values(2, 'Cersei Lannister', 'F', 5, 2, 1);
 
 insert into Student
-values(3, 'Guillaume Lux', 'F', 1, 5, 3, 1);
+values(3, 'Guillaume Lux', 'F', 5, 3, 1);
 
 insert into Student
-values(4, 'Jaap Eris', 'M', 1, 5, 4, 1);
+values(4, 'Jaap Eris', 'M', 5, 4, 1);
 
 insert into Student
-values(5, 'Kidlat Urbanus', 'F', 1, 5, 5, 1);
+values(5, 'Kidlat Urbanus', 'F', 5, 5, 1);
 
 insert into Student
-values(6, 'Hannah Abbott', 'F', 1, 5, 6, 1);
+values(6, 'Hannah Abbott', 'F', 5, 6, 1);
 
 insert into Student
-values(7, 'Ludo Bagman', 'F', 1, 5, 7, 1);
+values(7, 'Ludo Bagman', 'F', 5, 7, 1);
 
 insert into Student
-values(8, 'Bathilda Bagshot', 'F', 1, 5, 9, 1);
+values(8, 'Bathilda Bagshot', 'F', 5, 9, 1);
 
 insert into Student
-values(9, 'Katie Bell', 'F', 1, 5, 8, 1);
+values(9, 'Katie Bell', 'F', 5, 8, 1);
 
 insert into Student
-values(10, 'Cuthbert Binns', 'F', 1, 5, 10, 1);
+values(10, 'Cuthbert Binns', 'F', 5, 10, 1);
 
 insert into Hosts
 values(1, 0, 'V6T1Z4', '2324 Wesbrook Mall');
