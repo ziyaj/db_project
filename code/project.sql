@@ -26,7 +26,7 @@ unid INTEGER NOT NULL,
 is_active INTEGER NOT NULL,
 PRIMARY KEY (cid),
 FOREIGN KEY (unid) REFERENCES University
-ON UPDATE CASCADE
+--ON UPDATE CASCADE ?????
 );
 
 grant select on Student to public;
