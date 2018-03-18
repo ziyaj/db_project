@@ -190,6 +190,36 @@ values(9, 'Katie Bell', 'F', 5, 8, 1);
 insert into Student
 values(10, 'Cuthbert Binns', 'F', 5, 10, 1);
 
+insert into Residence
+values ('V6T1Z4', '2324 Wesbrook Mall', 'www.google.ca', 'M', 35);
+
+insert into Residence
+values ('M5S3G3', '100 St. George St.', 'www.google.ca', 'M', 35);
+
+insert into Residence
+values ('N2L3G1', '200 University Ave W', 'www.google.ca', 'M', 35);
+
+insert into Residence
+values ('H3A0G4', '845 Sherbrooke St W', 'www.google.ca', 'M', 35);
+
+insert into Residence
+values ('L8S4L8', '1280 Main St W', 'www.google.ca', 'M', 35);
+
+insert into Residence
+values ('K7L3N6', '99 University Ave', 'www.google.ca', 'M', 35);
+
+insert into Residence
+values ('V5A1S6', '8888 University Dr', 'www.google.ca', 'M', 35);
+
+insert into Residence
+values ('V8P5C2', '3800 Finnerty Rd', 'www.google.ca', 'M', 35);
+
+insert into Residence
+values ('T6G2R3', '116 St and 85 Ave', 'www.google.ca', 'M', 35);
+
+insert into Residence
+values ('T2N1N4', '2500 University Dr NW', 'www.google.ca', 'M', 35);
+
 insert into Hosts
 values(1, 0, 'V6T1Z4', '2324 Wesbrook Mall');
 
