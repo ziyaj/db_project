@@ -3,6 +3,7 @@ package com.team80;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.DriverManager;
 
 public class App {
     private JButton button_msg;
@@ -14,6 +15,7 @@ public class App {
             @Override
             public void actionPerformed(ActionEvent e) {
                 JOptionPane.showMessageDialog(null, "304 project initial commit");
+                PersistenceLayer.connectOracle();
             }
         });
     }
