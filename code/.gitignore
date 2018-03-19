@@ -2,4 +2,6 @@ out/*
 .idea/*
 .idea/workspace.xml
 code.iml
+*.zip
+
 
