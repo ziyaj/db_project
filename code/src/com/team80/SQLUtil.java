@@ -30,4 +30,19 @@ public class SQLUtil {
         }
     }
 
+    public static ResultSet findAllPosts() {
+        try {
+            final PersistenceLayer persistenceLayer = PersistenceLayer.getInstance();
+            final Connection con = persistenceLayer.getConnection();
+            final Statement stmt = con.createStatement();
+            // stmt is a statement object
+            final ResultSet rs = stmt.executeQuery("SELECT * FROM Posting");
+            return rs;
+        } catch(final SQLException e) {
+            System.err.println("An error occurred while executing query.");
+            System.err.println(e.getMessage());
+        }
+        return null;
+    }
+
 }

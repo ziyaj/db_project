@@ -131,10 +131,10 @@ grant select on Contract_Signs to public;
 
 -- Populate data
 insert into University
-values(1, 'UBC');
+values(1, 'The University of British Columbia');
 
 insert into University
-values(2, 'SFU');
+values(2, 'Simon Fraser University');
 
 insert into University
 values(3, 'University of Victoria');
@@ -160,35 +160,95 @@ values(9, 'University of Manitoba');
 insert into University
 values(10, 'University of Waterloo');
 
+insert into University
+values(11, 'Massachusetts Institute of Technology');
+
+insert into University
+values(12, 'Stanford University');
+
+insert into University
+values(13, 'University of California, Berkeley');
+
+insert into University
+values(14, 'Carnegie Mellon University');
+
+insert into University
+values(15, 'University of Washington');
+
+insert into University
+values(16, 'Princeton Univeristy');
+
+insert into University
+values(17, 'Cornell University');
+
+insert into University
+values(18, 'University of Illinois Urbana-Champaign');
+
+insert into University
+values(19, 'University of Michigan');
+
+insert into University
+values(20, 'Georgia Institute of Technology');
+
 insert into Student
 values(1, 'Harry Potter', 'M', 70, 1, 1);
 
 insert into Student
-values(2, 'Cersei Lannister', 'F', 5, 2, 1);
+values(2, 'Cersei Lannister', 'F', 35, 2, 1);
 
 insert into Student
-values(3, 'Guillaume Lux', 'F', 5, 3, 1);
+values(3, 'Guillaume Lux', 'F', 20, 3, 1);
 
 insert into Student
-values(4, 'Jaap Eris', 'M', 5, 4, 1);
+values(4, 'Jaap Eris', 'M', 24, 4, 1);
 
 insert into Student
-values(5, 'Kidlat Urbanus', 'F', 5, 5, 1);
+values(5, 'Kidlat Urbanus', 'F', 18, 5, 1);
 
 insert into Student
 values(6, 'Hannah Abbott', 'F', 5, 6, 1);
 
 insert into Student
-values(7, 'Ludo Bagman', 'F', 5, 7, 1);
+values(7, 'Ludo Bagman', 'M', 42, 7, 1);
 
 insert into Student
-values(8, 'Bathilda Bagshot', 'F', 5, 9, 1);
+values(8, 'Bathilda Bagshot', 'F', 51, 9, 1);
 
 insert into Student
-values(9, 'Katie Bell', 'F', 5, 8, 1);
+values(9, 'Katie Bell', 'F', 33, 8, 1);
 
 insert into Student
-values(10, 'Cuthbert Binns', 'F', 5, 10, 1);
+values(10, 'Cuthbert Binns', 'F', 9, 10, 1);
+
+insert into Student
+values(11, 'Charles Leiserson', 'M', 9, 11, 1);
+
+insert into Student
+values(12, 'Robert Floyd', 'M', 29, 12, 0);
+
+insert into Student
+values(13, 'Babara Liskov', 'F', 30, 11, 1);
+
+insert into Student
+values(14, 'Brian Kernighan', 'M', 55, 16, 1);
+
+insert into Student
+values(15, 'Jeffery Dean', 'M', 25, 15, 1);
+
+insert into Student
+values(16, 'Guanyao Fu', 'M', 15, 20, 1);
+
+insert into Student
+values(17, 'Randal Bryant', 'M', 32, 19, 1);
+
+insert into Student
+values(18, 'Ada Lovelace', 'F', 23, 13, 0);
+
+insert into Student
+values(19, 'Marie Currie', 'F', 14, 14, 0);
+
+insert into Student
+values(20, 'Eric Xing', 'M', 18, 18, 1);
 
 insert into Residence
 values ('V6T1Z4', '2324 Wesbrook Mall', 'www.google.ca', 'M', 35);
@@ -388,5 +448,5 @@ values(4, '2018-01-01', '2018-01-30', 0, 1, 2);
 insert into Contract_Signs
 values(5, '2018-01-01', '2018-01-30', 0, 1, 2);
 
- 
+
 
