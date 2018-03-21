@@ -251,34 +251,55 @@ insert into Student
 values(20, 'Eric Xing', 'M', 18, 18, 1);
 
 insert into Residence
-values ('V6T1Z4', '2324 Wesbrook Mall', 'www.google.ca', 'M', 35);
+values ('V6T1Z4', '2324 Wesbrook Mall', 'www.ubc.ca', 'M', 35);
 
 insert into Residence
-values ('M5S3G3', '100 St. George St.', 'www.google.ca', 'M', 35);
+values ('M5S3G3', '100 St. George St.', 'www.utoronto.ca', 'F', 62);
 
 insert into Residence
-values ('N2L3G1', '200 University Ave W', 'www.google.ca', 'M', 35);
+values ('N2L3G1', '200 University Ave W', 'uwaterloo.ca', 'M', 30);
 
 insert into Residence
-values ('H3A0G4', '845 Sherbrooke St W', 'www.google.ca', 'M', 35);
+values ('H3A0G4', '845 Sherbrooke St W', 'www.mcgill.ca', 'F', 50);
 
 insert into Residence
-values ('L8S4L8', '1280 Main St W', 'www.google.ca', 'M', 35);
+values ('L8S4L8', '1280 Main St W', 'www.mcmaster.ca', 'M', 40);
 
 insert into Residence
-values ('K7L3N6', '99 University Ave', 'www.google.ca', 'M', 35);
+values ('K7L3N6', '99 University Ave', 'www.queensu.ca', 'F', 32);
 
 insert into Residence
-values ('V5A1S6', '8888 University Dr', 'www.google.ca', 'M', 35);
+values ('V5A1S6', '8888 University Dr', 'www.sfu.ca', 'M', 28);
 
 insert into Residence
-values ('V8P5C2', '3800 Finnerty Rd', 'www.google.ca', 'M', 35);
+values ('V8P5C2', '3800 Finnerty Rd', 'www.uvic.ca', 'F', 30);
 
 insert into Residence
-values ('T6G2R3', '116 St and 85 Ave', 'www.google.ca', 'M', 35);
+values ('T6G2R3', '116 St and 85 Ave', 'www.ualberta.ca', 'M', 20);
 
 insert into Residence
-values ('T2N1N4', '2500 University Dr NW', 'www.google.ca', 'M', 35);
+values ('T2N1N4', '2500 University Dr NW', 'www.ucalgary.ca', 'M', 25);
+
+insert into Residence
+values ('02139', '77 Massachusetts Ave', 'web.mit.edu', 'M', 40);
+
+insert into Residence
+values ('94305', '450 Serra Mall', 'www.stanford.edu', 'F', 80);
+
+insert into Residence
+values ('94720', 'Berkeley', 'www.berkeley.edu', 'M', 65);
+
+insert into Residence
+values ('15213', '5000 Forbes Ave', 'www.stanford.edu', 'M', 42);
+
+insert into Residence
+values ('98195', 'Seattle', 'www.washington.edu', 'M', 38);
+
+insert into Residence
+values ('08544', 'Princeton', 'www.princeton.edu', 'F', 28);
+
+insert into Residence
+values ('14850', 'Ithaca', 'www.cornell.edu', 'M', 24);
 
 insert into Hosts
 values(1, 0, 'V6T1Z4', '2324 Wesbrook Mall');
