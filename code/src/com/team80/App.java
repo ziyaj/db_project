@@ -10,6 +10,15 @@ import java.awt.event.ActionListener;
 public class App {
     private JButton button_msg;
     private JPanel panelMain;
+    private JPasswordField passwordField1;
+    private JTabbedPane tabbedPane1;
+    private JPasswordField host_password;
+    private JTextField host_username;
+    private JTextField textField2;
+    private JButton submitButton;
+    private JPasswordField passwordField3;
+    private JButton submitButton1;
+    private JTextField textField3;
     private static PersistenceLayer persistenceLayer;
 
     public App() {
@@ -20,6 +29,18 @@ public class App {
                 SQLUtil.connectOracle();
                 persistenceLayer.closeConnection(); // actually this should be called when we close the app,
                 // but there is not such button yet
+            }
+        });
+        submitButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String username = host_username.getText();
+                String password = host_password.getText();
+                if (username.equals("leo") && password.equals("sb")) {
+                    JOptionPane.showMessageDialog(null, "Login successfully");
+                    JFrame host = new JFrame("host");
+                    host.setVisible(true);
+                }
             }
         });
     }
