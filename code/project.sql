@@ -47,12 +47,12 @@ grant select on Student to public;
 
 
 CREATE TABLE Residence (
-postal_code CHAR(6),
-address CHAR(50),
-link CHAR(50),
+rid INTEGER,
+roomno CHAR(5),
+residencename CHAR(30),
 gender CHAR(1),
 daily_rate INTEGER NOT NULL,
-PRIMARY KEY (postal_code, address)
+PRIMARY KEY (rid)
 );
 grant select on Residence to public;
 
@@ -60,11 +60,10 @@ grant select on Residence to public;
 CREATE TABLE Hosts (
 cid INTEGER,
 is_checked INTEGER NOT NULL,
-postal_code CHAR(6) NOT NULL,
-address CHAR(50) NOT NULL,
+rid INTEGER NOT NULL,
 PRIMARY KEY (cid),
 FOREIGN KEY (cid) REFERENCES Student,
-FOREIGN KEY (postal_code, address) REFERENCES Residence
+FOREIGN KEY (rid) REFERENCES Residence
 );
 grant select on Hosts to public;
 
@@ -91,11 +90,10 @@ grant select on Host_Reviews to public;
 
 CREATE TABLE Traveler_Reviews (
 traveler_id INTEGER,
-postal_code CHAR(6),
-address CHAR(50),
+rid INTEGER,
 rating INTEGER NOT NULL,
-PRIMARY KEY (traveler_id, postal_code, address),
-FOREIGN KEY (postal_code, address) REFERENCES Residence
+PRIMARY KEY (traveler_id, rid),
+FOREIGN KEY (rid) REFERENCES Residence
 ON DELETE CASCADE,
 FOREIGN KEY (traveler_id) REFERENCES Traveler (cid)
 );
@@ -251,85 +249,85 @@ insert into Student
 values(20, 'Eric Xing', 'M', 18, 18, 1);
 
 insert into Residence
-values ('V6T1Z4', '2324 Wesbrook Mall', 'www.ubc.ca', 'M', 35);
+values (1, '1024', 'Thunderbird Crescent', 'M', 35);
 
 insert into Residence
-values ('M5S3G3', '100 St. George St.', 'www.utoronto.ca', 'F', 62);
+values (2, '106C', 'Student Residence 1', 'F', 62);
 
 insert into Residence
-values ('N2L3G1', '200 University Ave W', 'uwaterloo.ca', 'M', 30);
+values (3, '237', 'Totem Park', 'M', 30);
 
 insert into Residence
-values ('H3A0G4', '845 Sherbrooke St W', 'www.mcgill.ca', 'F', 50);
+values (4, '221', 'Place Vanier', 'F', 50);
 
 insert into Residence
-values ('L8S4L8', '1280 Main St W', 'www.mcmaster.ca', 'M', 40);
+values (5, '304', 'Student Residence 5', 'M', 40);
 
 insert into Residence
-values ('K7L3N6', '99 University Ave', 'www.queensu.ca', 'F', 32);
+values (6, '321F', 'Church College', 'F', 32);
 
 insert into Residence
-values ('V5A1S6', '8888 University Dr', 'www.sfu.ca', 'M', 28);
+values (7, '2214A', 'University Residence 8', 'M', 28);
 
 insert into Residence
-values ('V8P5C2', '3800 Finnerty Rd', 'www.uvic.ca', 'F', 30);
+values (8, '104', 'Finnerty Residence 5', 'F', 30);
 
 insert into Residence
-values ('T6G2R3', '116 St and 85 Ave', 'www.ualberta.ca', 'M', 20);
+values (9, '332', 'Student Residence 3', 'M', 20);
 
 insert into Residence
-values ('T2N1N4', '2500 University Dr NW', 'www.ucalgary.ca', 'M', 25);
+values (10, '157', 'Marine Drive', 'M', 25);
 
 insert into Residence
-values ('02139', '77 Massachusetts Ave', 'web.mit.edu', 'M', 40);
+values (11, '246B', 'Saint George College', 'M', 40);
 
 insert into Residence
-values ('94305', '450 Serra Mall', 'www.stanford.edu', 'F', 80);
+values (12, '5213D', 'Serra Mall', 'F', 80);
 
 insert into Residence
-values ('94720', 'Berkeley', 'www.berkeley.edu', 'M', 65);
+values (13, '307C', 'Berkeley College', 'M', 65);
 
 insert into Residence
-values ('15213', '5000 Forbes Ave', 'www.stanford.edu', 'M', 42);
+values (14, '5152D', 'Forbes House', 'M', 42);
 
 insert into Residence
-values ('98195', 'Seattle', 'www.washington.edu', 'M', 38);
+values (15, '1005', 'Fraser Hall', 'M', 38);
 
 insert into Residence
-values ('08544', 'Princeton', 'www.princeton.edu', 'F', 28);
+values (16, '603', 'Princeton Place', 'F', 28);
 
 insert into Residence
-values ('14850', 'Ithaca', 'www.cornell.edu', 'M', 24);
+values (17, '221', 'Ithaca Park', 'M', 24);
 
 insert into Hosts
-values(1, 0, 'V6T1Z4', '2324 Wesbrook Mall');
+values(1, 0, 1);
 
 insert into Hosts
-values(2, 1, 'M5S3G3', '100 St. George St.');
+values(2, 1, 2);
 
 insert into Hosts
-values(3, 0, 'N2L3G1', '200 University Ave W');
+values(3, 0, 3);
 
 insert into Hosts
-values(4, 1, 'H3A0G4', '845 Sherbrooke St W');
+values(4, 1, 4);
 
 insert into Hosts
-values(5, 1, 'L8S4L8', '1280 Main St W');
+values(5, 1, 5);
 
 insert into Hosts
-values(6, 1, 'K7L3N6', '99 University Ave');
+values(6, 1, 6);
 
 insert into Hosts
-values(7, 1, 'V5A1S6', '8888 University Dr');
+values(7, 1, 7);
 
 insert into Hosts
-values(8, 0, 'V8P5C2', '3800 Finnerty Rd');
+values(8, 0, 8);
 
 insert into Hosts
-values(9, 1, 'T6G2R3', '116 St and 85 Ave');
+values(9, 1, 9);
 
 insert into Hosts
-values(10, 0, 'T2N1N4', '2500 University Dr NW');
+values(10, 0, 10);
 
 insert into Traveler
 values(1);
@@ -425,34 +423,34 @@ insert into Host_Reviews
 values(9, 4, 5);
 
 insert into Traveler_Reviews
-values(9, 'V6T1Z4', '2324 Wesbrook Mall', 8);
+values(9, 1, 8);
 
 insert into Traveler_Reviews
-values(8, 'M5S3G3', '100 St. George St.', 5);
+values(8, 2, 5);
 
 insert into Traveler_Reviews
-values(7, 'N2L3G1', '200 University Ave W', 3);
+values(7, 3, 3);
 
 insert into Traveler_Reviews
-values(6, 'H3A0G4', '845 Sherbrooke St W', 9);
+values(6, 4, 9);
 
 insert into Traveler_Reviews
-values(5, 'L8S4L8', '1280 Main St W', 2);
+values(5, 5, 2);
 
 insert into Traveler_Reviews
-values(4, 'K7L3N6', '99 University Ave', 7);
+values(4, 6, 7);
 
 insert into Traveler_Reviews
-values(3, 'V5A1S6', '8888 University Dr', 9);
+values(3, 7, 9);
 
 insert into Traveler_Reviews
-values(2, 'V8P5C2', '3800 Finnerty Rd', 6);
+values(2, 8, 6);
 
 insert into Traveler_Reviews
-values(1, 'T6G2R3', '116 St and 85 Ave', 8);
+values(1, 9, 8);
 
 insert into Traveler_Reviews
-values(5, 'T2N1N4', '2500 University Dr NW', 7);
+values(5, 10, 7);
 
 insert into Contract_Signs
 values(1, '2018-01-01', '2018-01-30', 0, 1, 2);
