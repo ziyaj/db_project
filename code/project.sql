@@ -115,6 +115,21 @@ FOREIGN KEY (traveler_id) REFERENCES Traveler (cid)
 );
 grant select on Contract_Signs to public;
 
+-- special view for posting info
+CREATE VIEW PostingInfo(pid, fromdate, todate, hostname, roomno, residencename, university, dailyrate) AS
+SELECT P.pid, P.fromdate, P.todate, S.name, H.roomno, H.residencename, U.name, H.daily_rate
+FROM Posting P, Hosts H, Student S, University U
+WHERE P.hostid = H.cid AND H.cid = S.cid AND S.unid = U.unid;
+
+-- special view for host rating
+CREATE VIEW HostRating(hostid, hostname, rating) AS
+SELECT H.cid, S.name, HR.rating
+FROM Hosts H, Student S, (SELECT TR.hostid AS id, AVG(TR.rating) AS rating
+                          FROM Traveler_Reviews TR, Hosts H
+                          WHERE TR.hostid = H.cid
+                          GROUP BY TR.hostid) HR
+WHERE H.cid = S.cid AND H.cid = HR.id;
+
 
 -- Populate data
 insert into University

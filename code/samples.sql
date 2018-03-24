@@ -16,6 +16,12 @@ SELECT P.pid, P.fromdate, P.todate, S.name, H.roomno, H.residencename, U.name, H
 FROM Posting P, Hosts H, Student S, University U
 WHERE P.hostid = H.cid AND H.cid = S.cid AND S.unid = U.unid;
 
+CREATE VIEW PostingInfo(pid, fromdate, todate, hostname, roomno, residencename, university, dailyrate) AS
+SELECT P.pid, P.fromdate, P.todate, S.name, H.roomno, H.residencename, U.name, H.daily_rate
+FROM Posting P, Hosts H, Student S, University U
+WHERE P.hostid = H.cid AND H.cid = S.cid AND S.unid = U.unid;
+
+
 -- 3. Division query
 -- find travellers who have been to every university (besides his or her own university)
 -- !!! Orcale syntax MINUS means EXCEPT
@@ -48,11 +54,28 @@ SELECT MIN(TR.rating)
 FROM Traveler_Reviews TR;
 
 -- 5. Nested Aggregation with group-by
--- Traveler: find the posts whose host has the highest/lowest rating
-SELECT TR.hostid, AVG(TR.rating)
-FROM Traveler_Reviews TR, Hosts H
-WHERE TR.hostid = H.cid
-GROUP BY TR.hostid
-ORDER BY AVG(TR.rating) DESC;
+-- Traveler: find heighest rating posts
+
+-- display hostid, hostname, and rating
+CREATE VIEW HostRating(hostid, hostname, rating) AS
+SELECT H.cid, S.name, HR.rating
+FROM Hosts H, Student S, (SELECT TR.hostid AS id, AVG(TR.rating) AS rating
+                          FROM Traveler_Reviews TR, Hosts H
+                          WHERE TR.hostid = H.cid
+                          GROUP BY TR.hostid) HR
+WHERE H.cid = S.cid AND H.cid = HR.id;
+
+
+-- select hosts with highest ratings
+SELECT HR.hostid, HR.hostname, HR.rating
+FROM HostRating HR
+WHERE HR.rating = (SELECT MAX(rating)
+                   FROM HostRating);
+
+-- select highest rated postings, only display the posting ids to make things easier
+SELECT HR.rating, HR.hostid, HR.hostname, P.pid
+FROM HostRating HR, Posting P
+WHERE HR.hostid = P.hostid AND HR.rating = (SELECT MAX(rating)
+                                         FROM HostRating);
 
 
