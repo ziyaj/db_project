@@ -1,23 +1,22 @@
 -- Drop pre-existing tables
-drop table salesdetails;
-drop table sales;
-drop table titleditors;
-drop table titleauthors;
-drop table titles;
-drop table publishers;
-drop table authors;
-drop table editors;
-drop table EXAM;
-drop table LICENSE;
-drop table DRIVER;
-drop table BRANCH;
+-- drop table salesdetails;
+-- drop table sales;
+-- drop table titleditors;
+-- drop table titleauthors;
+-- drop table titles;
+-- drop table publishers;
+-- drop table authors;
+-- drop table editors;
+-- drop table EXAM;
+-- drop table LICENSE;
+-- drop table DRIVER;
+-- drop table BRANCH;
 
 drop table Host_Reviews;
 drop table Traveler_Reviews;
 drop table Contract_Signs;
 drop table Posting;
 drop table Hosts;
-drop table Residence;
 drop table Traveler;
 drop table Student;
 drop table University;
@@ -46,24 +45,14 @@ FOREIGN KEY (unid) REFERENCES University
 grant select on Student to public;
 
 
-CREATE TABLE Residence (
-rid INTEGER,
-roomno CHAR(5),
-residencename CHAR(30),
-gender CHAR(1),
-daily_rate INTEGER NOT NULL,
-PRIMARY KEY (rid)
-);
-grant select on Residence to public;
-
-
 CREATE TABLE Hosts (
 cid INTEGER,
 is_checked INTEGER NOT NULL,
-rid INTEGER NOT NULL,
+roomno CHAR(5),
+residencename CHAR(30),
+daily_rate INTEGER NOT NULL,
 PRIMARY KEY (cid),
-FOREIGN KEY (cid) REFERENCES Student,
-FOREIGN KEY (rid) REFERENCES Residence
+FOREIGN KEY (cid) REFERENCES Student
 );
 grant select on Hosts to public;
 
@@ -90,10 +79,10 @@ grant select on Host_Reviews to public;
 
 CREATE TABLE Traveler_Reviews (
 traveler_id INTEGER,
-rid INTEGER,
+hostid INTEGER,
 rating INTEGER NOT NULL,
-PRIMARY KEY (traveler_id, rid),
-FOREIGN KEY (rid) REFERENCES Residence
+PRIMARY KEY (traveler_id, hostid),
+FOREIGN KEY (hostid) REFERENCES Hosts (cid)
 ON DELETE CASCADE,
 FOREIGN KEY (traveler_id) REFERENCES Traveler (cid)
 );
@@ -248,125 +237,65 @@ values(19, 'Marie Currie', 'F', 14, 14, 0);
 insert into Student
 values(20, 'Eric Xing', 'M', 18, 18, 1);
 
-insert into Residence
-values (1, '1024', 'Thunderbird Crescent', 'M', 35);
-
-insert into Residence
-values (2, '106C', 'Student Residence 1', 'F', 62);
-
-insert into Residence
-values (3, '237', 'Totem Park', 'M', 30);
-
-insert into Residence
-values (4, '221', 'Place Vanier', 'F', 50);
-
-insert into Residence
-values (5, '304', 'Student Residence 5', 'M', 40);
-
-insert into Residence
-values (6, '321F', 'Church College', 'F', 32);
-
-insert into Residence
-values (7, '2214A', 'University Residence 8', 'M', 28);
-
-insert into Residence
-values (8, '104', 'Finnerty Residence 5', 'F', 30);
-
-insert into Residence
-values (9, '332', 'Student Residence 3', 'M', 20);
-
-insert into Residence
-values (10, '157', 'Marine Drive', 'M', 25);
-
-insert into Residence
-values (11, '246B', 'Saint George College', 'M', 40);
-
-insert into Residence
-values (12, '5213D', 'Serra Mall', 'F', 80);
-
-insert into Residence
-values (13, '307C', 'Berkeley College', 'M', 65);
-
-insert into Residence
-values (14, '5152D', 'Forbes House', 'M', 42);
-
-insert into Residence
-values (15, '1005', 'Fraser Hall', 'M', 38);
-
-insert into Residence
-values (16, '603', 'Princeton Place', 'F', 28);
-
-insert into Residence
-values (17, '221', 'Ithaca Park', 'M', 24);
-
-insert into Residence
-values (18, '221', 'Ruce College', 'M', 24);
-
-insert into Residence
-values (19, '221', 'Haystack Hall', 'M', 24);
-
-insert into Residence
-values (20, '121', 'Mellon House', 'M', 24);
+insert into Hosts
+values(1, 0, '1024', 'Thunderbird Crescent', 35);
 
 insert into Hosts
-values(1, 0, 1);
+values(2, 1, '106C', 'Student Residence 1', 62);
 
 insert into Hosts
-values(2, 1, 2);
+values(3, 0, '237', 'Totem Park', 30);
 
 insert into Hosts
-values(3, 0, 3);
+values(4, 1, '221', 'Place Vanier', 50);
 
 insert into Hosts
-values(4, 1, 4);
+values(5, 1, '304', 'Student Residence 5', 40);
 
 insert into Hosts
-values(5, 1, 5);
+values(6, 1, '321F', 'Church College', 32);
 
 insert into Hosts
-values(6, 1, 6);
+values(7, 1, '2214A', 'University Residence 8', 28);
 
 insert into Hosts
-values(7, 1, 7);
+values(8, 0, '104', 'Finnerty Residence 5', 30);
 
 insert into Hosts
-values(8, 0, 8);
+values(9, 1, '332', 'Student Residence 3', 20);
 
 insert into Hosts
-values(9, 1, 9);
+values(10, 1, '157', 'Marine Drive', 25);
 
 insert into Hosts
-values(10, 1, 10);
+values(11, 0, '246B', 'Saint George College', 40);
 
 insert into Hosts
-values(11, 0, 11);
+values(12, 1, '5213D', 'Serra Mall', 80);
 
 insert into Hosts
-values(12, 1, 12);
+values(13, 0, '307C', 'Berkeley College', 65);
 
 insert into Hosts
-values(13, 0, 13);
+values(14, 1, '5152D', 'Forbes House', 42);
 
 insert into Hosts
-values(14, 1, 14);
+values(15, 0, '1005', 'Fraser Hall', 38);
 
 insert into Hosts
-values(15, 0, 15);
+values(16, 1, '603', 'Princeton Place', 28);
 
 insert into Hosts
-values(16, 1, 16);
+values(17, 0, '221', 'Ithaca Park', 24);
 
 insert into Hosts
-values(17, 0, 17);
+values(18, 0, '221', 'Ruce College', 24);
 
 insert into Hosts
-values(18, 0, 18);
+values(19, 1, '213', 'Haystack Hall', 34);
 
 insert into Hosts
-values(19, 1, 19);
-
-insert into Hosts
-values(20, 0, 20);
+values(20, 0, '121', 'Mellon House', 50);
 
 insert into Traveler
 values(1);
