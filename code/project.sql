@@ -225,7 +225,7 @@ insert into Student
 values(12, 'Robert Floyd', 'M', 29, 12, 0);
 
 insert into Student
-values(13, 'Babara Liskov', 'F', 30, 11, 1);
+values(13, 'Babara Liskov', 'F', 30, 17, 1);
 
 insert into Student
 values(14, 'Brian Kernighan', 'M', 55, 16, 1);
@@ -299,6 +299,15 @@ values (16, '603', 'Princeton Place', 'F', 28);
 insert into Residence
 values (17, '221', 'Ithaca Park', 'M', 24);
 
+insert into Residence
+values (18, '221', 'Ruce College', 'M', 24);
+
+insert into Residence
+values (19, '221', 'Haystack Hall', 'M', 24);
+
+insert into Residence
+values (20, '121', 'Mellon House', 'M', 24);
+
 insert into Hosts
 values(1, 0, 1);
 
@@ -327,7 +336,37 @@ insert into Hosts
 values(9, 1, 9);
 
 insert into Hosts
-values(10, 0, 10);
+values(10, 1, 10);
+
+insert into Hosts
+values(11, 0, 11);
+
+insert into Hosts
+values(12, 1, 12);
+
+insert into Hosts
+values(13, 0, 13);
+
+insert into Hosts
+values(14, 1, 14);
+
+insert into Hosts
+values(15, 0, 15);
+
+insert into Hosts
+values(16, 1, 16);
+
+insert into Hosts
+values(17, 0, 17);
+
+insert into Hosts
+values(18, 0, 18);
+
+insert into Hosts
+values(19, 1, 19);
+
+insert into Hosts
+values(20, 0, 20);
 
 insert into Traveler
 values(1);
@@ -453,19 +492,65 @@ insert into Traveler_Reviews
 values(5, 10, 7);
 
 insert into Contract_Signs
-values(1, '2018-01-01', '2018-01-30', 0, 1, 2);
+values(1, '2018-01-01', '2018-01-30', 0, 2, 1);
 
 insert into Contract_Signs
-values(2, '2018-01-01', '2018-01-30', 0, 1, 2);
+values(2, '2018-01-01', '2018-01-30', 0, 3, 1);
 
 insert into Contract_Signs
-values(3, '2018-01-01', '2018-01-30', 0, 1, 2);
+values(3, '2018-01-01', '2018-01-30', 0, 4, 1);
 
 insert into Contract_Signs
-values(4, '2018-01-01', '2018-01-30', 0, 1, 2);
+values(4, '2018-01-01', '2018-01-30', 0, 5, 1);
 
 insert into Contract_Signs
-values(5, '2018-01-01', '2018-01-30', 0, 1, 2);
+values(5, '2018-01-01', '2018-01-30', 0, 6, 1);
+
+insert into Contract_Signs
+values(6, '2018-01-01', '2018-01-30', 0, 7, 1);
+
+insert into Contract_Signs
+values(7, '2018-01-01', '2018-01-30', 0, 8, 1);
+
+insert into Contract_Signs
+values(8, '2018-01-01', '2018-01-30', 0, 9, 1);
+
+insert into Contract_Signs
+values(9, '2018-01-01', '2018-01-30', 0, 10, 1);
+
+insert into Contract_Signs
+values(10, '2018-01-01', '2018-01-30', 0, 11, 1);
+
+insert into Contract_Signs
+values(11, '2018-01-01', '2018-01-30', 0, 12, 1);
+
+insert into Contract_Signs
+values(12, '2018-01-01', '2018-01-30', 0, 13, 1);
+
+insert into Contract_Signs
+values(13, '2018-01-01', '2018-01-30', 0, 14, 1);
+
+insert into Contract_Signs
+values(14, '2018-01-01', '2018-01-30', 0, 15, 1);
+
+insert into Contract_Signs
+values(15, '2018-01-01', '2018-01-30', 0, 16, 1);
+
+insert into Contract_Signs
+values(16, '2018-01-01', '2018-01-30', 0, 17, 1);
+
+insert into Contract_Signs
+values(17, '2018-01-01', '2018-01-30', 0, 18, 1);
+
+insert into Contract_Signs
+values(18, '2018-01-01', '2018-01-30', 0, 19, 1);
+
+insert into Contract_Signs
+values(19, '2018-01-01', '2018-01-30', 0, 20, 1);
+
+insert into Contract_Signs
+values(20, '2018-01-01', '2018-01-30', 0, 1, 2);
+
 
 
 
