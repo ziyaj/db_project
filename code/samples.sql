@@ -12,12 +12,12 @@ FROM Student
 WHERE name = 'Harry Potter';
 
 -- 2. Join query, see all posts with host's name
-SELECT P.pid, P.fromdate, P.todate, S.name, H.roomno, H.residencename, U.name, H.daily_rate
+SELECT P.pid, P.fromdate, P.todate, H.cid, S.name, H.roomno, H.residencename, U.name, H.daily_rate
 FROM Posting P, Hosts H, Student S, University U
 WHERE P.hostid = H.cid AND H.cid = S.cid AND S.unid = U.unid;
 
-CREATE VIEW PostingInfo(pid, fromdate, todate, hostname, roomno, residencename, university, dailyrate) AS
-SELECT P.pid, P.fromdate, P.todate, S.name, H.roomno, H.residencename, U.name, H.daily_rate
+CREATE VIEW PostingInfo(pid, fromdate, todate, hostid, hostname, roomno, residencename, university, dailyrate) AS
+SELECT P.pid, P.fromdate, P.todate, H.cid, S.name, H.roomno, H.residencename, U.name, H.daily_rate
 FROM Posting P, Hosts H, Student S, University U
 WHERE P.hostid = H.cid AND H.cid = S.cid AND S.unid = U.unid;
 
@@ -53,6 +53,12 @@ FROM Traveler_Reviews TR;
 SELECT MIN(TR.rating)
 FROM Traveler_Reviews TR;
 
+-- select the cheapest posts
+SELECT *
+FROM PostingInfo PI
+WHERE PI.dailyrate = (SELECT MIN(dailyrate)
+                      FROM PostingInfo);
+
 -- 5. Nested Aggregation with group-by
 -- Traveler: find heighest rating posts
 
@@ -72,10 +78,19 @@ FROM HostRating HR
 WHERE HR.rating = (SELECT MAX(rating)
                    FROM HostRating);
 
--- select highest rated postings, only display the posting ids to make things easier
-SELECT HR.rating, HR.hostid, HR.hostname, P.pid
-FROM HostRating HR, Posting P
-WHERE HR.hostid = P.hostid AND HR.rating = (SELECT MAX(rating)
-                                         FROM HostRating);
+-- select highest rated postings
+SELECT *
+FROM PostingInfo PI
+WHERE PI.pid IN (SELECT P.pid
+                 FROM HostRating HR, Posting P
+                 WHERE HR.hostid = P.hostid AND HR.rating = (SELECT MAX(rating)
+                                                             FROM HostRating));
+
+-- 6. delete operation
+-- a host can view his posts
+SELECT *
+FROM PostingInfo PI
+WHERE PI.hostid = 1;
+-- host can delete a post
 
 

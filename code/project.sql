@@ -20,7 +20,8 @@ drop table Hosts;
 drop table Traveler;
 drop table Student;
 drop table University;
-
+drop view PostingInfo;
+drop view HostRating;
 
 -- Create tables
 CREATE TABLE University (
@@ -35,7 +36,6 @@ CREATE TABLE Student (
 cid INTEGER,
 name CHAR(20),
 gender CHAR(1),
-credit INTEGER,
 unid INTEGER NOT NULL,
 is_active INTEGER NOT NULL,
 PRIMARY KEY (cid),
@@ -47,7 +47,6 @@ grant select on Student to public;
 
 CREATE TABLE Hosts (
 cid INTEGER,
-is_checked INTEGER NOT NULL,
 roomno CHAR(5),
 residencename CHAR(30),
 daily_rate INTEGER NOT NULL,
@@ -116,8 +115,8 @@ FOREIGN KEY (traveler_id) REFERENCES Traveler (cid)
 grant select on Contract_Signs to public;
 
 -- special view for posting info
-CREATE VIEW PostingInfo(pid, fromdate, todate, hostname, roomno, residencename, university, dailyrate) AS
-SELECT P.pid, P.fromdate, P.todate, S.name, H.roomno, H.residencename, U.name, H.daily_rate
+CREATE VIEW PostingInfo(pid, fromdate, todate, hostid, hostname, roomno, residencename, university, dailyrate) AS
+SELECT P.pid, P.fromdate, P.todate, H.cid, S.name, H.roomno, H.residencename, U.name, H.daily_rate
 FROM Posting P, Hosts H, Student S, University U
 WHERE P.hostid = H.cid AND H.cid = S.cid AND S.unid = U.unid;
 
@@ -193,124 +192,124 @@ insert into University
 values(20, 'Georgia Institute of Technology');
 
 insert into Student
-values(1, 'Harry Potter', 'M', 70, 1, 1);
+values(1, 'Harry Potter', 'M', 1, 1);
 
 insert into Student
-values(2, 'Cersei Lannister', 'F', 35, 2, 1);
+values(2, 'Cersei Lannister', 'F', 2, 1);
 
 insert into Student
-values(3, 'Guillaume Lux', 'F', 20, 3, 1);
+values(3, 'Guillaume Lux', 'F', 3, 1);
 
 insert into Student
-values(4, 'Jaap Eris', 'M', 24, 4, 1);
+values(4, 'Jaap Eris', 'M', 4, 1);
 
 insert into Student
-values(5, 'Kidlat Urbanus', 'F', 18, 5, 1);
+values(5, 'Kidlat Urbanus', 'F', 5, 1);
 
 insert into Student
-values(6, 'Hannah Abbott', 'F', 5, 6, 1);
+values(6, 'Hannah Abbott', 'F', 6, 1);
 
 insert into Student
-values(7, 'Ludo Bagman', 'M', 42, 7, 1);
+values(7, 'Ludo Bagman', 'M', 7, 1);
 
 insert into Student
-values(8, 'Bathilda Bagshot', 'F', 51, 9, 1);
+values(8, 'Bathilda Bagshot', 'F', 9, 1);
 
 insert into Student
-values(9, 'Katie Bell', 'F', 33, 8, 1);
+values(9, 'Katie Bell', 'F', 8, 1);
 
 insert into Student
-values(10, 'Cuthbert Binns', 'F', 9, 10, 1);
+values(10, 'Cuthbert Binns', 'F', 10, 1);
 
 insert into Student
-values(11, 'Charles Leiserson', 'M', 9, 11, 1);
+values(11, 'Charles Leiserson', 'M', 11, 1);
 
 insert into Student
-values(12, 'Robert Floyd', 'M', 29, 12, 0);
+values(12, 'Robert Floyd', 'M', 12, 0);
 
 insert into Student
-values(13, 'Babara Liskov', 'F', 30, 17, 1);
+values(13, 'Babara Liskov', 'F', 17, 1);
 
 insert into Student
-values(14, 'Brian Kernighan', 'M', 55, 16, 1);
+values(14, 'Brian Kernighan', 'M', 16, 1);
 
 insert into Student
-values(15, 'Jeffery Dean', 'M', 25, 15, 1);
+values(15, 'Jeffery Dean', 'M', 15, 1);
 
 insert into Student
-values(16, 'Guanyao Fu', 'M', 15, 20, 1);
+values(16, 'Guanyao Fu', 'M', 20, 1);
 
 insert into Student
-values(17, 'Randal Bryant', 'M', 32, 19, 1);
+values(17, 'Randal Bryant', 'M', 19, 1);
 
 insert into Student
-values(18, 'Ada Lovelace', 'F', 23, 13, 0);
+values(18, 'Ada Lovelace', 'F', 13, 0);
 
 insert into Student
-values(19, 'Marie Currie', 'F', 14, 14, 0);
+values(19, 'Marie Currie', 'F', 14, 0);
 
 insert into Student
-values(20, 'Eric Xing', 'M', 18, 18, 1);
+values(20, 'Eric Xing', 'M', 18, 1);
 
 insert into Hosts
-values(1, 0, '1024', 'Thunderbird Crescent', 35);
+values(1, '1024', 'Thunderbird Crescent', 35);
 
 insert into Hosts
-values(2, 1, '106C', 'Student Residence 1', 62);
+values(2, '106C', 'Student Residence 1', 62);
 
 insert into Hosts
-values(3, 0, '237', 'Totem Park', 30);
+values(3, '237', 'Totem Park', 30);
 
 insert into Hosts
-values(4, 1, '221', 'Place Vanier', 50);
+values(4, '221', 'Place Vanier', 50);
 
 insert into Hosts
-values(5, 1, '304', 'Student Residence 5', 40);
+values(5, '304', 'Student Residence 5', 40);
 
 insert into Hosts
-values(6, 1, '321F', 'Church College', 32);
+values(6, '321F', 'Church College', 32);
 
 insert into Hosts
-values(7, 1, '2214A', 'University Residence 8', 28);
+values(7, '2214A', 'University Residence 8', 28);
 
 insert into Hosts
-values(8, 0, '104', 'Finnerty Residence 5', 30);
+values(8, '104', 'Finnerty Residence 5', 30);
 
 insert into Hosts
-values(9, 1, '332', 'Student Residence 3', 20);
+values(9, '332', 'Student Residence 3', 20);
 
 insert into Hosts
-values(10, 1, '157', 'Marine Drive', 25);
+values(10, '157', 'Marine Drive', 25);
 
 insert into Hosts
-values(11, 0, '246B', 'Saint George College', 40);
+values(11, '246B', 'Saint George College', 40);
 
 insert into Hosts
-values(12, 1, '5213D', 'Serra Mall', 80);
+values(12, '5213D', 'Serra Mall', 80);
 
 insert into Hosts
-values(13, 0, '307C', 'Berkeley College', 65);
+values(13, '307C', 'Berkeley College', 65);
 
 insert into Hosts
-values(14, 1, '5152D', 'Forbes House', 42);
+values(14, '5152D', 'Forbes House', 42);
 
 insert into Hosts
-values(15, 0, '1005', 'Fraser Hall', 38);
+values(15, '1005', 'Fraser Hall', 38);
 
 insert into Hosts
-values(16, 1, '603', 'Princeton Place', 28);
+values(16, '603B', 'Princeton Place', 28);
 
 insert into Hosts
-values(17, 0, '221', 'Ithaca Park', 24);
+values(17, '221', 'Ithaca Park', 24);
 
 insert into Hosts
-values(18, 0, '221', 'Ruce College', 24);
+values(18, '340', 'Ruce College', 24);
 
 insert into Hosts
-values(19, 1, '213', 'Haystack Hall', 34);
+values(19, '213', 'Haystack Hall', 34);
 
 insert into Hosts
-values(20, 0, '121', 'Mellon House', 50);
+values(20, '121', 'Mellon House', 50);
 
 insert into Traveler
 values(1);
