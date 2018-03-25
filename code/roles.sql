@@ -11,3 +11,6 @@
 --       c) gender
 --       d) university
 --       e) address (roomno + residencename)
+SELECT S.cid, S.name, S.gender, U.name, H.roomno, H.residencename, H.daily_rate
+FROM Student S, Hosts H, University U
+WHERE S.cid = Hosts.cid AND S.unid = U.unid;

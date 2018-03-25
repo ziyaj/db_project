@@ -37,7 +37,6 @@ cid INTEGER,
 name CHAR(20),
 gender CHAR(1),
 unid INTEGER NOT NULL,
-is_active INTEGER NOT NULL,
 PRIMARY KEY (cid),
 FOREIGN KEY (unid) REFERENCES University
 --ON UPDATE CASCADE ?????
@@ -192,64 +191,64 @@ insert into University
 values(20, 'Georgia Institute of Technology');
 
 insert into Student
-values(1, 'Harry Potter', 'M', 1, 1);
+values(1, 'Harry Potter', 'M', 1);
 
 insert into Student
-values(2, 'Cersei Lannister', 'F', 2, 1);
+values(2, 'Cersei Lannister', 'F', 2);
 
 insert into Student
-values(3, 'Guillaume Lux', 'F', 3, 1);
+values(3, 'Guillaume Lux', 'F', 3);
 
 insert into Student
-values(4, 'Jaap Eris', 'M', 4, 1);
+values(4, 'Jaap Eris', 'M', 4);
 
 insert into Student
-values(5, 'Kidlat Urbanus', 'F', 5, 1);
+values(5, 'Kidlat Urbanus', 'F', 5);
 
 insert into Student
-values(6, 'Hannah Abbott', 'F', 6, 1);
+values(6, 'Hannah Abbott', 'F', 6);
 
 insert into Student
-values(7, 'Ludo Bagman', 'M', 7, 1);
+values(7, 'Ludo Bagman', 'M', 7);
 
 insert into Student
-values(8, 'Bathilda Bagshot', 'F', 9, 1);
+values(8, 'Bathilda Bagshot', 'F', 9);
 
 insert into Student
-values(9, 'Katie Bell', 'F', 8, 1);
+values(9, 'Katie Bell', 'F', 8);
 
 insert into Student
-values(10, 'Cuthbert Binns', 'F', 10, 1);
+values(10, 'Cuthbert Binns', 'F', 10);
 
 insert into Student
-values(11, 'Charles Leiserson', 'M', 11, 1);
+values(11, 'Charles Leiserson', 'M', 11);
 
 insert into Student
-values(12, 'Robert Floyd', 'M', 12, 0);
+values(12, 'Robert Floyd', 'M', 12);
 
 insert into Student
-values(13, 'Babara Liskov', 'F', 17, 1);
+values(13, 'Babara Liskov', 'F', 17);
 
 insert into Student
-values(14, 'Brian Kernighan', 'M', 16, 1);
+values(14, 'Brian Kernighan', 'M', 16);
 
 insert into Student
-values(15, 'Jeffery Dean', 'M', 15, 1);
+values(15, 'Jeffery Dean', 'M', 15);
 
 insert into Student
-values(16, 'Guanyao Fu', 'M', 20, 1);
+values(16, 'Guanyao Fu', 'M', 20);
 
 insert into Student
-values(17, 'Randal Bryant', 'M', 19, 1);
+values(17, 'Randal Bryant', 'M', 19);
 
 insert into Student
-values(18, 'Ada Lovelace', 'F', 13, 0);
+values(18, 'Ada Lovelace', 'F', 13);
 
 insert into Student
-values(19, 'Marie Currie', 'F', 14, 0);
+values(19, 'Marie Currie', 'F', 14);
 
 insert into Student
-values(20, 'Eric Xing', 'M', 18, 1);
+values(20, 'Eric Xing', 'M', 18);
 
 insert into Hosts
 values(1, '1024', 'Thunderbird Crescent', 35);

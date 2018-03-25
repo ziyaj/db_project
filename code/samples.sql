@@ -25,7 +25,7 @@ WHERE P.hostid = H.cid AND H.cid = S.cid AND S.unid = U.unid;
 -- 3. Division query
 -- find travellers who have been to every university (besides his or her own university)
 -- !!! Orcale syntax MINUS means EXCEPT
-SELECT S.cid, S.name, S.is_active
+SELECT S.cid, S.name
 FROM Traveler T, Student S
 WHERE T.cid = S.cid
 AND NOT EXISTS
