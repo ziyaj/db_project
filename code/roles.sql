@@ -1,3 +1,6 @@
+-- set linesize 2000
+-- set wrap off
+
 -- AS TRAVELER --
 
 -- T1. can find postings with
@@ -28,18 +31,27 @@ WHERE PI.dailyrate = (SELECT MIN(dailyrate)
 INSERT INTO Contract_Signs
 VALUES(55, '2018-03-25', '2018-03-30', 5, 2);
 
--- T4. can see his reviewable hosts
-SELECT *
-FROM HostInfo HI
-WHERE HI.hostid IN (SELECT CS.hostid
-                    FROM Contract_Signs CS
-                    WHERE CS.travelerid = 1
-                    MINUS
-                    SELECT TR.hostid
-                    FROM Traveler_Reviews TR
-                    WHERE TR.travelerid = 1);
+-- T4. can view his or her contract
+SELECT CS.contractid, CS.fromdate, CS.todate, HI.hostid, HI.hostname, HI.university, HI.roomno, HI.residencename
+FROM Contract_Signs CS, HostInfo HI
+WHERE CS.travelerid = 1 AND CS.hostid = HI.hostid;
 
--- T5. can review a host he hasn't reviewed before
+-- T5. can cancel his or her contract
+DELETE
+FROM Contract_Signs CS
+WHERE CS.pid = 1;
+
+-- T6. can review a host he hasn't reviewed before, or update his or her reviews
+-- can see his reviewable hosts
+-- SELECT *
+-- FROM HostInfo HI
+-- WHERE HI.hostid IN (SELECT CS.hostid
+--                     FROM Contract_Signs CS
+--                     WHERE CS.travelerid = 1
+--                     MINUS
+--                     SELECT TR.hostid
+--                     FROM Traveler_Reviews TR
+--                     WHERE TR.travelerid = 1);
 INSERT INTO Traveler_Reviews
 VALUES(3, 5, 4);
 
@@ -57,8 +69,8 @@ WHERE PI.hostid = 1;
 -- H3. can update his post
 ---    if fromdate > todate, or todate < fromdate, the update should fail
 UPDATE Posting
-SET fromdate = '2018-01-05', description = 'a good place to live'
-WHERE pid = 1 AND hostid = 1;
+SET fromdate = '2018-01-05', description = 'a great place to live'
+WHERE pid = 1;
 
 
 -- AS ADMIN --
@@ -81,8 +93,9 @@ WHERE HI.hostid = HR.hostid
                        FROM HostRating);
 
 -- A3. can delete a host
---    a) If the host does not have contract, then he/she can be deleted
---    b) If the host has a contracct, then he/she cannot be deleted
+--    a) If the host does not have contract, posts, reviews, delete the host without cascade
+--    b) If the host does not have contract but has posts, and reviews, deleting the host will cascade on posts and reviews
+--    c) If the host has a current contract, then the deletion will be blocked
 DELETE
 FROM Hosts H
 WHERE H.cid = 21;
@@ -102,5 +115,4 @@ AND NOT EXISTS
       FROM Contract_Signs CS, Hosts H, Student S2, University U3
       WHERE CS.travelerid = T.cid AND CS.hostid = H.cid
             AND H.cid = S2.cid AND S2.unid = U3.unid));
-
 

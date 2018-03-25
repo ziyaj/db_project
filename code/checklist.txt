@@ -5,7 +5,7 @@
 
 2 == Join query ==
   REQ: pick one query of this category and provide an interface for the user to choose this query.
-  QUERY: A1
+  QUERY: T4, A1
 
 3 == Division query ==
   REQ: pick one query of this category and provide an interface for the user to choose this query.
@@ -15,19 +15,19 @@
 4 == Aggregation query ==
   REQ: pick one query that requires the use of aggregation (min, max, average, or count are all fine).
   - Rerun with a different aggregation
-  QUERY: T2
+  QUERY: T2, A1
 
 5 == Nested aggregation with group-by ==
- REQ: pick one query that finds the average for each group and then finds either the minimum or maximum across all those averages. Provide an interface for the user to specify whether the minimum or maximum is requested.
- - Show query or view
- - Rerun with a different aggregation
- QUERY: A2
+  REQ: pick one query that finds the average for each group and then finds either the minimum or maximum across all those averages. Provide an interface for the user to specify whether the minimum or maximum is requested.
+  - Show query or view
+  - Rerun with a different aggregation
+  QUERY: A2
 
 6 == Delete operation ==
   REQ: implement a cascade-on-delete situation. Provide an interface for the user to specify some input for the deletion operation. Some input values would fail the cascade specification but others would successfully follow the cascade specification. Provide an interface for the user to display the relation instance after the operation.
   - Case 1 - deletion causing cascades. Student to explain policy regarding blocking and show their code that implements this
   - Case 2 – deletion without cascade
-  QUERY: A3
+  QUERY: A3, T5
 
 7 == Update operation ==
   REQ: implement a constraint using the check statement. Provide an interface for the user to specify some input for the update operation. Some input values would successfully satisfy a constraint while others would fail. Provide an interface for the user to display the relation after the operation.
