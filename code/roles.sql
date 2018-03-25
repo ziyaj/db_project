@@ -15,39 +15,31 @@
 SELECT PI.pid, PI.fromdate, PI.todate, PI.hostname, PI.roomno, PI.residencename, PI.university, PI.dailyrate
 FROM PostingInfo PI
 WHERE PI.university LIKE '%British Columbia%'
-	  AND PI.fromdate <= '2018-01-01' AND PI.todate >= '2018-01-30'
-	  AND PI.dailyrate BETWEEN 20 AND 40;
+      AND PI.fromdate <= '2018-01-01' AND PI.todate >= '2018-01-30'
+      AND PI.dailyrate BETWEEN 20 AND 40;
 
--- T2. can view the cheapest postings
+-- T2. can view the cheapest/most expensive postings
 SELECT *
 FROM PostingInfo PI
 WHERE PI.dailyrate = (SELECT MIN(dailyrate)
                       FROM PostingInfo);
 
--- T3. can view the highest rated postings
-SELECT *
-FROM PostingInfo PI
-WHERE PI.pid IN (SELECT P.pid
-                 FROM HostRating HR, Posting P
-                 WHERE HR.hostid = P.hostid AND HR.rating = (SELECT MAX(rating)
-                                                             FROM HostRating));
-
--- T4. can sign a contract
+-- T3. can sign a contract
 INSERT INTO Contract_Signs
 VALUES(55, '2018-03-25', '2018-03-30', 5, 2);
 
--- T5. can see his reviewable hosts
+-- T4. can see his reviewable hosts
 SELECT *
 FROM HostInfo HI
 WHERE HI.hostid IN (SELECT CS.hostid
-					FROM Contract_Signs CS
-					WHERE CS.travelerid = 1
-					MINUS
-					SELECT TR.hostid
-					FROM Traveler_Reviews TR
-					WHERE TR.travelerid = 1);
+                    FROM Contract_Signs CS
+                    WHERE CS.travelerid = 1
+                    MINUS
+                    SELECT TR.hostid
+                    FROM Traveler_Reviews TR
+                    WHERE TR.travelerid = 1);
 
--- T6. can review a host he hasn't reviewed before
+-- T5. can review a host he hasn't reviewed before
 INSERT INTO Traveler_Reviews
 VALUES(3, 5, 4);
 
@@ -63,19 +55,39 @@ FROM PostingInfo PI
 WHERE PI.hostid = 1;
 
 -- H3. can update his post
+---    if fromdate > todate, or todate < fromdate, the update should fail
 UPDATE Posting
 SET fromdate = '2018-01-05', description = 'a good place to live'
 WHERE pid = 1 AND hostid = 1;
 
 
 -- AS ADMIN --
--- A1. can delete a host
+-- A1. can see hosts with contracts
+SELECT HI.hostid, HI.hostname, HI.university, COUNT(CS.contractid)
+FROM HostInfo HI, Contract_Signs CS
+WHERE HI.hostid = CS.hostid
+GROUP BY HI.hostid
+HAVING COUNT(CS.contractid) > 0;
+
+-- A2. can find highest/lowest rated hosts
+WITH HostRating(hostid, rating) AS
+     (SELECT TR.hostid, AVG(TR.rating)
+      FROM Traveler_Reviews TR
+      GROUP BY TR.hostid)
+SELECT HI.hostid, HI.hostname, HI.university, HR.rating
+FROM HostInfo HI, HostRating HR
+WHERE HI.hostid = HR.hostid
+      AND HR.rating = (SELECT MAX(rating)
+                       FROM HostRating);
+
+-- A3. can delete a host
 --    a) If the host does not have contract, then he/she can be deleted
 --    b) If the host has a contracct, then he/she cannot be deleted
 DELETE
 FROM Hosts H
 WHERE H.cid = 21;
--- A2. can find travelers who have been to every university
+
+-- A4. can find travelers who have been to every university
 SELECT S.cid, S.name
 FROM Traveler T, Student S
 WHERE T.cid = S.cid
@@ -90,4 +102,5 @@ AND NOT EXISTS
       FROM Contract_Signs CS, Hosts H, Student S2, University U3
       WHERE CS.travelerid = T.cid AND CS.hostid = H.cid
             AND H.cid = S2.cid AND S2.unid = U3.unid));
+
 

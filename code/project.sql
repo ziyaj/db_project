@@ -21,7 +21,6 @@ drop table Traveler;
 drop table Student;
 drop table University;
 drop view PostingInfo;
-drop view HostRating;
 drop view HostInfo;
 
 -- Create tables
@@ -123,15 +122,6 @@ CREATE VIEW PostingInfo(pid, fromdate, todate, hostid, hostname, roomno, residen
 SELECT P.pid, P.fromdate, P.todate, H.cid, S.name, H.roomno, H.residencename, U.name, H.dailyrate
 FROM Posting P, Hosts H, Student S, University U
 WHERE P.hostid = H.cid AND H.cid = S.cid AND S.unid = U.unid;
-
--- special view for host rating
-CREATE VIEW HostRating(hostid, hostname, rating) AS
-SELECT H.cid, S.name, HR.rating
-FROM Hosts H, Student S, (SELECT TR.hostid AS id, AVG(TR.rating) AS rating
-                          FROM Traveler_Reviews TR, Hosts H
-                          WHERE TR.hostid = H.cid
-                          GROUP BY TR.hostid) HR
-WHERE H.cid = S.cid AND H.cid = HR.id;
 
 -- speical view for hosts
 CREATE VIEW HostInfo(hostid, hostname, gender, university, roomno, residencename, dailyrate) AS
