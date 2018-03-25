@@ -11,6 +11,8 @@
 --       c) gender
 --       d) university
 --       e) address (roomno + residencename)
-SELECT S.cid, S.name, S.gender, U.name, H.roomno, H.residencename, H.daily_rate
-FROM Student S, Hosts H, University U
-WHERE S.cid = Hosts.cid AND S.unid = U.unid;
+SELECT HI.hostid, HI.hostname, HI.gender, HI.university, HI.roomno, HI.residencename
+FROM HostInfo HI
+WHERE HI.hostid = 14 AND HI.hostname LIKE '%Brian%'
+	  AND HI.gender = 'M'
+      AND HI.univeristy LIKE '%Princeton%';

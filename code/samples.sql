@@ -12,12 +12,12 @@ FROM Student
 WHERE name = 'Harry Potter';
 
 -- 2. Join query, see all posts with host's name
-SELECT P.pid, P.fromdate, P.todate, H.cid, S.name, H.roomno, H.residencename, U.name, H.daily_rate
+SELECT P.pid, P.fromdate, P.todate, H.cid, S.name, H.roomno, H.residencename, U.name, H.dailyrate
 FROM Posting P, Hosts H, Student S, University U
 WHERE P.hostid = H.cid AND H.cid = S.cid AND S.unid = U.unid;
 
 CREATE VIEW PostingInfo(pid, fromdate, todate, hostid, hostname, roomno, residencename, university, dailyrate) AS
-SELECT P.pid, P.fromdate, P.todate, H.cid, S.name, H.roomno, H.residencename, U.name, H.daily_rate
+SELECT P.pid, P.fromdate, P.todate, H.cid, S.name, H.roomno, H.residencename, U.name, H.dailyrate
 FROM Posting P, Hosts H, Student S, University U
 WHERE P.hostid = H.cid AND H.cid = S.cid AND S.unid = U.unid;
 
@@ -37,7 +37,7 @@ AND NOT EXISTS
       MINUS
      (SELECT U3.unid
       FROM Contract_Signs CS, Hosts H, Student S2, University U3
-      WHERE CS.traveler_id = T.cid AND CS.hostid = H.cid AND CS.is_cancelled <> 1
+      WHERE CS.travelerid = T.cid AND CS.hostid = H.cid AND CS.is_cancelled <> 1
             AND H.cid = S2.cid AND S2.unid = U3.unid));
 
 
