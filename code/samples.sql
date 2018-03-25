@@ -37,7 +37,7 @@ AND NOT EXISTS
       MINUS
      (SELECT U3.unid
       FROM Contract_Signs CS, Hosts H, Student S2, University U3
-      WHERE CS.travelerid = T.cid AND CS.hostid = H.cid AND CS.is_cancelled <> 1
+      WHERE CS.travelerid = T.cid AND CS.hostid = H.cid
             AND H.cid = S2.cid AND S2.unid = U3.unid));
 
 
@@ -101,4 +101,12 @@ WHERE P.pid = 1 AND P.hostid = 1;
 DELETE
 FROM Hosts H
 WHERE H.cid = 21;
+
+-- update operation
+-- host can make a post
+-- fromdate < todate
+-- fromdate > today's date
+INSERT INTO Posting
+VALUES(11, '2018-01-01', '2018-01-30', 'test1', 1);
+
 

@@ -96,19 +96,19 @@ description CHAR(140),
 hostid INTEGER NOT NULL,
 PRIMARY KEY (pid),
 FOREIGN KEY (hostid) REFERENCES Hosts (cid)
-ON DELETE CASCADE
+ON DELETE CASCADE,
+CHECK (pid > 0 AND fromdate < todate)
 );
 grant select on Posting to public;
 
 
 CREATE TABLE Contract_Signs (
-contract_id INTEGER,
+contractid INTEGER,
 fromdate DATE NOT NULL,
 todate DATE NOT NULL,
-is_cancelled INTEGER NOT NULL,
 hostid INTEGER NOT NULL,
 travelerid INTEGER NOT NULL,
-PRIMARY KEY (contract_id),
+PRIMARY KEY (contractid),
 FOREIGN KEY (hostid) REFERENCES Hosts (cid),
 FOREIGN KEY (travelerid) REFERENCES Traveler (cid)
 );
@@ -447,65 +447,62 @@ insert into Traveler_Reviews
 values(5, 10, 7);
 
 insert into Contract_Signs
-values(1, '2018-01-01', '2018-01-30', 0, 2, 1);
+values(1, '2018-01-01', '2018-01-30', 2, 1);
 
 insert into Contract_Signs
-values(2, '2018-01-01', '2018-01-30', 0, 3, 1);
+values(2, '2018-01-01', '2018-01-30', 3, 1);
 
 insert into Contract_Signs
-values(3, '2018-01-01', '2018-01-30', 0, 4, 1);
+values(3, '2018-01-01', '2018-01-30', 4, 1);
 
 insert into Contract_Signs
-values(4, '2018-01-01', '2018-01-30', 0, 5, 1);
+values(4, '2018-01-01', '2018-01-30', 5, 1);
 
 insert into Contract_Signs
-values(5, '2018-01-01', '2018-01-30', 0, 6, 1);
+values(5, '2018-01-01', '2018-01-30', 6, 1);
 
 insert into Contract_Signs
-values(6, '2018-01-01', '2018-01-30', 0, 7, 1);
+values(6, '2018-01-01', '2018-01-30', 7, 1);
 
 insert into Contract_Signs
-values(7, '2018-01-01', '2018-01-30', 0, 8, 1);
+values(7, '2018-01-01', '2018-01-30', 8, 1);
 
 insert into Contract_Signs
-values(8, '2018-01-01', '2018-01-30', 0, 9, 1);
+values(8, '2018-01-01', '2018-01-30', 9, 1);
 
 insert into Contract_Signs
-values(9, '2018-01-01', '2018-01-30', 0, 10, 1);
+values(9, '2018-01-01', '2018-01-30', 10, 1);
 
 insert into Contract_Signs
-values(10, '2018-01-01', '2018-01-30', 0, 11, 1);
+values(10, '2018-01-01', '2018-01-30', 11, 1);
 
 insert into Contract_Signs
-values(11, '2018-01-01', '2018-01-30', 0, 12, 1);
+values(11, '2018-01-01', '2018-01-30', 12, 1);
 
 insert into Contract_Signs
-values(12, '2018-01-01', '2018-01-30', 0, 13, 1);
+values(12, '2018-01-01', '2018-01-30', 13, 1);
 
 insert into Contract_Signs
-values(13, '2018-01-01', '2018-01-30', 0, 14, 1);
+values(13, '2018-01-01', '2018-01-30', 14, 1);
 
 insert into Contract_Signs
-values(14, '2018-01-01', '2018-01-30', 0, 15, 1);
+values(14, '2018-01-01', '2018-01-30', 15, 1);
 
 insert into Contract_Signs
-values(15, '2018-01-01', '2018-01-30', 0, 16, 1);
+values(15, '2018-01-01', '2018-01-30', 16, 1);
 
 insert into Contract_Signs
-values(16, '2018-01-01', '2018-01-30', 0, 17, 1);
+values(16, '2018-01-01', '2018-01-30', 17, 1);
 
 insert into Contract_Signs
-values(17, '2018-01-01', '2018-01-30', 0, 18, 1);
+values(17, '2018-01-01', '2018-01-30', 18, 1);
 
 insert into Contract_Signs
-values(18, '2018-01-01', '2018-01-30', 0, 19, 1);
+values(18, '2018-01-01', '2018-01-30', 19, 1);
 
 insert into Contract_Signs
-values(19, '2018-01-01', '2018-01-30', 0, 20, 1);
+values(19, '2018-01-01', '2018-01-30', 20, 1);
 
 insert into Contract_Signs
-values(20, '2018-01-01', '2018-01-30', 0, 1, 2);
-
-
-
+values(20, '2018-01-01', '2018-01-30', 1, 2);
 
