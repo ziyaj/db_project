@@ -77,6 +77,11 @@ SELECT CS.contractid, CS.fromdate, CS.todate, CS.travelerid, S.name, U.name
 FROM Contract_Signs CS, Traveler T, Student S, University U
 WHERE CS.hostid = 1 AND T.cid = CS.travelerid AND T.cid = S.cid AND S.unid = U.unid;
 
+-- H5. can see all the ratings the host has done
+SELECT HR.travelerid, S.name ,HR.rating
+FROM Host_Reviews HR, Traveler T, Student S
+WHERE HR.hostid = 1 AND HR.travelerid = T.cid AND T.cid = S.cid;
+
 -- AS ADMIN --
 -- A1. can see hosts with contracts
 SELECT HI.hostid, HI.hostname, HI.university, COUNT(CS.contractid)

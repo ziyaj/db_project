@@ -378,6 +378,9 @@ insert into Posting
 values(10, '2017-10-01', '2017-10-30', 'try my place and you will love', 4);
 
 insert into Host_Reviews
+values(2, 1, 5);
+
+insert into Host_Reviews
 values(1, 2, 3);
 
 insert into Host_Reviews
