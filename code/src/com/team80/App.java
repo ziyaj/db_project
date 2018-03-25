@@ -17,11 +17,12 @@ public class App {
     private JTextField textField2;
     private JButton submitButton;
     private JPasswordField passwordField3;
-    private JButton submitButton1;
+    private JButton submitButton2;
     private JTextField textField3;
     private static PersistenceLayer persistenceLayer;
 
     public App() {
+
         button_msg.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -31,6 +32,7 @@ public class App {
                 // but there is not such button yet
             }
         });
+
         submitButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
