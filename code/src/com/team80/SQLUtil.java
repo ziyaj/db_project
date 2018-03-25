@@ -114,11 +114,11 @@ public class SQLUtil {
                     "FROM Host_Reviews HR, Traveler T, Student S " +
                     "WHERE HR.hostid = " + hostid + "AND HR.travelerid = T.cid AND T.cid = S.cid");
             // travelerid, name, rating
-            while (rs.next()) {
-                System.out.println("contractid: " + rs.getInt(1));
-                System.out.println("name: " + rs.getString(2));
-                System.out.println("rating: " + rs.getInt(3));
-            }
+//            while (rs.next()) {
+//                System.out.println("contractid: " + rs.getInt(1));
+//                System.out.println("name: " + rs.getString(2));
+//                System.out.println("rating: " + rs.getInt(3));
+//            }
             return rs;
         } catch(final SQLException e) {
             System.err.println("An error occurred while executing query.");
