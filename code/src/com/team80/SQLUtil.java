@@ -43,6 +43,68 @@ public class SQLUtil {
         return null;
     }
 
+    /**
+     * T2 - find cheapest posts
+     * @return ResultSet rs
+     */
+    public static ResultSet findCheapestPosts() {
+        try {
+            final PersistenceLayer persistenceLayer = PersistenceLayer.getInstance();
+            final Connection con = persistenceLayer.getConnection();
+            final Statement stmt = con.createStatement();
+            // stmt is a statement object
+            final ResultSet rs = stmt.executeQuery("SELECT * FROM PostingInfo PI WHERE PI.dailyrate = (SELECT MIN(dailyrate) FROM PostingInfo)");
+            // pid, fromdate, todate, hostid, hostname, roomno, residencename, university, dailyrate
+//            while (rs.next()) {
+//                System.out.println("pid: " + rs.getInt(1));
+//                System.out.println("fromdate: " + rs.getString(2));
+//                System.out.println("todate: " + rs.getString(3));
+//                System.out.println("hostid: " + rs.getInt(4));
+//                System.out.println("hostname: " + rs.getString(5));
+//                System.out.println("roomno: " + rs.getString(1));
+//                System.out.println("residencename: " + rs.getString(2));
+//                System.out.println("university: " + rs.getString(3));
+//                System.out.println("dailyrate: " + rs.getInt(4));
+//            }
+            return rs;
+        } catch(final SQLException e) {
+            System.err.println("An error occurred while executing query.");
+            System.err.println(e.getMessage());
+        }
+        return null;
+    }
+
+    /**
+     * T2 - find most expensive posts
+     * @return ResultSet rs
+     */
+    public static ResultSet findMostExpensivePosts() {
+        try {
+            final PersistenceLayer persistenceLayer = PersistenceLayer.getInstance();
+            final Connection con = persistenceLayer.getConnection();
+            final Statement stmt = con.createStatement();
+            // stmt is a statement object
+            final ResultSet rs = stmt.executeQuery("SELECT * FROM PostingInfo PI WHERE PI.dailyrate = (SELECT MAX(dailyrate) FROM PostingInfo)");
+            // pid, fromdate, todate, hostid, hostname, roomno, residencename, university, dailyrate
+//            while (rs.next()) {
+//                System.out.println("pid: " + rs.getInt(1));
+//                System.out.println("fromdate: " + rs.getString(2));
+//                System.out.println("todate: " + rs.getString(3));
+//                System.out.println("hostid: " + rs.getInt(4));
+//                System.out.println("hostname: " + rs.getString(5));
+//                System.out.println("roomno: " + rs.getString(1));
+//                System.out.println("residencename: " + rs.getString(2));
+//                System.out.println("university: " + rs.getString(3));
+//                System.out.println("dailyrate: " + rs.getInt(4));
+//            }
+            return rs;
+        } catch(final SQLException e) {
+            System.err.println("An error occurred while executing query.");
+            System.err.println(e.getMessage());
+        }
+        return null;
+    }
+
     public static int[] deletePosts(int[] selection, DefaultTableModel model) {
         try {
             final PersistenceLayer persistenceLayer = PersistenceLayer.getInstance();
