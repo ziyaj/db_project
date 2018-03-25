@@ -257,6 +257,9 @@ values(19, 'Marie Currie', 'F', 14);
 insert into Student
 values(20, 'Eric Xing', 'M', 18);
 
+insert into Student
+values(21, 'Paul Friedman', 'M', 12);
+
 insert into Hosts
 values(1, '1024', 'Thunderbird Crescent', 35);
 
@@ -316,6 +319,9 @@ values(19, '213', 'Haystack Hall', 34);
 
 insert into Hosts
 values(20, '121', 'Mellon House', 50);
+
+insert into Hosts
+values(21, '420C', 'Maple House', 24);
 
 insert into Traveler
 values(1);

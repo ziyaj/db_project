@@ -91,6 +91,14 @@ WHERE PI.pid IN (SELECT P.pid
 SELECT *
 FROM PostingInfo PI
 WHERE PI.hostid = 1;
--- host can delete a post
+-- host can delete a post with pid, the hostid must match the host's hostid
+DELETE
+FROM Posting P
+WHERE P.pid = 1 AND P.hostid = 1;
 
+-- admin can delete a host
+-- the host cannot be deleted when there is a contract that has his record
+DELETE
+FROM Hosts H
+WHERE H.cid = 21;
 
