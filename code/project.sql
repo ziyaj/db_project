@@ -94,7 +94,7 @@ CREATE TABLE Posting (
 pid INTEGER,
 fromdate DATE NOT NULL,
 todate DATE NOT NULL,
-description CHAR(140),
+description CHAR(100),
 hostid INTEGER NOT NULL,
 PRIMARY KEY (pid),
 FOREIGN KEY (hostid) REFERENCES Hosts (cid)
@@ -118,8 +118,8 @@ CHECK (contractid > 0 AND fromdate < todate)
 grant select on Contract_Signs to public;
 
 -- special view for posting info
-CREATE VIEW PostingInfo(pid, fromdate, todate, hostid, hostname, roomno, residencename, university, dailyrate) AS
-SELECT P.pid, P.fromdate, P.todate, H.cid, S.name, H.roomno, H.residencename, U.name, H.dailyrate
+CREATE VIEW PostingInfo(pid, fromdate, todate, hostid, hostname, roomno, residencename, university, dailyrate, description) AS
+SELECT P.pid, P.fromdate, P.todate, H.cid, S.name, H.roomno, H.residencename, U.name, H.dailyrate, P.description
 FROM Posting P, Hosts H, Student S, University U
 WHERE P.hostid = H.cid AND H.cid = S.cid AND S.unid = U.unid;
 

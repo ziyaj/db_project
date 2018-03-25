@@ -5,29 +5,6 @@ import java.sql.*;
 
 public class SQLUtil {
 
-    // a sample method that executes a single query and prints results
-    public static void connectOracle() {
-        try {
-            final PersistenceLayer persistenceLayer = PersistenceLayer.getInstance();
-            final Connection con = persistenceLayer.getConnection();
-            final Statement stmt = con.createStatement();
-            // stmt is a statement object
-            final ResultSet rs = stmt.executeQuery("SELECT * FROM Student");
-            System.out.println();
-            System.out.println("Received data from server: ");
-            while (rs.next()) {
-                System.out.println("cid: " + rs.getInt(1));
-                System.out.println("cname: " + rs.getString(2));
-                System.out.println("gender: " + rs.getString(3));
-                System.out.println("credit: " + rs.getInt(4));
-                System.out.println("is_active: " + rs.getInt(5));
-            }
-        } catch(final SQLException e) {
-            System.err.println("An error occurred while executing query.");
-            System.err.println(e.getMessage());
-        }
-    }
-
     public static ResultSet findAllPosts(int id) {
         try {
             final PersistenceLayer persistenceLayer = PersistenceLayer.getInstance();
@@ -44,27 +21,27 @@ public class SQLUtil {
     }
 
     /**
-     * T2 - find cheapest posts
+     * H2. a host can see all his contracts
      * @return ResultSet rs
      */
-    public static ResultSet findCheapestPosts() {
+    public static ResultSet findHostsPostings(final int hostid) {
         try {
             final PersistenceLayer persistenceLayer = PersistenceLayer.getInstance();
             final Connection con = persistenceLayer.getConnection();
             final Statement stmt = con.createStatement();
             // stmt is a statement object
-            final ResultSet rs = stmt.executeQuery("SELECT * FROM PostingInfo PI WHERE PI.dailyrate = (SELECT MIN(dailyrate) FROM PostingInfo)");
-            // pid, fromdate, todate, hostid, hostname, roomno, residencename, university, dailyrate
+            final ResultSet rs = stmt.executeQuery("SELECT PI.pid, PI.fromdate, PI.todate, PI.roomno, PI.residencename, PI.dailyrate, PI.description " +
+                    "FROM PostingInfo PI " +
+                    "WHERE PI.hostid = " + hostid);
+            // pid, fromdate, todate, roomno, residencename, dailyrate, description
 //            while (rs.next()) {
 //                System.out.println("pid: " + rs.getInt(1));
 //                System.out.println("fromdate: " + rs.getString(2));
 //                System.out.println("todate: " + rs.getString(3));
-//                System.out.println("hostid: " + rs.getInt(4));
-//                System.out.println("hostname: " + rs.getString(5));
-//                System.out.println("roomno: " + rs.getString(1));
-//                System.out.println("residencename: " + rs.getString(2));
-//                System.out.println("university: " + rs.getString(3));
-//                System.out.println("dailyrate: " + rs.getInt(4));
+//                System.out.println("roomno: " + rs.getString(4));
+//                System.out.println("residencename: " + rs.getString(5));
+//                System.out.println("dailyrate: " + rs.getInt(6));
+//                System.out.println("description: " + rs.getString(7));
 //            }
             return rs;
         } catch(final SQLException e) {
@@ -75,7 +52,7 @@ public class SQLUtil {
     }
 
     /**
-     * H4 a host can see all his contracts
+     * H4. a host can see all his contracts
      * @return
      */
     public static ResultSet findHostsContracts(final int hostid) {
@@ -104,6 +81,11 @@ public class SQLUtil {
         return null;
     }
 
+    /**
+     * H5. a host can see all the ratings the host has done
+     * @param hostid
+     * @return ResultSet rs
+     */
     public static ResultSet findHostsReviews(final int hostid) {
         try {
             final PersistenceLayer persistenceLayer = PersistenceLayer.getInstance();
@@ -127,10 +109,39 @@ public class SQLUtil {
         return null;
     }
 
-
+    /**
+     * T2 - find cheapest posts
+     * @return ResultSet rs
+     */
+    public static ResultSet findCheapestPosts() {
+        try {
+            final PersistenceLayer persistenceLayer = PersistenceLayer.getInstance();
+            final Connection con = persistenceLayer.getConnection();
+            final Statement stmt = con.createStatement();
+            // stmt is a statement object
+            final ResultSet rs = stmt.executeQuery("SELECT * FROM PostingInfo PI WHERE PI.dailyrate = (SELECT MIN(dailyrate) FROM PostingInfo)");
+            // pid, fromdate, todate, hostid, hostname, roomno, residencename, university, dailyrate
+//            while (rs.next()) {
+//                System.out.println("pid: " + rs.getInt(1));
+//                System.out.println("fromdate: " + rs.getString(2));
+//                System.out.println("todate: " + rs.getString(3));
+//                System.out.println("hostid: " + rs.getInt(4));
+//                System.out.println("hostname: " + rs.getString(5));
+//                System.out.println("roomno: " + rs.getString(6));
+//                System.out.println("residencename: " + rs.getString(7));
+//                System.out.println("university: " + rs.getString(8));
+//                System.out.println("dailyrate: " + rs.getInt(9));
+//            }
+            return rs;
+        } catch(final SQLException e) {
+            System.err.println("An error occurred while executing query.");
+            System.err.println(e.getMessage());
+        }
+        return null;
+    }
 
     /**
-     * T2 - find most expensive posts
+     * T2. find most expensive posts
      * @return ResultSet rs
      */
     public static ResultSet findMostExpensivePosts() {

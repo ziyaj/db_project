@@ -62,7 +62,7 @@ INSERT INTO Posting
 VALUES(63, '2018-03-20', '2018-04-05', 'clean, neat residence with cheap rate', 3);
 
 -- H2. can see his own posts
-SELECT *
+SELECT PI.pid, PI.fromdate, PI.todate, PI.roomno, PI.residencename, PI.dailyrate, PI.description
 FROM PostingInfo PI
 WHERE PI.hostid = 1;
 
