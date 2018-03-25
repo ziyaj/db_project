@@ -358,34 +358,34 @@ insert into Traveler
 values(10);
 
 insert into Posting
-values(1, '2018-01-01', '2018-01-30', 'test1', 1);
+values(1, '2018-01-01', '2018-01-30', 'a good place to live', 1);
 
 insert into Posting
-values(2, '2018-02-01', '2018-02-28', 'test2', 2);
+values(2, '2018-02-01', '2018-02-28', 'cheap clean place', 2);
 
 insert into Posting
-values(3, '2017-03-01', '2017-03-30', 'test3', 2);
+values(3, '2017-03-01', '2017-03-30', 'small dorm but nice', 2);
 
 insert into Posting
-values(4, '2017-04-01', '2017-04-30', 'test4', 3);
+values(4, '2017-04-04', '2017-04-30', 'please rent it thanks', 3);
 
 insert into Posting
-values(5, '2017-05-01', '2017-05-30', 'test5', 3);
+values(5, '2017-05-06', '2017-05-30', 'best time to rent', 5);
 
 insert into Posting
-values(6, '2017-06-01', '2017-06-30', 'test6', 3);
+values(6, '2017-06-05', '2017-06-15', 'nice clean room', 3);
 
 insert into Posting
-values(7, '2017-07-01', '2017-07-30', 'test7', 4);
+values(7, '2017-07-02', '2017-07-09', 'welcome to rent my place', 4);
 
 insert into Posting
-values(8, '2017-08-01', '2017-08-30', 'test8', 4);
+values(8, '2017-08-10', '2017-08-12', 'best place to live in world', 8);
 
 insert into Posting
-values(9, '2017-09-01', '2017-09-30', 'test9', 4);
+values(9, '2017-09-05', '2017-09-20', 'cheap but comfortable place', 4);
 
 insert into Posting
-values(10, '2017-10-01', '2017-10-30', 'test10', 4);
+values(10, '2017-10-01', '2017-10-30', 'try my place and you will love', 4);
 
 insert into Host_Reviews
 values(1, 2, 3);

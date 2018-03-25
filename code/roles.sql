@@ -1,31 +1,93 @@
 -- AS TRAVELER --
--- 1. can find a host with
---    I. conditions:
---       a) the host's cid
---       b) the host's name
---       c) the host's gender
---       d) the host's university
---    I. display options:
---       a) cid
---       b) name
---       c) gender
---       d) university
---       e) address (roomno + residencename)
-SELECT HI.hostid, HI.hostname, HI.gender, HI.university, HI.roomno, HI.residencename
-FROM HostInfo HI
-WHERE HI.hostid = 14 AND HI.hostname LIKE '%Brian%'
-	  AND HI.gender = 'M'
-      AND HI.univeristy LIKE '%Princeton%';
 
+-- T1. can find postings with
+--     I. conditions:
+--        a) university
+--        b) within date range (fromdate <= STARTDATE AND todate >= ENDDATE)
+--        c) daily rate range (daily rate BETWEEN AMT1 AND AMT2)
+--    II. display options:
+--        a) pid
+--        b) date range (fromdate + todate)
+--        c) host name
+--        d) address (roomno + residencename)
+--        e) university
+--        f) dailyrate
+SELECT PI.pid, PI.fromdate, PI.todate, PI.hostname, PI.roomno, PI.residencename, PI.university, PI.dailyrate
+FROM PostingInfo PI
+WHERE PI.university LIKE '%British Columbia%'
+	  AND PI.fromdate <= '2018-01-01' AND PI.todate >= '2018-01-30'
+	  AND PI.dailyrate BETWEEN 20 AND 40;
+
+-- T2. can view the cheapest postings
+SELECT *
+FROM PostingInfo PI
+WHERE PI.dailyrate = (SELECT MIN(dailyrate)
+                      FROM PostingInfo);
+
+-- T3. can view the highest rated postings
+SELECT *
+FROM PostingInfo PI
+WHERE PI.pid IN (SELECT P.pid
+                 FROM HostRating HR, Posting P
+                 WHERE HR.hostid = P.hostid AND HR.rating = (SELECT MAX(rating)
+                                                             FROM HostRating));
+
+-- T4. can sign a contract
+INSERT INTO Contract_Signs
+VALUES(55, '2018-03-25', '2018-03-30', 5, 2);
+
+-- T5. can see his reviewable hosts
+SELECT *
+FROM HostInfo HI
+WHERE HI.hostid IN (SELECT CS.hostid
+					FROM Contract_Signs CS
+					WHERE CS.travelerid = 1
+					MINUS
+					SELECT TR.hostid
+					FROM Traveler_Reviews TR
+					WHERE TR.travelerid = 1);
+
+-- T6. can review a host he hasn't reviewed before
+INSERT INTO Traveler_Reviews
+VALUES(3, 5, 4);
 
 
 -- AS HOST --
+-- H1. can make a post
+INSERT INTO Posting
+VALUES(63, '2018-03-20', '2018-04-05', 'clean, neat residence with cheap rate', 3);
+
+-- H2. can see his own posts
+SELECT *
+FROM PostingInfo PI
+WHERE PI.hostid = 1;
+
+-- H3. can update his post
+UPDATE Posting
+SET fromdate = '2018-01-05', description = 'a good place to live'
+WHERE pid = 1 AND hostid = 1;
 
 
 -- AS ADMIN --
--- 1. can delete a host
+-- A1. can delete a host
 --    a) If the host does not have contract, then he/she can be deleted
 --    b) If the host has a contracct, then he/she cannot be deleted
 DELETE
 FROM Hosts H
 WHERE H.cid = 21;
+-- A2. can find travelers who have been to every university
+SELECT S.cid, S.name
+FROM Traveler T, Student S
+WHERE T.cid = S.cid
+AND NOT EXISTS
+    ((SELECT U1.unid
+      FROM University U1
+      WHERE U1.unid NOT IN (SELECT U2.unid
+                            FROM University U2
+                            WHERE S.unid = U2.unid))
+      MINUS
+     (SELECT U3.unid
+      FROM Contract_Signs CS, Hosts H, Student S2, University U3
+      WHERE CS.travelerid = T.cid AND CS.hostid = H.cid
+            AND H.cid = S2.cid AND S2.unid = U3.unid));
+
