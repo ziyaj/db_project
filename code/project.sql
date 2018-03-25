@@ -39,8 +39,8 @@ name CHAR(20),
 gender CHAR(1),
 unid INTEGER NOT NULL,
 PRIMARY KEY (cid),
-FOREIGN KEY (unid) REFERENCES University
---ON UPDATE CASCADE ?????
+FOREIGN KEY (unid) REFERENCES University,
+CHECK (gender = 'M' OR gender = 'F')
 );
 grant select on Student to public;
 
@@ -51,7 +51,8 @@ roomno CHAR(5),
 residencename CHAR(30),
 dailyrate INTEGER NOT NULL,
 PRIMARY KEY (cid),
-FOREIGN KEY (cid) REFERENCES Student
+FOREIGN KEY (cid) REFERENCES Student,
+CHECK (dailyrate BETWEEN 0 AND 200)
 );
 grant select on Hosts to public;
 
@@ -71,7 +72,8 @@ rating INTEGER,
 PRIMARY KEY (travelerid, hostid),
 FOREIGN KEY (travelerid) REFERENCES Traveler (cid),
 FOREIGN KEY (hostid) REFERENCES Hosts (cid)
-ON DELETE CASCADE
+ON DELETE CASCADE,
+CHECK (hostid <> travelerid AND rating BETWEEN 1 AND 10)
 );
 grant select on Host_Reviews to public;
 
@@ -83,7 +85,8 @@ rating INTEGER NOT NULL,
 PRIMARY KEY (travelerid, hostid),
 FOREIGN KEY (hostid) REFERENCES Hosts (cid)
 ON DELETE CASCADE,
-FOREIGN KEY (travelerid) REFERENCES Traveler (cid)
+FOREIGN KEY (travelerid) REFERENCES Traveler (cid),
+CHECK (travelerid <> hostid AND rating BETWEEN 1 AND 10)
 );
 grant select on Traveler_Reviews to public;
 
@@ -110,7 +113,8 @@ hostid INTEGER NOT NULL,
 travelerid INTEGER NOT NULL,
 PRIMARY KEY (contractid),
 FOREIGN KEY (hostid) REFERENCES Hosts (cid),
-FOREIGN KEY (travelerid) REFERENCES Traveler (cid)
+FOREIGN KEY (travelerid) REFERENCES Traveler (cid),
+CHECK (contractid > 0 AND fromdate < todate)
 );
 grant select on Contract_Signs to public;
 
@@ -429,7 +433,7 @@ insert into Traveler_Reviews
 values(6, 4, 9);
 
 insert into Traveler_Reviews
-values(5, 5, 2);
+values(5, 8, 2);
 
 insert into Traveler_Reviews
 values(4, 6, 7);
