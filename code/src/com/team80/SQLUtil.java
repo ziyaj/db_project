@@ -75,6 +75,36 @@ public class SQLUtil {
     }
 
     /**
+     * H4 a host can see all his contracts
+     * @return
+     */
+    public static ResultSet findHostsContracts(final int hostid) {
+        try {
+            final PersistenceLayer persistenceLayer = PersistenceLayer.getInstance();
+            final Connection con = persistenceLayer.getConnection();
+            final Statement stmt = con.createStatement();
+            // stmt is a statement object
+            final ResultSet rs = stmt.executeQuery("SELECT CS.contractid, CS.fromdate, CS.todate, CS.travelerid, S.name, U.name " +
+                    "FROM Contract_Signs CS, Traveler T, Student S, University U " +
+                    "WHERE CS.hostid = " + hostid + " AND T.cid = CS.travelerid AND T.cid = S.cid AND S.unid = U.unid");
+            // contractid, fromdate, todate, travelerid, name, university
+//            while (rs.next()) {
+//                System.out.println("contractid: " + rs.getInt(1));
+//                System.out.println("fromdate: " + rs.getString(2));
+//                System.out.println("todate: " + rs.getString(3));
+//                System.out.println("travelerid: " + rs.getInt(4));
+//                System.out.println("name: " + rs.getString(5));
+//                System.out.println("university: " + rs.getString(6));
+//            }
+            return rs;
+        } catch(final SQLException e) {
+            System.err.println("An error occurred while executing query.");
+            System.err.println(e.getMessage());
+        }
+        return null;
+    }
+
+    /**
      * T2 - find most expensive posts
      * @return ResultSet rs
      */

@@ -72,6 +72,10 @@ UPDATE Posting
 SET fromdate = '2018-01-05', description = 'a great place to live'
 WHERE pid = 1;
 
+-- H4. can see all his contracts
+SELECT CS.contractid, CS.fromdate, CS.todate, CS.travelerid, S.name, U.name
+FROM Contract_Signs CS, Traveler T, Student S, University U
+WHERE CS.hostid = 1 AND T.cid = CS.travelerid AND T.cid = S.cid AND S.unid = U.unid;
 
 -- AS ADMIN --
 -- A1. can see hosts with contracts
