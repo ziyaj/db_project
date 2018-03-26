@@ -22,7 +22,6 @@ public class App {
     private JButton adminSignInButton;
     private JButton hSignUpButton;
     private JButton hSignInButton;
-    private JButton tSignUpButton;
     private JButton tSignInButton;
     private JButton hUpdateButton;
     private JButton hDeleteButton;
@@ -66,6 +65,7 @@ public class App {
     private JButton buttonForGO;
     private JSpinner spinner1;
     private JButton submitButton;
+    private JTextField tLoginTextField;
     private int hid;
 
     DefaultTableModel model = new DefaultTableModel();
@@ -93,7 +93,7 @@ public class App {
         tab.remove(hostEditor);
         tab.remove(register);
         //</editor-fold>
-        //tab.remove(travellerEditorPanel);
+        tab.remove(travellerEditorPanel);
 
 
         //<editor-fold desc="Host Editor Events">
@@ -108,6 +108,41 @@ public class App {
             }
         });
 
+        //TODO
+        tSignInButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                try {
+                    hid = Integer.parseInt(tidTextField.getText());
+                } catch(Exception e1) {
+                    tLoginTextField.setText("Invalid traveller name");
+                    return;
+                }
+                ResultSet rs = SQLUtil.getStudent(hid);
+
+                try {
+                    if (rs.next()) {
+                        char[] pw = tPasswordField.getPassword();
+                        if (tidTextField.getText().equals(String.valueOf(pw))) {
+                            tab.add(travellerEditorPanel, 1);
+                            tab.setTitleAt(1, "TravellerEditor");
+                            tab.remove(travellerLogin);
+                            tab.setSelectedIndex(1);
+                        } else {
+                            tLoginTextField.setText("Invalid password. Try again.");
+                            JOptionPane.showMessageDialog(null, "Invalid password. Try again.","Error Message", JOptionPane.ERROR_MESSAGE);
+                        }
+                    } else {
+                        hid = -1;
+                        tLoginTextField.setText("User does not exist. Please sign up first.");
+                    }
+                } catch (SQLException e2) {
+                    e2.printStackTrace();
+                }
+            }
+        });
+        //</editor-fold>
 
 
 
@@ -187,7 +222,7 @@ public class App {
                 }
                 int dialogResult = JOptionPane.showConfirmDialog (null, "Delete selected records?","Warning", JOptionPane.YES_NO_OPTION);
                 if(dialogResult == JOptionPane.YES_OPTION){
-                    int[] result = SQLUtil.deletePosts(selectedRows, model);
+                    int[] result = SQLUtil.deletePost(selectedRows, model);
                     hSearchButton.doClick();
                     search();
                     if(result.length > 0) {
