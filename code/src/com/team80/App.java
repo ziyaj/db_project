@@ -101,9 +101,10 @@ public class App {
         final JPanel adminLogin = (JPanel) tab.getComponentAt(0);
         final JPanel hostLogin = (JPanel) tab.getComponentAt(1);
         final JPanel travellerLogin = (JPanel) tab.getComponentAt(2);
-        final JPanel hostEditor = (JPanel) tab.getComponentAt(3);
-        final JPanel register = (JPanel) tab.getComponentAt(4);
-        final JPanel travellerEditorPanel = (JPanel) tab.getComponentAt(5);
+        final JPanel register = (JPanel) tab.getComponentAt(3);
+        final JPanel hostEditor = (JPanel) tab.getComponentAt(4);
+        final JPanel adminEditor = (JPanel) tab.getComponentAt(5);
+        final JPanel travellerEditorPanel = (JPanel) tab.getComponentAt(6);
 
         // Hide the HostEditor tab on Login window
         tab.remove(hostEditor);
@@ -152,10 +153,10 @@ public class App {
                     if (rs.next()) {
                         char[] pw = tPasswordField.getPassword();
                         if (tidTextField.getText().equals(String.valueOf(pw))) {
-                            tab.add(travellerEditorPanel, 1);
-                            tab.setTitleAt(1, "TravellerEditor");
+                            tab.add(travellerEditorPanel, 2);
+                            tab.setTitleAt(2, "TravellerEditor");
                             tab.remove(travellerLogin);
-                            tab.setSelectedIndex(1);
+                            tab.setSelectedIndex(2);
                         } else {
                             tLoginTextField.setText("Invalid password. Try again.");
                             JOptionPane.showMessageDialog(null, "Invalid password. Try again.","Error Message", JOptionPane.ERROR_MESSAGE);
@@ -170,12 +171,6 @@ public class App {
             }
         });
         //</editor-fold>
-
-
-
-
-
-        hSearchButton.addMouseListener(new MouseAdapter() {
 
         contractsButton.addMouseListener(new MouseAdapter() {
             @Override
@@ -438,8 +433,7 @@ public class App {
 
                 int dialogResult = JOptionPane.showConfirmDialog (null, "Delete selected records?","Warning", JOptionPane.YES_NO_OPTION);
                 if(dialogResult == JOptionPane.YES_OPTION){
-                    int[] result = SQLUtil.deletePosts(selectedRows, model);
-                    hSearchButton.doClick();
+                    int[] result = SQLUtil.deletePost(selectedRows, model);
                     search();
                     if(result.length > 0) {
                         JOptionPane.showMessageDialog(null, "Selected records have been removed.", "Deletion Message", JOptionPane.INFORMATION_MESSAGE);
