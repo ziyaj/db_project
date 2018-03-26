@@ -66,11 +66,16 @@ public class App {
     private JSpinner spinner1;
     private JButton submitButton;
     private JTextField tLoginTextField;
+
+    private JPanel AdminPanel;
+    private JButton A_awardButton;
+    private JButton A_Delete;
+
     private int hid;
+
 
     DefaultTableModel model = new DefaultTableModel();
     //</editor-fold>
-
     public App() {
 
         //<editor-fold desc="Init">
@@ -158,6 +163,7 @@ public class App {
         hUpdateButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
+
                 super.mouseClicked(e);
                 int[] selectedRows = getSelected();
                 if (selectedRows.length == 0) {
@@ -325,6 +331,51 @@ public class App {
             }
         });
         //</editor-fold>
+        hUpdateButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent mouseEvent) {
+                super.mouseClicked(mouseEvent);
+            }
+        });
+
+        //show award message
+        A_awardButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent mouseEvent) {
+                super.mouseClicked(mouseEvent);
+                JOptionPane.showMessageDialog(null, "Hosts Awarded!!!", "Award Message", JOptionPane.INFORMATION_MESSAGE);
+            }
+        });
+
+        //Delete a Host
+        A_Delete.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent mouseEvent) {
+                super.mouseClicked(mouseEvent);
+                int[] selectedRows = getSelected();
+
+                //If nothing get selected
+                if (selectedRows.length == 0) {
+                    JOptionPane.showMessageDialog(null, "Please select a record", "Deletion Message", JOptionPane.WARNING_MESSAGE);
+                    return;
+                }
+
+                int dialogResult = JOptionPane.showConfirmDialog (null, "Delete selected records?","Warning", JOptionPane.YES_NO_OPTION);
+                if(dialogResult == JOptionPane.YES_OPTION){
+                    int[] result = SQLUtil.deletePosts(selectedRows, model);
+                    hSearchButton.doClick();
+                    search();
+                    if(result.length > 0) {
+                        JOptionPane.showMessageDialog(null, "Selected records have been removed.", "Deletion Message", JOptionPane.INFORMATION_MESSAGE);
+                        tab.remove(register);
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Deletion failed. Please try again.", "Deletion Message", JOptionPane.ERROR_MESSAGE);
+                    }
+                }
+
+
+            }
+        });
     }
 
     //<editor-fold desc="Helper">
