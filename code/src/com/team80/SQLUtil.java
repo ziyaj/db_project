@@ -38,6 +38,12 @@ public class SQLUtil {
         return -1;
     }
 
+    private static int getMaxPostingId() throws SQLException {
+        final PreparedStatement ps = getConnection().prepareStatement("SELECT MAX(pid) FROM Posting");
+        final ResultSet rs = ps.executeQuery();
+        return rs.next() ? rs.getInt(1) : 0;
+    }
+
     /**
      * H2. a host can see all of his or her own postings
      */
@@ -161,9 +167,9 @@ public class SQLUtil {
     }
 
     /**
-     * H7. a host can delete his post
+     * H7. a host can delete his post(s)
      */
-    public static int[] deletePost(int[] selection, DefaultTableModel model) {
+    public static int[] deletePost(final int[] selection, final DefaultTableModel model) {
         try {
             final PreparedStatement ps = getConnection().prepareStatement(DELETE_FROM + "Posting WHERE pid = ?");
             for (final int column : selection) {
@@ -226,10 +232,9 @@ public class SQLUtil {
      */
     public static int signContract(final int hostid, final int travelerid, final Date fromDate, final Date toDate) {
         try {
-            final int contractid = getMaxContractId() + 1;
             final PreparedStatement ps = getConnection().prepareStatement(
                     INSERT_INTO + "Contract_Signs VALUES (?, ?, ?, ?, ?)");
-            ps.setInt(1, contractid);
+            ps.setInt(1, getMaxContractId() + 1);
             ps.setDate(2, fromDate);
             ps.setDate(3, toDate);
             ps.setInt(4, hostid);
@@ -241,6 +246,12 @@ public class SQLUtil {
             System.err.println(e.getMessage());
         }
         return -1;
+    }
+
+    private static int getMaxContractId() throws SQLException {
+        final PreparedStatement ps = getConnection().prepareStatement("SELECT MAX(contractid) FROM Contract_Signs");
+        final ResultSet rs = ps.executeQuery();
+        return rs.next() ? rs.getInt(1) : 0;
     }
 
     /**
@@ -259,16 +270,166 @@ public class SQLUtil {
         return null;
     }
 
-    private static int getMaxContractId() throws SQLException {
-        final PreparedStatement ps = getConnection().prepareStatement("SELECT MAX(contractid) FROM Contract_Signs");
-        final ResultSet rs = ps.executeQuery();
-        return rs.next() ? rs.getInt(1) : 0;
+    /**
+     * T5. a traveler can cancel his or her contract if the contract in the future
+     */
+    public static int deleteContract(final int contractid) {
+        try {
+            if (isFutureContract(contractid)) {
+                final PreparedStatement ps = getConnection().prepareStatement(
+                        DELETE_FROM + "Contract_Signs WHERE contractid = ?");
+                ps.setInt(1, contractid);
+                return ps.executeUpdate();
+            } else {
+                System.out.println("The contract is current or past, you cannot delete it!");
+                return 0;
+            }
+        } catch (final SQLException e) {
+            System.err.println("An error occurred while executing query.");
+            System.err.println(e.getMessage());
+        }
+        return -1;
     }
 
-    private static int getMaxPostingId() throws SQLException {
-        final PreparedStatement ps = getConnection().prepareStatement("SELECT MAX(pid) FROM Posting");
-        final ResultSet rs = ps.executeQuery();
-        return rs.next() ? rs.getInt(1) : 0;
+    private static boolean isFutureContract(final int contractid) throws SQLException {
+        final ResultSet rs = getStatement().executeQuery(
+                "SELECT CS.fromdate FROM Contract_Signs CS WHERE CS.contractid = " + contractid);
+        if (rs.next()) {
+            final Date fromDate = rs.getDate(1);
+            final Date today = new Date(System.currentTimeMillis());
+            return today.before(fromDate);
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * T6. a traveler can review a host
+     */
+    public static int addTravelerReview(final int travelerid, final int hostid, final int rating) {
+        try {
+            if (travelerReviewExists(travelerid, hostid)) {
+                System.out.println("A review already exists, update the review");
+                return updateTravelerReview(travelerid, hostid, rating);
+            } else {
+                System.out.println("A traveler is adding a new review to a host");
+                return addNewTravelerReview(travelerid, hostid, rating);
+            }
+        } catch (final SQLException e) {
+            System.err.println("An error occurred while executing query.");
+            System.err.println(e.getMessage());
+        }
+        return -1;
+    }
+
+    private static int addNewTravelerReview(final int hostid, final int travelerid, final int rating)
+            throws SQLException {
+        final PreparedStatement ps = getConnection().prepareStatement(
+                INSERT_INTO + "Traveler_Reviews VALUES (?, ?, ?)");
+        ps.setInt(1, travelerid);
+        ps.setInt(2, hostid);
+        ps.setInt(3, rating);
+        return ps.executeUpdate();
+    }
+
+    private static int updateTravelerReview(final int travelerid, final int hostid, final int rating)
+            throws SQLException {
+        final PreparedStatement ps = getConnection().prepareStatement(
+                "UPDATE Traveler_Reviews SET rating = ? WHERE travelerid = ? AND hostid = ?");
+        ps.setInt(1, rating);
+        ps.setInt(2, travelerid);
+        ps.setInt(3, hostid);
+        return ps.executeUpdate();
+    }
+
+    private static boolean travelerReviewExists(final int travelerid, final int hostid) throws SQLException {
+        final ResultSet rs = getStatement().executeQuery(SELECT_COUNT + "FROM Traveler_Reviews " +
+                "WHERE hostid = " + hostid + " AND travelerid = " + travelerid);
+        return rs.next() && rs.getInt(1) > 0;
+    }
+
+    /**
+     * A1. an administrator can find host info and their contract counts
+     */
+    public static ResultSet findHostsContracts() {
+        try {
+            return getStatement().executeQuery(
+                    "SELECT HI.hostid, HI.hostname, HI.university, COUNT(CS.contractid) " +
+                    "FROM HostInfo HI, Contract_Signs CS " +
+                    "WHERE HI.hostid = CS.hostid " +
+                    "GROUP BY HI.hostid " +
+                    "HAVING COUNT(CS.contractid) > 0");
+        } catch (final SQLException e) {
+            System.err.println("An error occurred while executing query.");
+            System.err.println(e.getMessage());
+        }
+        return null;
+    }
+
+    /**
+     * A2. an administrator can find highest/lowest rated hosts
+     */
+    public static ResultSet findBestHosts() {
+        try {
+            return getStatement().executeQuery("WITH HostRating(hostid, rating) AS " +
+                    "     (SELECT TR.hostid, AVG(TR.rating) FROM Traveler_Reviews TR GROUP BY TR.hostid) " +
+                    "SELECT HI.hostid, HI.hostname, HI.university, HR.rating " +
+                    "FROM HostInfo HI, HostRating HR " +
+                    "WHERE HI.hostid = HR.hostid AND HR.rating = (SELECT MAX(rating) FROM HostRating)");
+        } catch (final SQLException e) {
+            System.err.println("An error occurred while executing query.");
+            System.err.println(e.getMessage());
+        }
+        return null;
+    }
+
+    public static ResultSet findWorstHosts() {
+        try {
+            return getStatement().executeQuery("WITH HostRating(hostid, rating) AS " +
+                    "     (SELECT TR.hostid, AVG(TR.rating) FROM Traveler_Reviews TR GROUP BY TR.hostid) " +
+                    "SELECT HI.hostid, HI.hostname, HI.university, HR.rating " +
+                    "FROM HostInfo HI, HostRating HR " +
+                    "WHERE HI.hostid = HR.hostid AND HR.rating = (SELECT MIN(rating) FROM HostRating)");
+        } catch (final SQLException e) {
+            System.err.println("An error occurred while executing query.");
+            System.err.println(e.getMessage());
+        }
+        return null;
+    }
+
+    /**
+     * A3. an administrator can delete a host
+     */
+    public static int deleteHost(final int hostid) {
+        try {
+            final PreparedStatement ps = getConnection().prepareStatement(
+                    DELETE_FROM + "Hosts WHERE cid = ?");
+            ps.setInt(1, hostid);
+            return ps.executeUpdate();
+        } catch (final SQLException e) {
+            System.err.println("An error occurred while executing query.");
+            System.err.println(e.getMessage());
+        }
+        return -1;
+    }
+
+    /**
+     * A4. an administrator can find travelers who have been to every university
+     */
+    public static ResultSet findAmazingTravelers() {
+        try {
+            return getStatement().executeQuery("SELECT S.cid, S.name FROM Traveler T, Student S " +
+                    "WHERE T.cid = S.cid AND NOT EXISTS " +
+                    "    ((SELECT U1.unid FROM University U1 " +
+                    "      WHERE U1.unid NOT IN (SELECT U2.unid FROM University U2 WHERE S.unid = U2.unid))" +
+                    "      MINUS " +
+                    "     (SELECT U3.unid FROM Contract_Signs CS, Hosts H, Student S2, University U3 " +
+                    "      WHERE CS.travelerid = T.cid AND CS.hostid = H.cid AND H.cid = S2.cid AND S2.unid = U3.unid))");
+        } catch (final SQLException e) {
+            System.err.println("An error occurred while executing query.");
+            System.err.println(e.getMessage());
+        }
+        return null;
     }
 
     public static ResultSet getHost(final int hostid) {

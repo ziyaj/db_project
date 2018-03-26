@@ -37,24 +37,20 @@ FROM Contract_Signs CS, HostInfo HI
 WHERE CS.travelerid = 1 AND CS.hostid = HI.hostid;
 
 -- T5. can cancel his or her contract
+-- first of all, check whether the contract is in the future
+SELECT CS.fromdate
+FROM Contract_Signs CS
+WHERE CS.contractid = 1;
+-- if the contract is in the future, then the traveler can delete it
 DELETE
 FROM Contract_Signs CS
-WHERE CS.pid = 1;
+WHERE CS.contractid = 1;
 
--- T6. can review a host he hasn't reviewed before, or update his or her reviews
--- can see his reviewable hosts
--- SELECT *
--- FROM HostInfo HI
--- WHERE HI.hostid IN (SELECT CS.hostid
---                     FROM Contract_Signs CS
---                     WHERE CS.travelerid = 1
---                     MINUS
---                     SELECT TR.hostid
---                     FROM Traveler_Reviews TR
---                     WHERE TR.travelerid = 1);
+-- T6. can review a host
+-- if there is already a review existing, the review will be updated
+-- if there is no review existing, a new review will be created
 INSERT INTO Traveler_Reviews
 VALUES(3, 5, 4);
-
 
 -- AS HOST --
 -- H1. can make a post
