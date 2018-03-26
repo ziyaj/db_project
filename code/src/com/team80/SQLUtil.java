@@ -5,29 +5,33 @@ import java.sql.*;
 
 public class SQLUtil {
 
+    private static Connection getConnection() {
+        final PersistenceLayer persistenceLayer = PersistenceLayer.getInstance();
+        return persistenceLayer.getConnection();
+    }
+
+    private static Statement getStatement() throws SQLException {
+        return getConnection().createStatement();
+    }
+
     /**
-     * H1. a host can add a post
-     * @param hostid
-     * @param fromDate
-     * @param toDate
-     * @param description
-     * @return ResultSet
+     * H1. a host can make a new post
      */
     public static int addPost(final int hostid, final Date fromDate, final Date toDate, final String description) {
         try {
-            final PersistenceLayer persistenceLayer = PersistenceLayer.getInstance();
-            final Connection con = persistenceLayer.getConnection();
+            System.out.println("Adding a post...");
+            final Connection con = getConnection();
             final int count = getMaxPostingId();
-            System.out.println("count: " + count);
             final PreparedStatement ps = con.prepareStatement("INSERT INTO Posting VALUES (?, ?, ?, ?, ?)");
             ps.setInt(1, count + 1);
             ps.setDate(2, fromDate);
             ps.setDate(3, toDate);
             ps.setString(4, description);
             ps.setInt(5, hostid);
+            final int result = ps.executeUpdate();
             System.out.println("Successfully added a post!");
-            return ps.executeUpdate();
-        } catch(final SQLException e) {
+            return result;
+        } catch (final SQLException e) {
             System.err.println("An error occurred while executing query.");
             System.err.println(e.getMessage());
         }
@@ -35,30 +39,15 @@ public class SQLUtil {
     }
 
     /**
-     * H2. a host can see all his contracts
-     * @return ResultSet rs
+     * H2. a host can see all of his or her own postings
      */
     public static ResultSet findHostsPostings(final int hostid) {
         try {
-            final PersistenceLayer persistenceLayer = PersistenceLayer.getInstance();
-            final Connection con = persistenceLayer.getConnection();
-            final Statement stmt = con.createStatement();
-            // stmt is a statement object
-            final ResultSet rs = stmt.executeQuery("SELECT PI.pid, PI.fromdate, PI.todate, PI.roomno, PI.residencename, PI.dailyrate, PI.description " +
+            return getStatement().executeQuery(
+                    "SELECT PI.pid, PI.fromdate, PI.todate, PI.roomno, PI.residencename, PI.dailyrate, PI.description " +
                     "FROM PostingInfo PI " +
                     "WHERE PI.hostid = " + hostid);
-            // pid, fromdate, todate, roomno, residencename, dailyrate, description
-//            while (rs.next()) {
-//                System.out.println("pid: " + rs.getInt(1));
-//                System.out.println("fromdate: " + rs.getString(2));
-//                System.out.println("todate: " + rs.getString(3));
-//                System.out.println("roomno: " + rs.getString(4));
-//                System.out.println("residencename: " + rs.getString(5));
-//                System.out.println("dailyrate: " + rs.getInt(6));
-//                System.out.println("description: " + rs.getString(7));
-//            }
-            return rs;
-        } catch(final SQLException e) {
+        } catch (final SQLException e) {
             System.err.println("An error occurred while executing query.");
             System.err.println(e.getMessage());
         }
@@ -67,34 +56,29 @@ public class SQLUtil {
 
     /**
      * H3. a host can update his post
-     * @param selection
-     * @param model
-     * @param fromDate
-     * @param toDate
-     * @param description
-     * @return int
      */
-    public static int updatePost(int[] selection, DefaultTableModel model, Date fromDate, Date toDate, String description) {
+    public static int updatePost(final int[] selection, final DefaultTableModel model, final Date fromDate,
+                                 final Date toDate, final String description) {
+        final Date fDate = (fromDate == null) ? (Date) model.getValueAt(selection[0], 1) : fromDate;
+        final Date tDate = (toDate == null) ? (Date) model.getValueAt(selection[0], 2) : toDate;
+        if (fDate.after(tDate)) {
+            return 0;
+        }
+        final int pid = (Integer) model.getValueAt(selection[0], 0);
+        return updatePostSQL(pid, fDate, toDate, description);
+    }
+
+    private static int updatePostSQL(final int pid, final Date fromDate, final Date toDate, final String description) {
         try {
-            final PersistenceLayer persistenceLayer = PersistenceLayer.getInstance();
-            final Connection con = persistenceLayer.getConnection();
-
-            final Date fDate = (fromDate == null) ? (Date) model.getValueAt(selection[0], 1) : fromDate;
-            final Date tDate = (toDate == null) ? (Date) model.getValueAt(selection[0], 2) : toDate;
-
-            if(fDate.after(tDate)){
-                return 0;
-            }
-
-            final String stmt = "UPDATE Posting SET description = ? , fromdate = ? , todate = ? WHERE pid = ?";
-            final PreparedStatement ps = con.prepareStatement(stmt);
-            final int pid = (Integer) model.getValueAt(selection[0], 0);
+            final Connection con = getConnection();
+            final PreparedStatement ps = con.prepareStatement(
+                    "UPDATE Posting SET description = ? , fromdate = ? , todate = ? WHERE pid = ?");
             ps.setString(1, description);
-            ps.setDate(2, fDate);
-            ps.setDate(3, tDate);
+            ps.setDate(2, fromDate);
+            ps.setDate(3, toDate);
             ps.setInt(4, pid);
             return ps.executeUpdate();
-        } catch(final SQLException e) {
+        } catch (final SQLException e) {
             System.err.println("An error occurred while executing query.");
             System.err.println(e.getMessage());
         }
@@ -103,28 +87,14 @@ public class SQLUtil {
 
     /**
      * H4. a host can see all his contracts
-     * @return
      */
     public static ResultSet findHostsContracts(final int hostid) {
         try {
-            final PersistenceLayer persistenceLayer = PersistenceLayer.getInstance();
-            final Connection con = persistenceLayer.getConnection();
-            final Statement stmt = con.createStatement();
-            // stmt is a statement object
-            final ResultSet rs = stmt.executeQuery("SELECT CS.contractid, CS.fromdate, CS.todate, CS.travelerid, S.name, U.name " +
+            return getStatement().executeQuery(
+                    "SELECT CS.contractid, CS.fromdate, CS.todate, CS.travelerid, S.name, U.name " +
                     "FROM Contract_Signs CS, Traveler T, Student S, University U " +
                     "WHERE CS.hostid = " + hostid + " AND T.cid = CS.travelerid AND T.cid = S.cid AND S.unid = U.unid");
-            // contractid, fromdate, todate, travelerid, name, university
-//            while (rs.next()) {
-//                System.out.println("contractid: " + rs.getInt(1));
-//                System.out.println("fromdate: " + rs.getString(2));
-//                System.out.println("todate: " + rs.getString(3));
-//                System.out.println("travelerid: " + rs.getInt(4));
-//                System.out.println("name: " + rs.getString(5));
-//                System.out.println("university: " + rs.getString(6));
-//            }
-            return rs;
-        } catch(final SQLException e) {
+        } catch (final SQLException e) {
             System.err.println("An error occurred while executing query.");
             System.err.println(e.getMessage());
         }
@@ -132,27 +102,14 @@ public class SQLUtil {
     }
 
     /**
-     * H5. a host can see all the ratings the host has done
-     * @param hostid
-     * @return ResultSet rs
+     * H5. a host can see all the ratings he or she has reviewed
      */
     public static ResultSet findHostsReviews(final int hostid) {
         try {
-            final PersistenceLayer persistenceLayer = PersistenceLayer.getInstance();
-            final Connection con = persistenceLayer.getConnection();
-            final Statement stmt = con.createStatement();
-            // stmt is a statement object
-            final ResultSet rs = stmt.executeQuery("SELECT HR.travelerid, S.name ,HR.rating " +
+            return getStatement().executeQuery("SELECT HR.travelerid, S.name ,HR.rating " +
                     "FROM Host_Reviews HR, Traveler T, Student S " +
                     "WHERE HR.hostid = " + hostid + "AND HR.travelerid = T.cid AND T.cid = S.cid");
-            // travelerid, name, rating
-//            while (rs.next()) {
-//                System.out.println("contractid: " + rs.getInt(1));
-//                System.out.println("name: " + rs.getString(2));
-//                System.out.println("rating: " + rs.getInt(3));
-//            }
-            return rs;
-        } catch(final SQLException e) {
+        } catch (final SQLException e) {
             System.err.println("An error occurred while executing query.");
             System.err.println(e.getMessage());
         }
@@ -161,69 +118,76 @@ public class SQLUtil {
 
     /**
      * H6. a host can review a traveler
-     * @param hostid
-     * @param travelerid
-     * @param rating
-     * @return int
      */
     public static int addHostReview(final int hostid, final int travelerid, final int rating) {
         try {
-            final PersistenceLayer persistenceLayer = PersistenceLayer.getInstance();
-            final Connection con = persistenceLayer.getConnection();
-            if (doesReviewExist(hostid, travelerid)) {
+            if (hostReviewExists(hostid, travelerid)) {
                 System.out.println("A review already exists, update the review");
                 return updateHostReview(hostid, travelerid, rating);
             } else {
-                final PreparedStatement ps = con.prepareStatement("INSERT INTO Host_Reviews VALUES (?, ?, ?)");
-                ps.setInt(1, travelerid);
-                ps.setInt(2, hostid);
-                ps.setInt(3, rating);
-                System.out.println("Host has added a new review to a traveler");
-                return ps.executeUpdate();
+                System.out.println("A Host is adding a new review to a traveler");
+                return addNewHostReview(hostid, travelerid, rating);
             }
-        } catch(final SQLException e) {
+        } catch (final SQLException e) {
             System.err.println("An error occurred while executing query.");
             System.err.println(e.getMessage());
         }
         return -1;
     }
 
+    private static int addNewHostReview(final int hostid, final int travelerid, final int rating) throws SQLException {
+        final PreparedStatement ps = getConnection().prepareStatement("INSERT INTO Host_Reviews VALUES (?, ?, ?)");
+        ps.setInt(1, travelerid);
+        ps.setInt(2, hostid);
+        ps.setInt(3, rating);
+        System.out.println("Host has added a new review to a traveler");
+        return ps.executeUpdate();
+    }
+
     private static int updateHostReview(final int hostid, final int travelerid, final int rating) throws SQLException {
-        final PersistenceLayer persistenceLayer = PersistenceLayer.getInstance();
-        final Connection con = persistenceLayer.getConnection();
-        final String stmt = "UPDATE Host_Reviews SET rating = ? WHERE travelerid = ? AND hostid = ?";
-        final PreparedStatement ps = con.prepareStatement(stmt);
+        final PreparedStatement ps = getConnection().prepareStatement(
+                "UPDATE Host_Reviews SET rating = ? WHERE travelerid = ? AND hostid = ?");
         ps.setInt(1, rating);
         ps.setInt(2, travelerid);
         ps.setInt(3, hostid);
         return ps.executeUpdate();
     }
 
-    private static boolean doesReviewExist(final int hostid, final int travelerid) throws SQLException {
-        final PersistenceLayer persistenceLayer = PersistenceLayer.getInstance();
-        final Connection con = persistenceLayer.getConnection();
-        final Statement stmt = con.createStatement();
-        // stmt is a statement object
-        final ResultSet rs = stmt.executeQuery("SELECT COUNT(*) " +
-                "FROM Host_Reviews " +
+    private static boolean hostReviewExists(final int hostid, final int travelerid) throws SQLException {
+        final ResultSet rs = getStatement().executeQuery("SELECT COUNT(*) FROM Host_Reviews " +
                 "WHERE hostid = " + hostid + " AND travelerid = " + travelerid);
         return rs.next() ? rs.getInt(1) > 0 : false;
     }
 
     /**
+     * H7. a host can delete his post
+     */
+    public static int[] deletePost(int[] selection, DefaultTableModel model) {
+        try {
+            final PreparedStatement ps = getConnection().prepareStatement("DELETE FROM Posting WHERE pid = ?");
+            for (final int column : selection) {
+                final int pid = (Integer) model.getValueAt(column, 0);
+                ps.setInt(1, pid);
+                ps.addBatch();
+            }
+            return ps.executeBatch();
+        } catch (final SQLException e) {
+            System.err.println("An error occurred while executing query.");
+            System.err.println(e.getMessage());
+        }
+        return null;
+    }
+
+    /**
      * T1. find postings with
-     * @param id
-     * @return
      */
     public static ResultSet findAllPosts(final int id) {
         try {
-            final PersistenceLayer persistenceLayer = PersistenceLayer.getInstance();
-            final Connection con = persistenceLayer.getConnection();
-            String stmt = (id == -1) ? "SELECT * FROM Posting" : "SELECT * FROM Posting WHERE hostid = ? ORDER BY pid DESC";
-            PreparedStatement ps = con.prepareStatement(stmt);
+            final String stmt = (id == -1) ? "SELECT * FROM Posting" : "SELECT * FROM Posting WHERE hostid = ? ORDER BY pid DESC";
+            PreparedStatement ps = getConnection().prepareStatement(stmt);
             ps.setInt(1, id);
             return ps.executeQuery();
-        } catch(final SQLException e) {
+        } catch (final SQLException e) {
             System.err.println("An error occurred while executing query.");
             System.err.println(e.getMessage());
         }
@@ -231,61 +195,24 @@ public class SQLUtil {
     }
 
     /**
-     * T2 - find cheapest posts
-     * @return ResultSet rs
+     * T2. find cheapest/most expensive posts
      */
     public static ResultSet findCheapestPosts() {
         try {
-            final PersistenceLayer persistenceLayer = PersistenceLayer.getInstance();
-            final Connection con = persistenceLayer.getConnection();
-            final Statement stmt = con.createStatement();
-            // stmt is a statement object
-            final ResultSet rs = stmt.executeQuery("SELECT * FROM PostingInfo PI WHERE PI.dailyrate = (SELECT MIN(dailyrate) FROM PostingInfo)");
-            // pid, fromdate, todate, hostid, hostname, roomno, residencename, university, dailyrate
-//            while (rs.next()) {
-//                System.out.println("pid: " + rs.getInt(1));
-//                System.out.println("fromdate: " + rs.getString(2));
-//                System.out.println("todate: " + rs.getString(3));
-//                System.out.println("hostid: " + rs.getInt(4));
-//                System.out.println("hostname: " + rs.getString(5));
-//                System.out.println("roomno: " + rs.getString(6));
-//                System.out.println("residencename: " + rs.getString(7));
-//                System.out.println("university: " + rs.getString(8));
-//                System.out.println("dailyrate: " + rs.getInt(9));
-//            }
-            return rs;
-        } catch(final SQLException e) {
+            return getStatement().executeQuery(
+                    "SELECT * FROM PostingInfo PI WHERE PI.dailyrate = (SELECT MIN(dailyrate) FROM PostingInfo)");
+        } catch (final SQLException e) {
             System.err.println("An error occurred while executing query.");
             System.err.println(e.getMessage());
         }
         return null;
     }
 
-    /**
-     * T2. find most expensive posts
-     * @return ResultSet rs
-     */
     public static ResultSet findMostExpensivePosts() {
         try {
-            final PersistenceLayer persistenceLayer = PersistenceLayer.getInstance();
-            final Connection con = persistenceLayer.getConnection();
-            final Statement stmt = con.createStatement();
-            // stmt is a statement object
-            final ResultSet rs = stmt.executeQuery("SELECT * FROM PostingInfo PI WHERE PI.dailyrate = (SELECT MAX(dailyrate) FROM PostingInfo)");
-            // pid, fromdate, todate, hostid, hostname, roomno, residencename, university, dailyrate
-//            while (rs.next()) {
-//                System.out.println("pid: " + rs.getInt(1));
-//                System.out.println("fromdate: " + rs.getString(2));
-//                System.out.println("todate: " + rs.getString(3));
-//                System.out.println("hostid: " + rs.getInt(4));
-//                System.out.println("hostname: " + rs.getString(5));
-//                System.out.println("roomno: " + rs.getString(1));
-//                System.out.println("residencename: " + rs.getString(2));
-//                System.out.println("university: " + rs.getString(3));
-//                System.out.println("dailyrate: " + rs.getInt(4));
-//            }
-            return rs;
-        } catch(final SQLException e) {
+            return getStatement().executeQuery(
+                    "SELECT * FROM PostingInfo PI WHERE PI.dailyrate = (SELECT MAX(dailyrate) FROM PostingInfo)");
+        } catch (final SQLException e) {
             System.err.println("An error occurred while executing query.");
             System.err.println(e.getMessage());
         }
@@ -294,18 +221,12 @@ public class SQLUtil {
 
     /**
      * T3. a traveler can sign up contract
-     * @param hostid
-     * @param travelerid
-     * @param fromDate
-     * @param toDate
-     * @return
      */
     public static int signContract(final int hostid, final int travelerid, final Date fromDate, final Date toDate) {
         try {
-            final PersistenceLayer persistenceLayer = PersistenceLayer.getInstance();
-            final Connection con = persistenceLayer.getConnection();
             final int contractid = getMaxContractId() + 1;
-            final PreparedStatement ps = con.prepareStatement("INSERT INTO Contract_Signs VALUES (?, ?, ?, ?, ?)");
+            final PreparedStatement ps = getConnection().prepareStatement(
+                    "INSERT INTO Contract_Signs VALUES (?, ?, ?, ?, ?)");
             ps.setInt(1, contractid);
             ps.setDate(2, fromDate);
             ps.setDate(3, toDate);
@@ -313,7 +234,7 @@ public class SQLUtil {
             ps.setInt(5, travelerid);
             System.out.println("A traveler has signed up a contract");
             return ps.executeUpdate();
-        } catch(final SQLException e) {
+        } catch (final SQLException e) {
             System.err.println("An error occurred while executing query.");
             System.err.println(e.getMessage());
         }
@@ -322,55 +243,14 @@ public class SQLUtil {
 
     /**
      * T4. a traveler can view his or her contracts
-     * @param travlerid
-     * @return
      */
     public static ResultSet findTravelerContracts(final int travlerid) {
         try {
-            final PersistenceLayer persistenceLayer = PersistenceLayer.getInstance();
-            final Connection con = persistenceLayer.getConnection();
-            final Statement stmt = con.createStatement();
-            // stmt is a statement object
-            final ResultSet rs = stmt.executeQuery("SELECT CS.contractid, CS.fromdate, CS.todate, HI.hostid, HI.hostname, HI.university, HI.roomno, HI.residencename " +
+            return getStatement().executeQuery(
+                    "SELECT CS.contractid, CS.fromdate, CS.todate, HI.hostid, HI.hostname, HI.university, HI.roomno, HI.residencename " +
                     "FROM Contract_Signs CS, HostInfo HI " +
                     "WHERE CS.travelerid = " + travlerid + " AND CS.hostid = HI.hostid");
-            // contractid, fromdate, todate, hostid, hostname, university, roomno, residencename
-//            while (rs.next()) {
-//                System.out.println("contractid: " + rs.getInt(1));
-//                System.out.println("fromdate: " + rs.getString(2));
-//                System.out.println("todate: " + rs.getString(3));
-//                System.out.println("hostid: " + rs.getInt(4));
-//                System.out.println("hostname: " + rs.getString(5));
-//                System.out.println("university: " + rs.getString(6));
-//                System.out.println("roomno: " + rs.getString(7));
-//                System.out.println("residencename: " + rs.getString(8));
-//            }
-            return rs;
-        } catch(final SQLException e) {
-            System.err.println("An error occurred while executing query.");
-            System.err.println(e.getMessage());
-        }
-        return null;
-    }
-
-    /**
-     * H7. a host can delete his post
-     * @param selection
-     * @param model
-     * @return
-     */
-    public static int[] deletePost(int[] selection, DefaultTableModel model) {
-        try {
-            final PersistenceLayer persistenceLayer = PersistenceLayer.getInstance();
-            final Connection con = persistenceLayer.getConnection();
-            PreparedStatement ps = con.prepareStatement("DELETE FROM Posting WHERE pid = ?");
-            for (int i = 0; i < selection.length; i++) {
-                int pid = (Integer) model.getValueAt(selection[i], 0);
-                ps.setInt(1, pid);
-                ps.addBatch();
-            }
-            return ps.executeBatch();
-        } catch(final SQLException e) {
+        } catch (final SQLException e) {
             System.err.println("An error occurred while executing query.");
             System.err.println(e.getMessage());
         }
@@ -378,61 +258,50 @@ public class SQLUtil {
     }
 
     private static int getMaxContractId() throws SQLException {
-        final PersistenceLayer persistenceLayer = PersistenceLayer.getInstance();
-        final Connection con = persistenceLayer.getConnection();
-        final PreparedStatement ps = con.prepareStatement("SELECT MAX(contractid) FROM Contract_Signs");
+        final PreparedStatement ps = getConnection().prepareStatement("SELECT MAX(contractid) FROM Contract_Signs");
         final ResultSet rs = ps.executeQuery();
         return rs.next() ? rs.getInt(1) : 0;
     }
 
     private static int getMaxPostingId() throws SQLException {
-        final PersistenceLayer persistenceLayer = PersistenceLayer.getInstance();
-        final Connection con = persistenceLayer.getConnection();
-        final PreparedStatement ps = con.prepareStatement("SELECT MAX(pid) FROM Posting");
+        final PreparedStatement ps = getConnection().prepareStatement("SELECT MAX(pid) FROM Posting");
         final ResultSet rs = ps.executeQuery();
         return rs.next() ? rs.getInt(1) : 0;
     }
 
-    public static ResultSet getHost(int id) {
+    public static ResultSet getHost(final int hostid) {
         try {
-            final PersistenceLayer persistenceLayer = PersistenceLayer.getInstance();
-            final Connection con = persistenceLayer.getConnection();
-            PreparedStatement ps = con.prepareStatement("SELECT * FROM Hosts WHERE cid = ?");
-            ps.setInt(1, id);
+            final PreparedStatement ps = getConnection().prepareStatement("SELECT * FROM Hosts WHERE cid = ?");
+            ps.setInt(1, hostid);
             return ps.executeQuery();
-        } catch(final SQLException e) {
+        } catch (final SQLException e) {
             System.err.println("An error occurred while executing query.");
             System.err.println(e.getMessage());
         }
         return null;
     }
 
-    public static int addHost(int cid, boolean isChecked, String roomNo, String residence, int dailyRate) {
+    public static int addHost(final int cid, final String roomNo, final String residence, final int dailyRate) {
         try {
-            final PersistenceLayer persistenceLayer = PersistenceLayer.getInstance();
-            final Connection con = persistenceLayer.getConnection();
-            PreparedStatement ps = con.prepareStatement("INSERT INTO Hosts VALUES (?, ?, ?, ?, ?)");
+            final PreparedStatement ps = getConnection().prepareStatement("INSERT INTO Hosts VALUES (?, ?, ?, ?)");
             ps.setInt(1, cid);
-            ps.setBoolean(2, isChecked);
-            ps.setString(3, roomNo);
-            ps.setString(4, residence);
-            ps.setInt(5, dailyRate);
+            ps.setString(2, roomNo);
+            ps.setString(3, residence);
+            ps.setInt(4, dailyRate);
             return ps.executeUpdate();
-        } catch(final SQLException e) {
+        } catch (final SQLException e) {
             System.err.println("An error occurred while executing query.");
             System.err.println(e.getMessage());
         }
         return -1;
     }
 
-    public static ResultSet getStudent(int id) {
+    public static ResultSet getStudent(final int cid) {
         try {
-            final PersistenceLayer persistenceLayer = PersistenceLayer.getInstance();
-            final Connection con = persistenceLayer.getConnection();
-            PreparedStatement ps = con.prepareStatement("SELECT * FROM Student WHERE cid = ?");
-            ps.setInt(1, id);
+            final PreparedStatement ps = getConnection().prepareStatement("SELECT * FROM Student WHERE cid = ?");
+            ps.setInt(1, cid);
             return ps.executeQuery();
-        } catch(final SQLException e) {
+        } catch (final SQLException e) {
             System.err.println("An error occurred while executing query.");
             System.err.println(e.getMessage());
         }
