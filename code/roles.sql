@@ -83,9 +83,19 @@ FROM Host_Reviews HR, Traveler T, Student S
 WHERE HR.hostid = 1 AND HR.travelerid = T.cid AND T.cid = S.cid;
 
 -- H6. can review a traveler
--- travelerid, hostid, rating
+-- if the reivew exists, do an update
+SELECT COUNT(*)
+FROM Host_Reviews
+WHERE hostid = 1 AND travelerid = 2;
+
+-- other wise do an insert travelerid, hostid, rating
 INSERT INTO Host_Reviews
 VALUES(1, 8, 5);
+
+-- H7. can delete his post
+DELETE
+FROM Posting P
+WHERE P.pid = 1;
 
 -- AS ADMIN --
 -- A1. can see hosts with contracts

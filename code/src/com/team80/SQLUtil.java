@@ -170,17 +170,44 @@ public class SQLUtil {
         try {
             final PersistenceLayer persistenceLayer = PersistenceLayer.getInstance();
             final Connection con = persistenceLayer.getConnection();
-            final PreparedStatement ps = con.prepareStatement("INSERT INTO Host_Reviews VALUES (?, ?, ?)");
-            ps.setInt(1, travelerid);
-            ps.setInt(2, hostid);
-            ps.setInt(3, rating);
-            System.out.println("Host has added a new review to a traveler");
-            return ps.executeUpdate();
+            if (doesReviewExist(hostid, travelerid)) {
+                System.out.println("A review already exists, update the review");
+                return updateHostReview(hostid, travelerid, rating);
+            } else {
+                final PreparedStatement ps = con.prepareStatement("INSERT INTO Host_Reviews VALUES (?, ?, ?)");
+                ps.setInt(1, travelerid);
+                ps.setInt(2, hostid);
+                ps.setInt(3, rating);
+                System.out.println("Host has added a new review to a traveler");
+                return ps.executeUpdate();
+            }
         } catch(final SQLException e) {
             System.err.println("An error occurred while executing query.");
             System.err.println(e.getMessage());
         }
         return -1;
+    }
+
+    private static int updateHostReview(final int hostid, final int travelerid, final int rating) throws SQLException {
+        final PersistenceLayer persistenceLayer = PersistenceLayer.getInstance();
+        final Connection con = persistenceLayer.getConnection();
+        final String stmt = "UPDATE Host_Reviews SET rating = ? WHERE travelerid = ? AND hostid = ?";
+        final PreparedStatement ps = con.prepareStatement(stmt);
+        ps.setInt(1, rating);
+        ps.setInt(2, travelerid);
+        ps.setInt(3, hostid);
+        return ps.executeUpdate();
+    }
+
+    private static boolean doesReviewExist(final int hostid, final int travelerid) throws SQLException {
+        final PersistenceLayer persistenceLayer = PersistenceLayer.getInstance();
+        final Connection con = persistenceLayer.getConnection();
+        final Statement stmt = con.createStatement();
+        // stmt is a statement object
+        final ResultSet rs = stmt.executeQuery("SELECT COUNT(*) " +
+                "FROM Host_Reviews " +
+                "WHERE hostid = " + hostid + " AND travelerid = " + travelerid);
+        return rs.next() ? rs.getInt(1) > 0 : false;
     }
 
     /**
@@ -326,7 +353,13 @@ public class SQLUtil {
         return null;
     }
 
-    public static int[] deletePosts(int[] selection, DefaultTableModel model) {
+    /**
+     * H7 a host can delete his post
+     * @param selection
+     * @param model
+     * @return
+     */
+    public static int[] deletePost(int[] selection, DefaultTableModel model) {
         try {
             final PersistenceLayer persistenceLayer = PersistenceLayer.getInstance();
             final Connection con = persistenceLayer.getConnection();
