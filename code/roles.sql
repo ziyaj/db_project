@@ -82,6 +82,11 @@ SELECT HR.travelerid, S.name ,HR.rating
 FROM Host_Reviews HR, Traveler T, Student S
 WHERE HR.hostid = 1 AND HR.travelerid = T.cid AND T.cid = S.cid;
 
+-- H6. can review a traveler
+-- travelerid, hostid, rating
+INSERT INTO Host_Reviews
+VALUES(1, 8, 5);
+
 -- AS ADMIN --
 -- A1. can see hosts with contracts
 SELECT HI.hostid, HI.hostname, HI.university, COUNT(CS.contractid)

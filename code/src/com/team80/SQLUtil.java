@@ -21,6 +21,35 @@ public class SQLUtil {
     }
 
     /**
+     * H1. a host can add a post
+     * @param hostid
+     * @param fromDate
+     * @param toDate
+     * @param description
+     * @return ResultSet
+     */
+    public static int addPost(final int hostid, final Date fromDate, final Date toDate, final String description) {
+        try {
+            final PersistenceLayer persistenceLayer = PersistenceLayer.getInstance();
+            final Connection con = persistenceLayer.getConnection();
+            final int count = getMaxPostingId();
+            System.out.println("count: " + count);
+            final PreparedStatement ps = con.prepareStatement("INSERT INTO Posting VALUES (?, ?, ?, ?, ?)");
+            ps.setInt(1, count + 1);
+            ps.setDate(2, fromDate);
+            ps.setDate(3, toDate);
+            ps.setString(4, description);
+            ps.setInt(5, hostid);
+            System.out.println("Successfully added a post!");
+            return ps.executeUpdate();
+        } catch(final SQLException e) {
+            System.err.println("An error occurred while executing query.");
+            System.err.println(e.getMessage());
+        }
+        return -1;
+    }
+
+    /**
      * H2. a host can see all his contracts
      * @return ResultSet rs
      */
@@ -49,6 +78,42 @@ public class SQLUtil {
             System.err.println(e.getMessage());
         }
         return null;
+    }
+
+    /**
+     * H3. a host can update his post
+     * @param selection
+     * @param model
+     * @param fromDate
+     * @param toDate
+     * @param description
+     * @return int
+     */
+    public static int updatePost(int[] selection, DefaultTableModel model, Date fromDate, Date toDate, String description) {
+        try {
+            final PersistenceLayer persistenceLayer = PersistenceLayer.getInstance();
+            final Connection con = persistenceLayer.getConnection();
+
+            final Date fDate = (fromDate == null) ? (Date) model.getValueAt(selection[0], 1) : fromDate;
+            final Date tDate = (toDate == null) ? (Date) model.getValueAt(selection[0], 2) : toDate;
+
+            if(fDate.after(tDate)){
+                return 0;
+            }
+
+            final String stmt = "UPDATE Posting SET description = ? , fromdate = ? , todate = ? WHERE pid = ?";
+            final PreparedStatement ps = con.prepareStatement(stmt);
+            final int pid = (int)model.getValueAt(selection[0], 0);
+            ps.setString(1, description);
+            ps.setDate(2, fDate);
+            ps.setDate(3, tDate);
+            ps.setInt(4, pid);
+            return ps.executeUpdate();
+        } catch(final SQLException e) {
+            System.err.println("An error occurred while executing query.");
+            System.err.println(e.getMessage());
+        }
+        return -1;
     }
 
     /**
@@ -107,6 +172,30 @@ public class SQLUtil {
             System.err.println(e.getMessage());
         }
         return null;
+    }
+
+    /**
+     * H6. a host can review a traveler
+     * @param hostid
+     * @param travelerid
+     * @param rating
+     * @return int
+     */
+    public static int addHostReview(final int hostid, final int travelerid, final int rating) {
+        try {
+            final PersistenceLayer persistenceLayer = PersistenceLayer.getInstance();
+            final Connection con = persistenceLayer.getConnection();
+            final PreparedStatement ps = con.prepareStatement("INSERT INTO Host_Reviews VALUES (?, ?, ?)");
+            ps.setInt(1, travelerid);
+            ps.setInt(2, hostid);
+            ps.setInt(3, rating);
+            System.out.println("Host has added a new review to a traveler");
+            return ps.executeUpdate();
+        } catch(final SQLException e) {
+            System.err.println("An error occurred while executing query.");
+            System.err.println(e.getMessage());
+        }
+        return -1;
     }
 
     /**
@@ -189,56 +278,12 @@ public class SQLUtil {
         return null;
     }
 
-    public static int updatePost(int[] selection, DefaultTableModel model, Date fromDate, Date toDate, String description) {
-        try {
-            final PersistenceLayer persistenceLayer = PersistenceLayer.getInstance();
-            final Connection con = persistenceLayer.getConnection();
-
-            Date fDate = (fromDate == null) ? (Date) model.getValueAt(selection[0], 1) : fromDate;
-            Date tDate = (toDate == null) ? (Date) model.getValueAt(selection[0], 2) : toDate;
-
-            if(fDate.after(tDate)){
-                return 0;
-            }
-
-            String stmt = "UPDATE Posting SET description = ? , fromdate = ? , todate = ? WHERE pid = ?";
-            PreparedStatement ps = con.prepareStatement(stmt);
-            int pid = (int)model.getValueAt(selection[0], 0);
-            ps.setString(1, description);
-            ps.setDate(2, fDate);
-            ps.setDate(3, tDate);
-            ps.setInt(4, pid);
-            return ps.executeUpdate();
-        } catch(final SQLException e) {
-            System.err.println("An error occurred while executing query.");
-            System.err.println(e.getMessage());
-        }
-        return -1;
-    }
-
-    public static int addPost(int id, Date fromDate, Date toDate, String description) {
-        try {
-            final PersistenceLayer persistenceLayer = PersistenceLayer.getInstance();
-            final Connection con = persistenceLayer.getConnection();
-            PreparedStatement ps = con.prepareStatement("SELECT MAX(pid) FROM Posting");
-            ResultSet rs = ps.executeQuery();
-            int count = 0;
-            if (rs.next()) {
-                count = rs.getInt(1);
-            }
-            System.out.println("count: " + count);
-            ps = con.prepareStatement("INSERT INTO Posting VALUES (?, ?, ?, ?, ?)");
-            ps.setInt(1, count + 1);
-            ps.setDate(2, fromDate);
-            ps.setDate(3, toDate);
-            ps.setString(4, description);
-            ps.setInt(5, id);
-            return ps.executeUpdate();
-        } catch(final SQLException e) {
-            System.err.println("An error occurred while executing query.");
-            System.err.println(e.getMessage());
-        }
-        return -1;
+    private static int getMaxPostingId() throws SQLException {
+        final PersistenceLayer persistenceLayer = PersistenceLayer.getInstance();
+        final Connection con = persistenceLayer.getConnection();
+        final PreparedStatement ps1 = con.prepareStatement("SELECT MAX(pid) FROM Posting");
+        final ResultSet rs = ps1.executeQuery();
+        return rs.next() ? rs.getInt(1) : 0;
     }
 
     public static ResultSet getHost(int id) {
