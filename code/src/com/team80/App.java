@@ -318,7 +318,6 @@ public class App {
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
                 int cID;
-                boolean isChecked;
                 String roomNo = "";
                 String residence = "";
                 int dailyRate = -1;
@@ -333,7 +332,6 @@ public class App {
 
                     roomNo = roomTextField.getText();
                     residence = residenceTextField.getText();
-                    isChecked = checkedRadioButton.isSelected();
                     try {
                         dailyRate = Integer.parseInt(dailyRateTextField.getText());
                     } catch (Exception e1) {
@@ -343,7 +341,7 @@ public class App {
                         JOptionPane.showMessageDialog(null, "Info missing","Error Message", JOptionPane.ERROR_MESSAGE);
                         return;
                     }
-                    int result = SQLUtil.addHost(cID, isChecked, roomNo, residence, dailyRate);
+                    int result = SQLUtil.addHost(cID, roomNo, residence, dailyRate);
                     if(result == 1) {
                         JOptionPane.showMessageDialog(null, "Registration successful. Please log in.", "Register Message", JOptionPane.INFORMATION_MESSAGE);
                         tab.remove(register);
