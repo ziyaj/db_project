@@ -57,6 +57,15 @@ public class App {
     private JTextField tidTextField;
     private JPasswordField tPasswordField;
     private JPanel registerPanel;
+    private JPanel travellerEditorPanel;
+    private JPanel filteredResultPanel;
+    private JPanel postingFilterField1;
+    private JPanel postingFilterField2;
+    private JPanel contractReviewField;
+    private JComboBox comboBox1;
+    private JButton buttonForGO;
+    private JSpinner spinner1;
+    private JButton submitButton;
     private int hid;
 
     DefaultTableModel model = new DefaultTableModel();
@@ -73,15 +82,19 @@ public class App {
         hTable.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
         hTable.setFillsViewportHeight(true);
 
-        JPanel adminLogin = (JPanel) tab.getComponentAt(0);
-        JPanel hostLogin = (JPanel) tab.getComponentAt(1);
-        JPanel travellerLogin = (JPanel) tab.getComponentAt(2);
-        JPanel hostEditor = (JPanel) tab.getComponentAt(3);
-        JPanel register = (JPanel) tab.getComponentAt(4);
+        final JPanel adminLogin = (JPanel) tab.getComponentAt(0);
+        final JPanel hostLogin = (JPanel) tab.getComponentAt(1);
+        final JPanel travellerLogin = (JPanel) tab.getComponentAt(2);
+        final JPanel hostEditor = (JPanel) tab.getComponentAt(3);
+        final JPanel register = (JPanel) tab.getComponentAt(4);
+        final JPanel travellerEditorPanel = (JPanel) tab.getComponentAt(5);
+
         // Hide the HostEditor tab on Login window
         tab.remove(hostEditor);
         tab.remove(register);
         //</editor-fold>
+        //tab.remove(travellerEditorPanel);
+
 
         //<editor-fold desc="Host Editor Events">
         logOutButton.addMouseListener(new MouseAdapter() {
@@ -94,6 +107,12 @@ public class App {
                 tab.setSelectedIndex(1);
             }
         });
+
+
+
+
+
+
         hSearchButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
