@@ -354,7 +354,7 @@ public class SQLUtil {
     }
 
     /**
-     * H7 a host can delete his post
+     * H7. a host can delete his post
      * @param selection
      * @param model
      * @return
