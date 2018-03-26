@@ -4,6 +4,10 @@ import javax.swing.table.DefaultTableModel;
 import java.sql.*;
 
 public class SQLUtil {
+    private static final String INSERT_INTO = "INSERT INTO ";
+    private static final String DELETE_FROM = "DELETE FROM ";
+    private static final String SELECT_ALL_FROM = "SELECT * FROM ";
+    private static final String SELECT_COUNT = "SELECT COUNT(*) ";
 
     private static Connection getConnection() {
         final PersistenceLayer persistenceLayer = PersistenceLayer.getInstance();
@@ -19,18 +23,14 @@ public class SQLUtil {
      */
     public static int addPost(final int hostid, final Date fromDate, final Date toDate, final String description) {
         try {
-            System.out.println("Adding a post...");
-            final Connection con = getConnection();
-            final int count = getMaxPostingId();
-            final PreparedStatement ps = con.prepareStatement("INSERT INTO Posting VALUES (?, ?, ?, ?, ?)");
-            ps.setInt(1, count + 1);
+            final String sql = INSERT_INTO + "Posting VALUES (?, ?, ?, ?, ?)";
+            final PreparedStatement ps = getConnection().prepareStatement(sql);
+            ps.setInt(1, getMaxPostingId() + 1);
             ps.setDate(2, fromDate);
             ps.setDate(3, toDate);
             ps.setString(4, description);
             ps.setInt(5, hostid);
-            final int result = ps.executeUpdate();
-            System.out.println("Successfully added a post!");
-            return result;
+            return ps.executeUpdate();
         } catch (final SQLException e) {
             System.err.println("An error occurred while executing query.");
             System.err.println(e.getMessage());
@@ -63,9 +63,10 @@ public class SQLUtil {
         final Date tDate = (toDate == null) ? (Date) model.getValueAt(selection[0], 2) : toDate;
         if (fDate.after(tDate)) {
             return 0;
+        } else {
+            final int pid = (Integer) model.getValueAt(selection[0], 0);
+            return updatePostSQL(pid, fDate, toDate, description);
         }
-        final int pid = (Integer) model.getValueAt(selection[0], 0);
-        return updatePostSQL(pid, fDate, toDate, description);
     }
 
     private static int updatePostSQL(final int pid, final Date fromDate, final Date toDate, final String description) {
@@ -136,7 +137,7 @@ public class SQLUtil {
     }
 
     private static int addNewHostReview(final int hostid, final int travelerid, final int rating) throws SQLException {
-        final PreparedStatement ps = getConnection().prepareStatement("INSERT INTO Host_Reviews VALUES (?, ?, ?)");
+        final PreparedStatement ps = getConnection().prepareStatement(INSERT_INTO + "Host_Reviews VALUES (?, ?, ?)");
         ps.setInt(1, travelerid);
         ps.setInt(2, hostid);
         ps.setInt(3, rating);
@@ -154,9 +155,9 @@ public class SQLUtil {
     }
 
     private static boolean hostReviewExists(final int hostid, final int travelerid) throws SQLException {
-        final ResultSet rs = getStatement().executeQuery("SELECT COUNT(*) FROM Host_Reviews " +
+        final ResultSet rs = getStatement().executeQuery(SELECT_COUNT + "FROM Host_Reviews " +
                 "WHERE hostid = " + hostid + " AND travelerid = " + travelerid);
-        return rs.next() ? rs.getInt(1) > 0 : false;
+        return rs.next() && rs.getInt(1) > 0;
     }
 
     /**
@@ -164,7 +165,7 @@ public class SQLUtil {
      */
     public static int[] deletePost(int[] selection, DefaultTableModel model) {
         try {
-            final PreparedStatement ps = getConnection().prepareStatement("DELETE FROM Posting WHERE pid = ?");
+            final PreparedStatement ps = getConnection().prepareStatement(DELETE_FROM + "Posting WHERE pid = ?");
             for (final int column : selection) {
                 final int pid = (Integer) model.getValueAt(column, 0);
                 ps.setInt(1, pid);
@@ -183,8 +184,9 @@ public class SQLUtil {
      */
     public static ResultSet findAllPosts(final int id) {
         try {
-            final String stmt = (id == -1) ? "SELECT * FROM Posting" : "SELECT * FROM Posting WHERE hostid = ? ORDER BY pid DESC";
-            PreparedStatement ps = getConnection().prepareStatement(stmt);
+            final String stmt = SELECT_ALL_FROM + ((id == -1) ?
+                    "Posting" : "Posting WHERE hostid = ? ORDER BY pid DESC");
+            final PreparedStatement ps = getConnection().prepareStatement(stmt);
             ps.setInt(1, id);
             return ps.executeQuery();
         } catch (final SQLException e) {
@@ -200,7 +202,7 @@ public class SQLUtil {
     public static ResultSet findCheapestPosts() {
         try {
             return getStatement().executeQuery(
-                    "SELECT * FROM PostingInfo PI WHERE PI.dailyrate = (SELECT MIN(dailyrate) FROM PostingInfo)");
+                    SELECT_ALL_FROM + "PostingInfo PI WHERE PI.dailyrate = (SELECT MIN(dailyrate) FROM PostingInfo)");
         } catch (final SQLException e) {
             System.err.println("An error occurred while executing query.");
             System.err.println(e.getMessage());
@@ -211,7 +213,7 @@ public class SQLUtil {
     public static ResultSet findMostExpensivePosts() {
         try {
             return getStatement().executeQuery(
-                    "SELECT * FROM PostingInfo PI WHERE PI.dailyrate = (SELECT MAX(dailyrate) FROM PostingInfo)");
+                    SELECT_ALL_FROM + "PostingInfo PI WHERE PI.dailyrate = (SELECT MAX(dailyrate) FROM PostingInfo)");
         } catch (final SQLException e) {
             System.err.println("An error occurred while executing query.");
             System.err.println(e.getMessage());
@@ -226,7 +228,7 @@ public class SQLUtil {
         try {
             final int contractid = getMaxContractId() + 1;
             final PreparedStatement ps = getConnection().prepareStatement(
-                    "INSERT INTO Contract_Signs VALUES (?, ?, ?, ?, ?)");
+                    INSERT_INTO + "Contract_Signs VALUES (?, ?, ?, ?, ?)");
             ps.setInt(1, contractid);
             ps.setDate(2, fromDate);
             ps.setDate(3, toDate);
@@ -271,7 +273,7 @@ public class SQLUtil {
 
     public static ResultSet getHost(final int hostid) {
         try {
-            final PreparedStatement ps = getConnection().prepareStatement("SELECT * FROM Hosts WHERE cid = ?");
+            final PreparedStatement ps = getConnection().prepareStatement(SELECT_ALL_FROM + "Hosts WHERE cid = ?");
             ps.setInt(1, hostid);
             return ps.executeQuery();
         } catch (final SQLException e) {
@@ -283,7 +285,7 @@ public class SQLUtil {
 
     public static int addHost(final int cid, final String roomNo, final String residence, final int dailyRate) {
         try {
-            final PreparedStatement ps = getConnection().prepareStatement("INSERT INTO Hosts VALUES (?, ?, ?, ?)");
+            final PreparedStatement ps = getConnection().prepareStatement(INSERT_INTO + "Hosts VALUES (?, ?, ?, ?)");
             ps.setInt(1, cid);
             ps.setString(2, roomNo);
             ps.setString(3, residence);
@@ -298,7 +300,7 @@ public class SQLUtil {
 
     public static ResultSet getStudent(final int cid) {
         try {
-            final PreparedStatement ps = getConnection().prepareStatement("SELECT * FROM Student WHERE cid = ?");
+            final PreparedStatement ps = getConnection().prepareStatement(SELECT_ALL_FROM + "Student WHERE cid = ?");
             ps.setInt(1, cid);
             return ps.executeQuery();
         } catch (final SQLException e) {
