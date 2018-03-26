@@ -5,21 +5,6 @@ import java.sql.*;
 
 public class SQLUtil {
 
-    public static ResultSet findAllPosts(int id) {
-        try {
-            final PersistenceLayer persistenceLayer = PersistenceLayer.getInstance();
-            final Connection con = persistenceLayer.getConnection();
-            String stmt = (id == -1) ? "SELECT * FROM Posting" : "SELECT * FROM Posting WHERE hostid = ? ORDER BY pid DESC";
-            PreparedStatement ps = con.prepareStatement(stmt);
-            ps.setInt(1, id);
-            return ps.executeQuery();
-        } catch(final SQLException e) {
-            System.err.println("An error occurred while executing query.");
-            System.err.println(e.getMessage());
-        }
-        return null;
-    }
-
     /**
      * H1. a host can add a post
      * @param hostid
@@ -103,7 +88,7 @@ public class SQLUtil {
 
             final String stmt = "UPDATE Posting SET description = ? , fromdate = ? , todate = ? WHERE pid = ?";
             final PreparedStatement ps = con.prepareStatement(stmt);
-            final int pid = (int)model.getValueAt(selection[0], 0);
+            final int pid = (Integer) model.getValueAt(selection[0], 0);
             ps.setString(1, description);
             ps.setDate(2, fDate);
             ps.setDate(3, tDate);
@@ -199,6 +184,26 @@ public class SQLUtil {
     }
 
     /**
+     * T1. find postings with
+     * @param id
+     * @return
+     */
+    public static ResultSet findAllPosts(final int id) {
+        try {
+            final PersistenceLayer persistenceLayer = PersistenceLayer.getInstance();
+            final Connection con = persistenceLayer.getConnection();
+            String stmt = (id == -1) ? "SELECT * FROM Posting" : "SELECT * FROM Posting WHERE hostid = ? ORDER BY pid DESC";
+            PreparedStatement ps = con.prepareStatement(stmt);
+            ps.setInt(1, id);
+            return ps.executeQuery();
+        } catch(final SQLException e) {
+            System.err.println("An error occurred while executing query.");
+            System.err.println(e.getMessage());
+        }
+        return null;
+    }
+
+    /**
      * T2 - find cheapest posts
      * @return ResultSet rs
      */
@@ -260,13 +265,41 @@ public class SQLUtil {
         return null;
     }
 
+    /**
+     * T3. a traveler can sign up contract
+     * @param hostid
+     * @param travelerid
+     * @param fromDate
+     * @param toDate
+     * @return
+     */
+    public static int signContract(final int hostid, final int travelerid, final Date fromDate, final Date toDate) {
+        try {
+            final PersistenceLayer persistenceLayer = PersistenceLayer.getInstance();
+            final Connection con = persistenceLayer.getConnection();
+            final int contractid = getMaxContractId() + 1;
+            final PreparedStatement ps = con.prepareStatement("INSERT INTO Contract_Signs VALUES (?, ?, ?, ?, ?)");
+            ps.setInt(1, contractid);
+            ps.setDate(2, fromDate);
+            ps.setDate(3, toDate);
+            ps.setInt(4, hostid);
+            ps.setInt(5, travelerid);
+            System.out.println("A traveler has signed up a contract");
+            return ps.executeUpdate();
+        } catch(final SQLException e) {
+            System.err.println("An error occurred while executing query.");
+            System.err.println(e.getMessage());
+        }
+        return -1;
+    }
+
     public static int[] deletePosts(int[] selection, DefaultTableModel model) {
         try {
             final PersistenceLayer persistenceLayer = PersistenceLayer.getInstance();
             final Connection con = persistenceLayer.getConnection();
             PreparedStatement ps = con.prepareStatement("DELETE FROM Posting WHERE pid = ?");
             for (int i = 0; i < selection.length; i++) {
-                int pid = (int)model.getValueAt(selection[i], 0);
+                int pid = (Integer) model.getValueAt(selection[i], 0);
                 ps.setInt(1, pid);
                 ps.addBatch();
             }
@@ -278,11 +311,19 @@ public class SQLUtil {
         return null;
     }
 
+    private static int getMaxContractId() throws SQLException {
+        final PersistenceLayer persistenceLayer = PersistenceLayer.getInstance();
+        final Connection con = persistenceLayer.getConnection();
+        final PreparedStatement ps = con.prepareStatement("SELECT MAX(contractid) FROM Contract_Signs");
+        final ResultSet rs = ps.executeQuery();
+        return rs.next() ? rs.getInt(1) : 0;
+    }
+
     private static int getMaxPostingId() throws SQLException {
         final PersistenceLayer persistenceLayer = PersistenceLayer.getInstance();
         final Connection con = persistenceLayer.getConnection();
-        final PreparedStatement ps1 = con.prepareStatement("SELECT MAX(pid) FROM Posting");
-        final ResultSet rs = ps1.executeQuery();
+        final PreparedStatement ps = con.prepareStatement("SELECT MAX(pid) FROM Posting");
+        final ResultSet rs = ps.executeQuery();
         return rs.next() ? rs.getInt(1) : 0;
     }
 
@@ -331,4 +372,5 @@ public class SQLUtil {
         }
         return null;
     }
+
 }
