@@ -71,7 +71,7 @@ public class SQLUtil {
             return 0;
         } else {
             final int pid = (Integer) model.getValueAt(selection[0], 0);
-            return updatePostSQL(pid, fDate, toDate, description);
+            return updatePostSQL(pid, fDate, tDate, description);
         }
     }
 
