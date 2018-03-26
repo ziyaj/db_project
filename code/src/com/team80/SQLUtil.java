@@ -293,6 +293,39 @@ public class SQLUtil {
         return -1;
     }
 
+    /**
+     * T4. a traveler can view his or her contracts
+     * @param travlerid
+     * @return
+     */
+    public static ResultSet findTravelerContracts(final int travlerid) {
+        try {
+            final PersistenceLayer persistenceLayer = PersistenceLayer.getInstance();
+            final Connection con = persistenceLayer.getConnection();
+            final Statement stmt = con.createStatement();
+            // stmt is a statement object
+            final ResultSet rs = stmt.executeQuery("SELECT CS.contractid, CS.fromdate, CS.todate, HI.hostid, HI.hostname, HI.university, HI.roomno, HI.residencename " +
+                    "FROM Contract_Signs CS, HostInfo HI " +
+                    "WHERE CS.travelerid = " + travlerid + " AND CS.hostid = HI.hostid");
+            // contractid, fromdate, todate, hostid, hostname, university, roomno, residencename
+//            while (rs.next()) {
+//                System.out.println("contractid: " + rs.getInt(1));
+//                System.out.println("fromdate: " + rs.getString(2));
+//                System.out.println("todate: " + rs.getString(3));
+//                System.out.println("hostid: " + rs.getInt(4));
+//                System.out.println("hostname: " + rs.getString(5));
+//                System.out.println("university: " + rs.getString(6));
+//                System.out.println("roomno: " + rs.getString(7));
+//                System.out.println("residencename: " + rs.getString(8));
+//            }
+            return rs;
+        } catch(final SQLException e) {
+            System.err.println("An error occurred while executing query.");
+            System.err.println(e.getMessage());
+        }
+        return null;
+    }
+
     public static int[] deletePosts(int[] selection, DefaultTableModel model) {
         try {
             final PersistenceLayer persistenceLayer = PersistenceLayer.getInstance();
