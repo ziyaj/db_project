@@ -63,7 +63,7 @@ FROM PostingInfo PI
 WHERE PI.hostid = 1;
 
 -- H3. can update his post
----    if fromdate > todate, or todate < fromdate, the update should fail
+--- if fromdate > todate, or todate < fromdate, the update should fail
 UPDATE Posting
 SET fromdate = '2018-01-05', description = 'a great place to live'
 WHERE pid = 1;

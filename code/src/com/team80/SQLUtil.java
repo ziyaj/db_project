@@ -186,8 +186,87 @@ public class SQLUtil {
     }
 
     /**
-     * T1. find postings with
+     * T1. a traveler can find postings with
+     --     I. conditions:
+     --        a) university
+     --        b) within date range (fromdate <= STARTDATE AND todate >= ENDDATE)
+     --        c) daily rate range (daily rate BETWEEN AMT1 AND AMT2) default: low: 1 high: 200
+     --    II. display options: has to display pid at least
+     --        a) date range (fromdate + todate)
+     --        b) host name
+     --        c) address (roomno + residencename)
+     --        d) university
+     --        e) dailyrate
      */
+    public static ResultSet findPostsWith(final boolean showDateRange, final boolean showHost,
+                                          final boolean showAddress, final boolean showUniv,
+                                          final boolean showRate) {
+        try {
+            final String select = computeSelectPosts(showDateRange, showHost, showAddress, showUniv, showRate);
+            final String sql = select + "FROM PostingInfo PI ";
+            final PreparedStatement ps = getConnection().prepareStatement(sql);
+            return ps.executeQuery();
+        } catch (final SQLException e) {
+            System.err.println("An error occurred while executing query.");
+            System.err.println(e.getMessage());
+        }
+        return null;
+    }
+
+    public static ResultSet findPostsWithCondition(final String univ, final Date startDate, final Date endDate,
+                                                   final int lowPrice, final int highPrice,
+                                                   final boolean showDateRange, final boolean showHost,
+                                                   final boolean showAddress, final boolean showUniv,
+                                                   final boolean showRate) {
+        try {
+            final String select = computeSelectPosts(showDateRange, showHost, showAddress, showUniv, showRate);
+            final String sql = select + "FROM PostingInfo PI " + computeWherePosts(univ, startDate, endDate, lowPrice, highPrice);
+            final PreparedStatement ps = getConnection().prepareStatement(sql);
+            return ps.executeQuery();
+        } catch (final SQLException e) {
+            System.err.println("An error occurred while executing query.");
+            System.err.println(e.getMessage());
+        }
+        return null;
+    }
+
+    private static String computeSelectPosts(final boolean showDateRange,
+                                             final boolean showHost, final boolean showAddress,
+                                             final boolean showUniv, final boolean showRate) {
+        String select = "SELECT PI.pid,";
+        if (showDateRange) {
+            select += "PI.fromdate,PI.todate,";
+        }
+        if (showHost) {
+            select += "PI.hostname,";
+        }
+        if (showAddress) {
+            select += "PI.roomno,PI.residencename,";
+        }
+        if (showUniv) {
+            select += "PI.university,";
+        }
+        if (showRate) {
+            select += "PI.dailyrate,";
+        }
+        return select.substring(0, select.length()-1) + " ";
+    }
+
+    private static String computeWherePosts(final String university, final Date startDate, final Date endDate, final int
+            lowPrice, final int highPrice) {
+        String where = "WHERE PI.dailyrate BETWEEN " + lowPrice + " AND " + highPrice;
+        if (university != null && !university.isEmpty()) {
+            where += " AND PI.university LIKE '%" + university + "%' ";
+        }
+        if (startDate != null) {
+            where += " AND PI.fromdate <= " + startDate;
+        }
+        if (endDate != null) {
+            where += " AND PI.todate >= " + endDate;
+        }
+        return where;
+    }
+
     public static ResultSet findAllPosts(final int id) {
         try {
             final String stmt = SELECT_ALL_FROM + ((id == -1) ?
