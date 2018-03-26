@@ -5,7 +5,11 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.sql.*;
+import java.util.Hashtable;
+
 import org.jdesktop.swingx.JXDatePicker;
+
+import static java.sql.Types.*;
 
 
 // before starting the app, you should ssh to your ugrad account
@@ -25,12 +29,12 @@ public class App {
     private JButton tSignInButton;
     private JButton hUpdateButton;
     private JButton hDeleteButton;
-    private JButton hSearchButton;
-    private JButton hInsertButton;
+    private JButton postsButton;
+    private JButton addPostButton;
     private JTextField PID;
     private JTextField descriptionTextField;
     private JTable hTable;
-    private JTextField pidTextField;
+    private JTextField ratingTextField;
     private JButton logOutButton;
     private JTextField hostMsg;
     static PersistenceLayer persistenceLayer;
@@ -56,6 +60,7 @@ public class App {
     private JTextField tidTextField;
     private JPasswordField tPasswordField;
     private JPanel registerPanel;
+
     private JPanel travellerEditorPanel;
     private JPanel filteredResultPanel;
     private JPanel postingFilterField1;
@@ -70,6 +75,12 @@ public class App {
     private JPanel AdminPanel;
     private JButton A_awardButton;
     private JButton A_Delete;
+
+
+    private JButton contractsButton;
+    private JButton addReviewButton;
+    private JSlider ratingSlider;
+    private JButton reviewsButton;
 
     private int hid;
 
@@ -97,6 +108,16 @@ public class App {
         // Hide the HostEditor tab on Login window
         tab.remove(hostEditor);
         tab.remove(register);
+
+        ratingSlider.setMaximum(10);
+        ratingSlider.setMinimum(1);
+        Hashtable labelTable = new Hashtable();
+        for (int i = 1; i <= 10; i++) {
+            labelTable.put(i, new JLabel(String.valueOf(i)));
+        }
+        ratingSlider.setLabelTable( labelTable );
+        ratingSlider.setPaintLabels(true);
+
         //</editor-fold>
         tab.remove(travellerEditorPanel);
 
@@ -112,6 +133,7 @@ public class App {
                 tab.setSelectedIndex(1);
             }
         });
+
 
         //TODO
         tSignInButton.addMouseListener(new MouseAdapter() {
@@ -154,10 +176,29 @@ public class App {
 
 
         hSearchButton.addMouseListener(new MouseAdapter() {
+
+        contractsButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                ResultSet rs = SQLUtil.findHostsContracts(hid);
+                loadTable(hTable, model, rs);
+            }
+        });
+        postsButton.addMouseListener(new MouseAdapter() {
+
             @Override
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
                 search();
+            }
+        });
+        reviewsButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                ResultSet rs = SQLUtil.findHostsReviews(hid);
+                loadTable(hTable, model, rs);
             }
         });
         hUpdateButton.addMouseListener(new MouseAdapter() {
@@ -191,7 +232,7 @@ public class App {
                 }
             }
         });
-        hInsertButton.addMouseListener(new MouseAdapter() {
+        addPostButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
@@ -217,6 +258,38 @@ public class App {
                 search();
             }
         });
+        addReviewButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                int[] selectedRows = getSelected();
+                if (selectedRows.length == 0) {
+                    JOptionPane.showMessageDialog(null, "Please select a record", "Add Review Message", JOptionPane.WARNING_MESSAGE);
+                    return;
+                } else if (selectedRows.length > 1) {
+                    JOptionPane.showMessageDialog(null, "Please select only one record at a time", "Add Review Message", JOptionPane.WARNING_MESSAGE);
+                } else {
+                    int rating = ratingSlider.getValue();
+                    /*
+                    if (!model.getColumnName(1).equals("CONTRACTID")) {
+                        JOptionPane.showMessageDialog(null, "Selected record is not a contract", "Add Review Message", JOptionPane.ERROR_MESSAGE);
+                        return;
+                    }
+                    */
+                    int tid = (Integer) model.getValueAt(selectedRows[0], 3);
+                    int dialogResult = JOptionPane.showConfirmDialog (null, "Add a host review?","Warning", JOptionPane.YES_NO_OPTION);
+                    if(dialogResult == JOptionPane.YES_OPTION) {
+                        int result = SQLUtil.addHostReview(hid, tid, rating);
+                        search();
+                        if (result > 0) {
+                            JOptionPane.showMessageDialog(null, "Added successfully.", "Add Review Message", JOptionPane.INFORMATION_MESSAGE);
+                        } else {
+                            JOptionPane.showMessageDialog(null, "Failed. Please try again", "Add Review Message", JOptionPane.ERROR_MESSAGE);
+                        }
+                    }
+                }
+            }
+        });
         hDeleteButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -228,8 +301,10 @@ public class App {
                 }
                 int dialogResult = JOptionPane.showConfirmDialog (null, "Delete selected records?","Warning", JOptionPane.YES_NO_OPTION);
                 if(dialogResult == JOptionPane.YES_OPTION){
+
                     int[] result = SQLUtil.deletePost(selectedRows, model);
-                    hSearchButton.doClick();
+                    postsButton.doClick();
+
                     search();
                     if(result.length > 0) {
                         JOptionPane.showMessageDialog(null, "Selected records have been removed.", "Deletion Message", JOptionPane.INFORMATION_MESSAGE);
@@ -331,6 +406,7 @@ public class App {
             }
         });
         //</editor-fold>
+
         hUpdateButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent mouseEvent) {
@@ -376,6 +452,7 @@ public class App {
 
             }
         });
+
     }
 
     //<editor-fold desc="Helper">
@@ -392,37 +469,8 @@ public class App {
 
 
     public void search() {
-        int pid;
-        ResultSet rs = null;
-        String pidStr = pidTextField.getText();
-        if (!pidStr.equals("")) {
-            try {
-                pid = Integer.parseInt(pidStr);
-                // TODO: add pid as search criterion
-
-            } catch (Exception e1) {
-                hLoginTextField.setText("Invalid username");
-                return;
-            }
-        } else {
-            rs = SQLUtil.findAllPosts(hid);
-        }
-
-        try {
-            int pID;
-            Date fromDate;
-            Date toDate;
-            String description = "";
-            model.setRowCount(0);
-            while (rs.next()) {
-                pID = rs.getInt(1);
-                fromDate = rs.getDate("fromdate");
-                toDate = rs.getDate("todate");
-                description = rs.getString("description");
-                Object[] row = {pID, fromDate, toDate, description};
-                model.addRow(row);
-            }
-        } catch (SQLException e1) { }
+        ResultSet rs = SQLUtil.findAllPosts(hid);
+        loadTable(hTable, model, rs);
     }
 
     public int[] getSelected() {
@@ -431,6 +479,43 @@ public class App {
             selection[i] = hTable.convertRowIndexToModel(selection[i]);
         }
         return selection;
+    }
+
+    public void loadTable(JTable table, DefaultTableModel model, ResultSet rs) {
+        try {
+            ResultSetMetaData rsmd = rs.getMetaData();
+            int count = rsmd.getColumnCount();
+            String[] columnNames = new String[count];
+            int[] types = new int[count];
+            for(int i = 0; i < count; i++) {
+                columnNames[i] = rsmd.getColumnLabel(i+1);
+                types[i] = rsmd.getColumnType(i+1);
+            }
+
+            model.setRowCount(0);
+            while (rs.next()) {
+                Object[] row = new Object[count];
+                for(int i = 0; i < count; i++) {
+                    switch (types[i]) {
+                        case NUMERIC:
+                            row[i] = rs.getInt(i+1);
+                            break;
+                        case CHAR:
+                            row[i] = rs.getString(i+1);
+                            break;
+                        case TIMESTAMP:
+                            row[i] = rs.getDate(i+1);
+                            break;
+                        default:
+                    }
+                }
+                model.addRow(row);
+            }
+
+            model.setColumnIdentifiers(columnNames);
+            table.setModel(model);
+            model.fireTableDataChanged();
+        } catch (Exception e1) {}
     }
     //</editor-fold>
 
