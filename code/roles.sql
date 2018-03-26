@@ -87,7 +87,6 @@ WHERE HR.hostid = 1 AND HR.travelerid = T.cid AND T.cid = S.cid;
 SELECT COUNT(*)
 FROM Host_Reviews
 WHERE hostid = 1 AND travelerid = 2;
-
 -- other wise do an insert travelerid, hostid, rating
 INSERT INTO Host_Reviews
 VALUES(1, 8, 5);
