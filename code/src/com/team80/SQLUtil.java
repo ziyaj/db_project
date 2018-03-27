@@ -360,16 +360,15 @@ public class SQLUtil {
     /**
      * T3. a traveler can sign up contract
      */
-    public static int transformPostingToContract(final int pid) {
+    public static int transformPostingToContract(final int pid, final int travelerid) {
         try {
             final ResultSet rs = getStatement().executeQuery(
-                    "SELECT PI.travelerid, PI.hostid, PI.fromdate, PI.todate " +
+                    "SELECT PI.hostid, PI.fromdate, PI.todate " +
                     "FROM PostingInfo PI WHERE PI.pid = " + pid);
             if (rs.next()) {
-                final int travelerid = rs.getInt(1);
-                final int hostid = rs.getInt(2);
-                final Date fromdate = rs.getDate(3);
-                final Date todate = rs.getDate(4);
+                final int hostid = rs.getInt(1);
+                final Date fromdate = rs.getDate(2);
+                final Date todate = rs.getDate(3);
                 final int result = signContract(hostid, travelerid, fromdate, todate);
                 if (result != -1) {
                     return deletePostWithId(pid);
