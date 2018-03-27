@@ -27,7 +27,7 @@
             <properties/>
             <border type="none" title=""/>
             <children>
-              <grid id="7d820" layout-manager="GridLayoutManager" row-count="3" column-count="3" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+              <grid id="7d820" layout-manager="GridLayoutManager" row-count="3" column-count="4" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
                 <margin top="0" left="0" bottom="0" right="0"/>
                 <constraints>
                   <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
@@ -37,13 +37,29 @@
                 <children>
                   <vspacer id="cba1e">
                     <constraints>
-                      <grid row="2" column="2" row-span="1" col-span="1" vsize-policy="7" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
+                      <grid row="2" column="3" row-span="1" col-span="1" vsize-policy="7" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                  </vspacer>
+                  <component id="3e8d" class="javax.swing.JSeparator">
+                    <constraints>
+                      <grid row="0" column="1" row-span="1" col-span="2" vsize-policy="0" hsize-policy="0" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties/>
+                  </component>
+                  <vspacer id="38ce2">
+                    <constraints>
+                      <grid row="1" column="2" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                  </vspacer>
+                  <vspacer id="151c1">
+                    <constraints>
+                      <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
                     </constraints>
                   </vspacer>
                   <grid id="5ff5d" layout-manager="GridLayoutManager" row-count="6" column-count="5" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
                     <margin top="0" left="0" bottom="0" right="0"/>
                     <constraints>
-                      <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="9" fill="0" indent="0" use-parent-layout="false"/>
+                      <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="9" fill="0" indent="0" use-parent-layout="false"/>
                     </constraints>
                     <properties/>
                     <border type="none"/>
@@ -124,24 +140,20 @@
                           <grid row="0" column="3" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
                         </constraints>
                       </vspacer>
+                      <component id="bccb3" class="javax.swing.JTextField" binding="AdminLoginText">
+                        <constraints>
+                          <grid row="4" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+                            <preferred-size width="150" height="-1"/>
+                          </grid>
+                        </constraints>
+                        <properties>
+                          <editable value="false"/>
+                          <enabled value="true"/>
+                          <text value=""/>
+                        </properties>
+                      </component>
                     </children>
                   </grid>
-                  <component id="3e8d" class="javax.swing.JSeparator">
-                    <constraints>
-                      <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
-                    </constraints>
-                    <properties/>
-                  </component>
-                  <vspacer id="38ce2">
-                    <constraints>
-                      <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
-                    </constraints>
-                  </vspacer>
-                  <vspacer id="151c1">
-                    <constraints>
-                      <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
-                    </constraints>
-                  </vspacer>
                 </children>
               </grid>
             </children>
@@ -764,7 +776,7 @@
               </component>
             </children>
           </grid>
-          <grid id="5e3db" binding="AdminPanel" layout-manager="GridLayoutManager" row-count="2" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+          <grid id="5e3db" binding="AdminEditor" layout-manager="GridLayoutManager" row-count="2" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
             <margin top="0" left="0" bottom="0" right="0"/>
             <constraints>
               <tabbedpane title="AdminPanel"/>
@@ -795,7 +807,7 @@
                         <properties/>
                         <border type="none"/>
                         <children>
-                          <component id="d346c" class="javax.swing.JTable">
+                          <component id="d346c" class="javax.swing.JTable" binding="A_Table">
                             <constraints/>
                             <properties/>
                           </component>
@@ -826,7 +838,7 @@
                       <text value="Please enter hostid here"/>
                     </properties>
                   </component>
-                  <component id="9ab76" class="javax.swing.JButton">
+                  <component id="9ab76" class="javax.swing.JButton" binding="HR_hostButton">
                     <constraints>
                       <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                     </constraints>
@@ -834,7 +846,7 @@
                       <text value="Find Host with Highest rating "/>
                     </properties>
                   </component>
-                  <component id="77772" class="javax.swing.JButton">
+                  <component id="77772" class="javax.swing.JButton" binding="SuperT">
                     <constraints>
                       <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                     </constraints>
@@ -842,7 +854,7 @@
                       <text value="Find Travellers who have been to every university"/>
                     </properties>
                   </component>
-                  <component id="53f55" class="javax.swing.JTextField">
+                  <component id="53f55" class="javax.swing.JTextField" binding="A_hidTextfield">
                     <constraints>
                       <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
                         <preferred-size width="150" height="-1"/>
@@ -852,25 +864,17 @@
                       <text value=""/>
                     </properties>
                   </component>
-                  <component id="b2446" class="javax.swing.JButton">
-                    <constraints>
-                      <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-                    </constraints>
-                    <properties>
-                      <text value="Find Host with lowest rating "/>
-                    </properties>
-                  </component>
                   <hspacer id="232f0">
                     <constraints>
                       <grid row="0" column="3" row-span="1" col-span="2" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                     </constraints>
                   </hspacer>
-                  <component id="def7d" class="javax.swing.JButton">
+                  <component id="def7d" class="javax.swing.JButton" binding="FindHost">
                     <constraints>
                       <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                     </constraints>
                     <properties>
-                      <text value="Find Host by hostID"/>
+                      <text value="Find all hosts with contracts"/>
                     </properties>
                   </component>
                   <hspacer id="e50ee">
@@ -894,12 +898,20 @@
                       <text value="Award"/>
                     </properties>
                   </component>
-                  <component id="65ec7" class="javax.swing.JButton" default-binding="true">
+                  <component id="65ec7" class="javax.swing.JButton" binding="A_Logout">
                     <constraints>
                       <grid row="3" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                     </constraints>
                     <properties>
                       <text value="Log out"/>
+                    </properties>
+                  </component>
+                  <component id="b2446" class="javax.swing.JButton" binding="LR_HostButton">
+                    <constraints>
+                      <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <text value="Find Host with Lowest rating "/>
                     </properties>
                   </component>
                 </children>
