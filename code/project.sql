@@ -37,6 +37,7 @@ cid INTEGER,
 name CHAR(20),
 gender CHAR(1),
 unid INTEGER NOT NULL,
+password CHAR(10) NOT NULL,
 PRIMARY KEY (cid),
 FOREIGN KEY (unid) REFERENCES University,
 CHECK (gender = 'M' OR gender = 'F')
@@ -192,67 +193,67 @@ insert into University
 values(20, 'Georgia Institute of Technology');
 
 insert into Student
-values(1, 'Harry Potter', 'M', 1);
+values(1, 'Harry Potter', 'M', 1, '123456');
 
 insert into Student
-values(2, 'Cersei Lannister', 'F', 2);
+values(2, 'Cersei Lannister', 'F', 2, '123456');
 
 insert into Student
-values(3, 'Guillaume Lux', 'F', 3);
+values(3, 'Guillaume Lux', 'F', 3, '123456');
 
 insert into Student
-values(4, 'Jaap Eris', 'M', 4);
+values(4, 'Jaap Eris', 'M', 4, '123456');
 
 insert into Student
-values(5, 'Kidlat Urbanus', 'F', 5);
+values(5, 'Kidlat Urbanus', 'F', 5, '123456');
 
 insert into Student
-values(6, 'Hannah Abbott', 'F', 6);
+values(6, 'Hannah Abbott', 'F', 6, '123456');
 
 insert into Student
-values(7, 'Ludo Bagman', 'M', 7);
+values(7, 'Ludo Bagman', 'M', 7, '123456');
 
 insert into Student
-values(8, 'Bathilda Bagshot', 'F', 9);
+values(8, 'Bathilda Bagshot', 'F', 9, '123456');
 
 insert into Student
-values(9, 'Katie Bell', 'F', 8);
+values(9, 'Katie Bell', 'F', 8, '123456');
 
 insert into Student
-values(10, 'Cuthbert Binns', 'F', 10);
+values(10, 'Cuthbert Binns', 'F', 10, '123456');
 
 insert into Student
-values(11, 'Charles Leiserson', 'M', 11);
+values(11, 'Charles Leiserson', 'M', 11, '123456');
 
 insert into Student
-values(12, 'Robert Floyd', 'M', 12);
+values(12, 'Robert Floyd', 'M', 12, '123456');
 
 insert into Student
-values(13, 'Babara Liskov', 'F', 17);
+values(13, 'Babara Liskov', 'F', 17, '123456');
 
 insert into Student
-values(14, 'Brian Kernighan', 'M', 16);
+values(14, 'Brian Kernighan', 'M', 16, '123456');
 
 insert into Student
-values(15, 'Jeffery Dean', 'M', 15);
+values(15, 'Jeffery Dean', 'M', 15, '123456');
 
 insert into Student
-values(16, 'Guanyao Fu', 'M', 20);
+values(16, 'Guanyao Fu', 'M', 20, '123456');
 
 insert into Student
-values(17, 'Randal Bryant', 'M', 19);
+values(17, 'Randal Bryant', 'M', 19, '123456');
 
 insert into Student
-values(18, 'Ada Lovelace', 'F', 13);
+values(18, 'Ada Lovelace', 'F', 13, '123456');
 
 insert into Student
-values(19, 'Marie Currie', 'F', 14);
+values(19, 'Marie Currie', 'F', 14, '123456');
 
 insert into Student
-values(20, 'Eric Xing', 'M', 18);
+values(20, 'Eric Xing', 'M', 18, '123456');
 
 insert into Student
-values(21, 'Paul Friedman', 'M', 12);
+values(21, 'Paul Friedman', 'M', 12, '123456');
 
 insert into Hosts
 values(1, '1024', 'Thunderbird Crescent', 35);
