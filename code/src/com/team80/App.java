@@ -219,7 +219,6 @@ public class App {
                     int dialogResult = JOptionPane.showConfirmDialog (null, "Add a host review?","Warning", JOptionPane.YES_NO_OPTION);
                     if(dialogResult == JOptionPane.YES_OPTION) {
                         int result = SQLUtil.addHostReview(hid, tid, rating);
-                        refreshAllPosts();
                         if (result > 0) {
                             JOptionPane.showMessageDialog(null, "Added successfully.", "Add Review Message", JOptionPane.INFORMATION_MESSAGE);
                         } else {
@@ -239,7 +238,6 @@ public class App {
                 }
                 int dialogResult = JOptionPane.showConfirmDialog (null, "Delete selected records?","Warning", JOptionPane.YES_NO_OPTION);
                 if(dialogResult == JOptionPane.YES_OPTION){
-
                     int[] result = SQLUtil.deletePost(selectedRows, hModel);
                     refreshAllPosts();
                     if(result.length > 0) {
@@ -312,27 +310,22 @@ public class App {
                     JOptionPane.showMessageDialog(null, "Invalid username.","Login error", JOptionPane.ERROR_MESSAGE);
                     return;
                 }
-                ResultSet rs = SQLUtil.getHost(hid);
 
-                try {
-                    if (rs.next()) {
-                        char[] pw = hPasswordField.getPassword();
-                        if (hidTextField.getText().equals(String.valueOf(pw))) {
-                            hidTextField.setText("");
-                            hPasswordField.setText("");
-                            tab.add(hostEditor, 1);
-                            tab.setTitleAt(1, "HostEditor");
-                            tab.remove(hostLogin);
-                            tab.setSelectedIndex(1);
-                        } else {
-                            JOptionPane.showMessageDialog(null, "Invalid password. Try again.","Error Message", JOptionPane.ERROR_MESSAGE);
-                        }
+                if (SQLUtil.hostExists(hid)) {
+                    char[] pw = hPasswordField.getPassword();
+                    if (SQLUtil.hasCorrectPassword(hid, String.valueOf(pw))) {
+                        hidTextField.setText("");
+                        hPasswordField.setText("");
+                        tab.add(hostEditor, 1);
+                        tab.setTitleAt(1, "Host Editor");
+                        tab.remove(hostLogin);
+                        tab.setSelectedIndex(1);
                     } else {
-                        hid = -1;
-                        JOptionPane.showMessageDialog(null, "User does not exist. Please sign up first.","Login error", JOptionPane.ERROR_MESSAGE);
+                        JOptionPane.showMessageDialog(null, "Invalid password. Try again.","Error Message", JOptionPane.ERROR_MESSAGE);
                     }
-                } catch (SQLException e2) {
-                    e2.printStackTrace();
+                } else {
+                    hid = -1;
+                    JOptionPane.showMessageDialog(null, "User does not exist. Please sign up first.","Login error", JOptionPane.ERROR_MESSAGE);
                 }
             }
         });
