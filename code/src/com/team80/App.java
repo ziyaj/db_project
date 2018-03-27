@@ -311,9 +311,14 @@ public class App {
                     return;
                 }
 
+                String pw = String.valueOf(hPasswordField.getPassword());
+                if (pw.equals("")) {
+                    JOptionPane.showMessageDialog(null, "Please enter password.","Error Message", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+
                 if (SQLUtil.hostExists(hid)) {
-                    char[] pw = hPasswordField.getPassword();
-                    if (SQLUtil.hasCorrectPassword(hid, String.valueOf(pw))) {
+                    if (SQLUtil.hasCorrectPassword(hid, pw)) {
                         hidTextField.setText("");
                         hPasswordField.setText("");
                         tab.add(hostEditor, 1);
