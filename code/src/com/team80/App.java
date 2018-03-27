@@ -443,7 +443,7 @@ public class App {
 
 
     public void refreshAllPosts() {
-        ResultSet rs = SQLUtil.findAllPosts(hid);
+        ResultSet rs = SQLUtil.findHostsPostings(hid);
         printTable(hTable, hModel, rs);
     }
 
