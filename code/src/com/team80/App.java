@@ -37,7 +37,6 @@ public class App {
     private JTextField hostMsg;
     static PersistenceLayer persistenceLayer;
     private JTextField hidTextField;
-    private JTextField hLoginTextField;
     private JPanel adminPanel;
     private JPanel hostPanel;
     private JPanel travellerPanel;
@@ -45,7 +44,6 @@ public class App {
     private JPasswordField hPasswordField;
     private JTextField roomTextField;
     private JTextField residenceTextField;
-    private JRadioButton checkedRadioButton;
     private JTextField dailyRateTextField;
     private JTextField rTextField;
     private JPasswordField rPasswordField;
@@ -139,12 +137,12 @@ public class App {
 
             @Override
             public void mouseClicked(MouseEvent e) {
-                super.mouseClicked(e);
-                refreshAllPosts();
                 addReviewButton.setEnabled(false);
                 hUpdateButton.setEnabled(true);
                 addPostButton.setEnabled(true);
                 hDeleteButton.setEnabled(true);
+                super.mouseClicked(e);
+                refreshAllPosts();
             }
         });
         reviewsButton.addMouseListener(new MouseAdapter() {
@@ -279,7 +277,7 @@ public class App {
                             JOptionPane.showMessageDialog(null, "User already exists", "Register Message", JOptionPane.ERROR_MESSAGE);
                             return;
                         }
-                    } catch (SQLException e1) { }
+                    } catch (SQLException e1) {}
 
                     roomNo = roomTextField.getText();
                     residence = residenceTextField.getText();
@@ -323,7 +321,7 @@ public class App {
                 try {
                     hid = Integer.parseInt(hidTextField.getText());
                 } catch(Exception e1) {
-                    hLoginTextField.setText("Invalid username");
+                    JOptionPane.showMessageDialog(null, "Invalid username.","Login error", JOptionPane.ERROR_MESSAGE);
                     return;
                 }
                 ResultSet rs = SQLUtil.getHost(hid);
@@ -334,18 +332,16 @@ public class App {
                         if (hidTextField.getText().equals(String.valueOf(pw))) {
                             hidTextField.setText("");
                             hPasswordField.setText("");
-                            hLoginTextField.setText("");
                             tab.add(hostEditor, 1);
                             tab.setTitleAt(1, "HostEditor");
                             tab.remove(hostLogin);
                             tab.setSelectedIndex(1);
                         } else {
-                            hLoginTextField.setText("Invalid password. Try again.");
                             JOptionPane.showMessageDialog(null, "Invalid password. Try again.","Error Message", JOptionPane.ERROR_MESSAGE);
                         }
                     } else {
                         hid = -1;
-                        hLoginTextField.setText("User does not exist. Please sign up first.");
+                        JOptionPane.showMessageDialog(null, "User does not exist. Please sign up first.","Login error", JOptionPane.ERROR_MESSAGE);
                     }
                 } catch (SQLException e2) {
                     e2.printStackTrace();
