@@ -127,8 +127,12 @@ public class App {
             @Override
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
+                hUpdateButton.setEnabled(false);
+                addPostButton.setEnabled(false);
+                hDeleteButton.setEnabled(false);
+                addReviewButton.setEnabled(true);
                 ResultSet rs = SQLUtil.findHostsContracts(hid);
-                loadTable(hTable, hModel, rs);
+                printTable(hTable, hModel, rs);
             }
         });
         postsButton.addMouseListener(new MouseAdapter() {
@@ -137,14 +141,22 @@ public class App {
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
                 refreshAllPosts();
+                addReviewButton.setEnabled(false);
+                hUpdateButton.setEnabled(true);
+                addPostButton.setEnabled(true);
+                hDeleteButton.setEnabled(true);
             }
         });
         reviewsButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
+                hUpdateButton.setEnabled(false);
+                addPostButton.setEnabled(false);
+                hDeleteButton.setEnabled(false);
+                addReviewButton.setEnabled(false);
                 ResultSet rs = SQLUtil.findHostsReviews(hid);
-                loadTable(hTable, hModel, rs);
+                printTable(hTable, hModel, rs);
             }
         });
         hUpdateButton.addMouseListener(new MouseAdapter() {
@@ -213,12 +225,6 @@ public class App {
                     JOptionPane.showMessageDialog(null, "Please select only one record at a time", "Add Review Message", JOptionPane.WARNING_MESSAGE);
                 } else {
                     int rating = ratingSlider.getValue();
-                    /*
-                    if (!model.getColumnName(1).equals("CONTRACTID")) {
-                        JOptionPane.showMessageDialog(null, "Selected record is not a contract", "Add Review Message", JOptionPane.ERROR_MESSAGE);
-                        return;
-                    }
-                    */
                     int tid = (Integer) hModel.getValueAt(selectedRows[0], 3);
                     int dialogResult = JOptionPane.showConfirmDialog (null, "Add a host review?","Warning", JOptionPane.YES_NO_OPTION);
                     if(dialogResult == JOptionPane.YES_OPTION) {
@@ -328,6 +334,7 @@ public class App {
                         if (hidTextField.getText().equals(String.valueOf(pw))) {
                             hidTextField.setText("");
                             hPasswordField.setText("");
+                            hLoginTextField.setText("");
                             tab.add(hostEditor, 1);
                             tab.setTitleAt(1, "HostEditor");
                             tab.remove(hostLogin);
@@ -437,7 +444,7 @@ public class App {
 
     public void refreshAllPosts() {
         ResultSet rs = SQLUtil.findAllPosts(hid);
-        loadTable(hTable, hModel, rs);
+        printTable(hTable, hModel, rs);
     }
 
     public int[] getSelected() {
@@ -448,7 +455,7 @@ public class App {
         return selection;
     }
 
-    public void loadTable(JTable table, DefaultTableModel model, ResultSet rs) {
+    public void printTable(JTable table, DefaultTableModel model, ResultSet rs) {
         try {
             ResultSetMetaData rsmd = rs.getMetaData();
             int count = rsmd.getColumnCount();
