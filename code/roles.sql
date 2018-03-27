@@ -1,6 +1,24 @@
 -- set linesize 2000
 -- set wrap off
 
+-- LOGIN --
+
+-- traveler login
+SELECT T.cid
+FROM Student S, Traveler T
+WHERE T.cid = S.cid AND T.cid = 1;
+
+-- host login
+SELECT H.cid
+FROM Student S, Hosts H
+WHERE H.cid = S.cid AND H.cid = 1;
+
+-- check password
+SELECT S.cid
+FROM Student S
+WHERE S.cid = 1 AND S.password = "123456";
+
+
 -- AS TRAVELER --
 
 -- T1. can find postings with
