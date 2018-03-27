@@ -114,9 +114,36 @@ travelerid INTEGER NOT NULL,
 PRIMARY KEY (contractid),
 FOREIGN KEY (hostid) REFERENCES Hosts (cid),
 FOREIGN KEY (travelerid) REFERENCES Traveler (cid),
-CHECK (contractid > 0 AND fromdate < todate)
+CHECK (contractid > 0 AND fromdate < todate AND hostid <> travelerid)
 );
 grant select on Contract_Signs to public;
+
+CREATE OR REPLACE TRIGGER No_Overlap_Contracts
+BEFORE INSERT OR UPDATE ON Contract_Signs
+FOR EACH ROW
+
+DECLARE
+    NumExists          NUMBER;
+    Overlap_Contract   EXCEPTION;
+
+BEGIN
+
+    SELECT COUNT(*) INTO NumExists FROM Contract_Signs CS
+    WHERE :new.hostid = CS.hostid AND :new.contractid <> CS.contractid
+          AND ((:new.fromdate >= CS.fromdate AND :new.fromdate <= CS.todate)
+          OR (:new.todate >= CS.fromdate AND :new.todate <= CS.todate));
+
+    IF (NumExists > 0) THEN
+        RAISE Overlap_Contract;
+    END IF;
+
+EXCEPTION
+   WHEN Overlap_Contract THEN
+      Raise_application_error (-20300,
+         'The contract is overlapped with an existing one');
+END;
+
+/
 
 -- special view for posting info
 CREATE VIEW PostingInfo(pid, fromdate, todate, hostid, hostname, roomno, residencename, university, dailyrate, description) AS
@@ -133,7 +160,7 @@ WHERE S.cid = H.cid AND S.unid = U.unid;
 
 -- Populate data
 insert into University
-values(1, 'The University of British Columbia');
+values(1, 'Hogwarts School of Witchcraft and Wizardry');
 
 insert into University
 values(2, 'Simon Fraser University');
@@ -256,16 +283,16 @@ insert into Student
 values(21, 'Paul Friedman', 'M', 12, '123456');
 
 insert into Hosts
-values(1, '1024', 'Thunderbird Crescent', 35);
+values(1, '1024', 'Dragon Crescent', 35);
 
 insert into Hosts
 values(2, '106C', 'Student Residence 1', 62);
 
 insert into Hosts
-values(3, '237', 'Totem Park', 30);
+values(3, '237', 'Lincoin Park', 30);
 
 insert into Hosts
-values(4, '221', 'Place Vanier', 50);
+values(4, '221', 'Place Vampire', 50);
 
 insert into Hosts
 values(5, '304', 'Student Residence 5', 40);
@@ -283,7 +310,7 @@ insert into Hosts
 values(9, '332', 'Student Residence 3', 20);
 
 insert into Hosts
-values(10, '157', 'Marine Drive', 25);
+values(10, '157', 'Commericial Drive', 25);
 
 insert into Hosts
 values(11, '246B', 'Saint George College', 40);
@@ -298,16 +325,16 @@ insert into Hosts
 values(14, '5152D', 'Forbes House', 42);
 
 insert into Hosts
-values(15, '1005', 'Fraser Hall', 38);
+values(15, '1005', 'Fraser Valley', 38);
 
 insert into Hosts
 values(16, '603B', 'Princeton Place', 28);
 
 insert into Hosts
-values(17, '221', 'Ithaca Park', 24);
+values(17, '221', 'Ithaca Park Residence', 24);
 
 insert into Hosts
-values(18, '340', 'Ruce College', 24);
+values(18, '340', 'Royce College', 24);
 
 insert into Hosts
 values(19, '213', 'Haystack Hall', 34);
@@ -316,7 +343,7 @@ insert into Hosts
 values(20, '121', 'Mellon House', 50);
 
 insert into Hosts
-values(21, '420C', 'Maple House', 24);
+values(21, '420C', 'Maple Castle', 24);
 
 insert into Traveler
 values(1);
@@ -347,6 +374,36 @@ values(9);
 
 insert into Traveler
 values(10);
+
+insert into Traveler
+values(11);
+
+insert into Traveler
+values(12);
+
+insert into Traveler
+values(13);
+
+insert into Traveler
+values(14);
+
+insert into Traveler
+values(15);
+
+insert into Traveler
+values(16);
+
+insert into Traveler
+values(17);
+
+insert into Traveler
+values(18);
+
+insert into Traveler
+values(19);
+
+insert into Traveler
+values(20);
 
 insert into Posting
 values(1, '2018-01-01', '2018-01-30', 'a good place to live', 1);
@@ -503,4 +560,26 @@ values(19, '2018-01-01', '2018-01-30', 20, 1);
 
 insert into Contract_Signs
 values(20, '2018-01-01', '2018-01-30', 1, 2);
+
+insert into Contract_Signs
+values(21, '2018-02-05', '2018-02-18', 3, 2);
+
+insert into Contract_Signs
+values(22, '2018-02-05', '2018-02-08', 4, 2);
+
+insert into Contract_Signs
+values(23, '2018-02-05', '2018-02-10', 5, 2);
+
+insert into Contract_Signs
+values(24, '2018-03-01', '2018-03-08', 7, 2);
+
+insert into Contract_Signs
+values(25, '2018-02-15', '2018-02-22', 8, 2);
+
+insert into Contract_Signs
+values(26, '2018-05-04', '2018-05-08', 12, 2);
+
+insert into Contract_Signs
+values(27, '2018-10-01', '2018-10-05', 15, 2);
+
 
