@@ -118,6 +118,35 @@ CHECK (contractid > 0 AND fromdate < todate AND hostid <> travelerid)
 );
 grant select on Contract_Signs to public;
 
+
+CREATE OR REPLACE TRIGGER No_Overlap_Posting
+BEFORE INSERT OR UPDATE ON Posting
+FOR EACH ROW
+
+DECLARE
+    NumExists         NUMBER;
+    Overlap_Posting   EXCEPTION;
+
+BEGIN
+
+    SELECT COUNT(*) INTO NumExists FROM Posting P
+    WHERE :new.hostid = P.hostid AND :new.pid <> P.pid
+          AND ((:new.fromdate >= P.fromdate AND :new.fromdate <= P.todate)
+          OR (:new.todate >= P.fromdate AND :new.todate <= P.todate));
+
+    IF (NumExists > 0) THEN
+        RAISE Overlap_Posting;
+    END IF;
+
+EXCEPTION
+   WHEN Overlap_Posting THEN
+      Raise_application_error (-20301,
+         'The posting is overlapped with an existing one for that host');
+END;
+
+/
+
+
 CREATE OR REPLACE TRIGGER No_Overlap_Contracts
 BEFORE INSERT OR UPDATE ON Contract_Signs
 FOR EACH ROW
