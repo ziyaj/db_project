@@ -40,6 +40,10 @@ WHERE PI.dailyrate = (SELECT MIN(dailyrate)
                       FROM PostingInfo);
 
 -- T3. can sign a contract
+SELECT PI.travelerid, PI.hostid, PI.fromdate, PI.todate
+FROM PostingInfo PI
+WHERE PI.pid = 1;
+
 INSERT INTO Contract_Signs
 VALUES(55, '2018-03-25', '2018-03-30', 5, 2);
 
