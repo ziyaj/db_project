@@ -111,20 +111,18 @@ public class App {
         //</editor-fold>
 
         //<editor-fold desc="Host Editor Events">
-        logOutButton.addMouseListener(new MouseAdapter() {
+        logOutButton.addActionListener(new ActionListener() {
             @Override
-            public void mouseClicked(MouseEvent e) {
-                super.mouseClicked(e);
+            public void actionPerformed(ActionEvent e) {
                 tab.add(hostLogin, 1);
                 tab.setTitleAt(1, "Host");
                 tab.remove(hostEditor);
                 tab.setSelectedIndex(1);
             }
         });
-        contractsButton.addMouseListener(new MouseAdapter() {
+        contractsButton.addActionListener(new ActionListener() {
             @Override
-            public void mouseClicked(MouseEvent e) {
-                super.mouseClicked(e);
+            public void actionPerformed(ActionEvent e) {
                 hUpdateButton.setEnabled(false);
                 addPostButton.setEnabled(false);
                 hDeleteButton.setEnabled(false);
@@ -133,22 +131,19 @@ public class App {
                 printTable(hTable, hModel, rs);
             }
         });
-        postsButton.addMouseListener(new MouseAdapter() {
-
+        postsButton.addActionListener(new ActionListener() {
             @Override
-            public void mouseClicked(MouseEvent e) {
+            public void actionPerformed(ActionEvent e) {
                 addReviewButton.setEnabled(false);
                 hUpdateButton.setEnabled(true);
                 addPostButton.setEnabled(true);
                 hDeleteButton.setEnabled(true);
-                super.mouseClicked(e);
                 refreshAllPosts();
             }
         });
-        reviewsButton.addMouseListener(new MouseAdapter() {
+        reviewsButton.addActionListener(new ActionListener() {
             @Override
-            public void mouseClicked(MouseEvent e) {
-                super.mouseClicked(e);
+            public void actionPerformed(ActionEvent e) {
                 hUpdateButton.setEnabled(false);
                 addPostButton.setEnabled(false);
                 hDeleteButton.setEnabled(false);
@@ -157,10 +152,9 @@ public class App {
                 printTable(hTable, hModel, rs);
             }
         });
-        hUpdateButton.addMouseListener(new MouseAdapter() {
+        hUpdateButton.addActionListener(new ActionListener() {
             @Override
-            public void mouseClicked(MouseEvent e) {
-                super.mouseClicked(e);
+            public void actionPerformed(ActionEvent e) {
                 int[] selectedRows = getSelected();
                 if (selectedRows.length == 0) {
                     JOptionPane.showMessageDialog(null, "Please select a record", "Update Message", JOptionPane.WARNING_MESSAGE);
@@ -186,10 +180,9 @@ public class App {
                 }
             }
         });
-        addPostButton.addMouseListener(new MouseAdapter() {
+        addPostButton.addActionListener(new ActionListener() {
             @Override
-            public void mouseClicked(MouseEvent e) {
-                super.mouseClicked(e);
+            public void actionPerformed(ActionEvent e) {
                 if (fromDatePicker.getDate() == null || toDatePicker.getDate() == null) {
                     JOptionPane.showMessageDialog(null, "Missing date", "New Posting Message", JOptionPane.ERROR_MESSAGE);
                     return;
@@ -211,10 +204,9 @@ public class App {
                 refreshAllPosts();
             }
         });
-        addReviewButton.addMouseListener(new MouseAdapter() {
+        addReviewButton.addActionListener(new ActionListener() {
             @Override
-            public void mouseClicked(MouseEvent e) {
-                super.mouseClicked(e);
+            public void actionPerformed(ActionEvent e) {
                 int[] selectedRows = getSelected();
                 if (selectedRows.length == 0) {
                     JOptionPane.showMessageDialog(null, "Please select a record", "Add Review Message", JOptionPane.WARNING_MESSAGE);
@@ -237,10 +229,9 @@ public class App {
                 }
             }
         });
-        hDeleteButton.addMouseListener(new MouseAdapter() {
+        hDeleteButton.addActionListener(new ActionListener() {
             @Override
-            public void mouseClicked(MouseEvent e) {
-                super.mouseClicked(e);
+            public void actionPerformed(ActionEvent e) {
                 int[] selectedRows = getSelected();
                 if (selectedRows.length == 0) {
                     JOptionPane.showMessageDialog(null, "Please select a record", "Deletion Message", JOptionPane.WARNING_MESSAGE);
@@ -262,10 +253,9 @@ public class App {
         //</editor-fold>
 
         //<editor-fold desc="Register Events">
-        rSignUpButton.addMouseListener(new MouseAdapter() {
+        rSignUpButton.addActionListener(new ActionListener() {
             @Override
-            public void mouseClicked(MouseEvent e) {
-                super.mouseClicked(e);
+            public void actionPerformed(ActionEvent e) {
                 int cID;
                 String roomNo = "";
                 String residence = "";
@@ -305,19 +295,17 @@ public class App {
         //</editor-fold>
 
         //<editor-fold desc="Host Events">
-        hSignUpButton.addMouseListener(new MouseAdapter() {
+        hSignUpButton.addActionListener(new ActionListener() {
             @Override
-            public void mouseClicked(MouseEvent e) {
-                super.mouseClicked(e);
+            public void actionPerformed(ActionEvent e) {
                 tab.add(register);
                 tab.setTitleAt(4, "Register");
                 tab.setSelectedIndex(4);
             }
         });
-        hSignInButton.addMouseListener(new MouseAdapter() {
+        hSignInButton.addActionListener(new ActionListener() {
             @Override
-            public void mouseClicked(MouseEvent e) {
-                super.mouseClicked(e);
+            public void actionPerformed(ActionEvent e) {
                 try {
                     hid = Integer.parseInt(hidTextField.getText());
                 } catch(Exception e1) {
@@ -352,19 +340,17 @@ public class App {
 
         //<editor-fold desc="Admin Editor Events">
         //show award message
-        A_awardButton.addMouseListener(new MouseAdapter() {
+        A_awardButton.addActionListener(new ActionListener() {
             @Override
-            public void mouseClicked(MouseEvent mouseEvent) {
-                super.mouseClicked(mouseEvent);
+            public void actionPerformed(ActionEvent e) {
                 JOptionPane.showMessageDialog(null, "Hosts Awarded!!!", "Award Message", JOptionPane.INFORMATION_MESSAGE);
             }
         });
 
         //Delete a Host
-        A_Delete.addMouseListener(new MouseAdapter() {
+        A_Delete.addActionListener(new ActionListener() {
             @Override
-            public void mouseClicked(MouseEvent mouseEvent) {
-                super.mouseClicked(mouseEvent);
+            public void actionPerformed(ActionEvent e) {
                 int[] selectedRows = getSelected();
 
                 //If nothing get selected
@@ -389,10 +375,9 @@ public class App {
 
         //<editor-fold desc="Traveller Editor Events">
         //TODO
-        tSignInButton.addMouseListener(new MouseAdapter() {
+        tSignInButton.addActionListener(new ActionListener() {
             @Override
-            public void mouseClicked(MouseEvent e) {
-                super.mouseClicked(e);
+            public void actionPerformed(ActionEvent e) {
                 try {
                     hid = Integer.parseInt(tidTextField.getText());
                 } catch(Exception e1) {
@@ -423,6 +408,7 @@ public class App {
             }
         });
         //</editor-fold>
+
     }
 
     //<editor-fold desc="Helper">
