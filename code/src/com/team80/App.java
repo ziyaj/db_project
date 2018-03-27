@@ -6,9 +6,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.sql.*;
 import java.util.Hashtable;
-
 import org.jdesktop.swingx.JXDatePicker;
-
 import static java.sql.Types.*;
 
 
@@ -87,10 +85,6 @@ public class App {
 
         //<editor-fold desc="Init">
         panelMain.setPreferredSize(new Dimension(1200, 600));
-
-        //String[] hTableColumns = {"PID", "From_Date", "To_Date", "Description"};
-        //hModel.setColumnIdentifiers(hTableColumns);
-        //hTable.setModel(hModel);
         hTable.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
         hTable.setFillsViewportHeight(true);
 
@@ -113,7 +107,7 @@ public class App {
         for (int i = 1; i <= 10; i++) {
             labelTable.put(i, new JLabel(String.valueOf(i)));
         }
-        ratingSlider.setLabelTable( labelTable );
+        ratingSlider.setLabelTable(labelTable);
         ratingSlider.setPaintLabels(true);
 
         //</editor-fold>
@@ -156,7 +150,6 @@ public class App {
         hUpdateButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-
                 super.mouseClicked(e);
                 int[] selectedRows = getSelected();
                 if (selectedRows.length == 0) {
@@ -174,7 +167,6 @@ public class App {
                         refreshAllPosts();
                         if (result > 0) {
                             JOptionPane.showMessageDialog(null, "Update successful.", "Update Message", JOptionPane.INFORMATION_MESSAGE);
-                            tab.remove(register);
                         } else if (result == 0) {
                             JOptionPane.showMessageDialog(null, "Invalid period", "Update Message", JOptionPane.ERROR_MESSAGE);
                         } else {
@@ -203,7 +195,6 @@ public class App {
                 int result = SQLUtil.addPost(hid, fromDate, toDate, description);
                 if(result == 1) {
                     JOptionPane.showMessageDialog(null, "New posting has been added", "New Posting Message", JOptionPane.INFORMATION_MESSAGE);
-                    tab.remove(register);
                 } else {
                     JOptionPane.showMessageDialog(null, "Insert failed. Please try again.", "New Posting Message", JOptionPane.ERROR_MESSAGE);
                 }
@@ -258,7 +249,6 @@ public class App {
                     refreshAllPosts();
                     if(result.length > 0) {
                         JOptionPane.showMessageDialog(null, "Selected records have been removed.", "Deletion Message", JOptionPane.INFORMATION_MESSAGE);
-                        tab.remove(register);
                     } else {
                         JOptionPane.showMessageDialog(null, "Deletion failed. Please try again.", "Deletion Message", JOptionPane.ERROR_MESSAGE);
                     }
@@ -316,8 +306,8 @@ public class App {
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
                 tab.add(register);
-                tab.setTitleAt(3, "Register");
-                tab.setSelectedIndex(3);
+                tab.setTitleAt(4, "Register");
+                tab.setSelectedIndex(4);
             }
         });
         hSignInButton.addMouseListener(new MouseAdapter() {
@@ -336,6 +326,8 @@ public class App {
                     if (rs.next()) {
                         char[] pw = hPasswordField.getPassword();
                         if (hidTextField.getText().equals(String.valueOf(pw))) {
+                            hidTextField.setText("");
+                            hPasswordField.setText("");
                             tab.add(hostEditor, 1);
                             tab.setTitleAt(1, "HostEditor");
                             tab.remove(hostLogin);
@@ -384,7 +376,6 @@ public class App {
                     refreshAllPosts();
                     if(result.length > 0) {
                         JOptionPane.showMessageDialog(null, "Selected records have been removed.", "Deletion Message", JOptionPane.INFORMATION_MESSAGE);
-                        tab.remove(register);
                     } else {
                         JOptionPane.showMessageDialog(null, "Deletion failed. Please try again.", "Deletion Message", JOptionPane.ERROR_MESSAGE);
                     }
