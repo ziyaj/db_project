@@ -440,7 +440,7 @@ public class SQLUtil {
         return -1;
     }
 
-    private static int addNewTravelerReview(final int hostid, final int travelerid, final int rating)
+    private static int addNewTravelerReview(final int travelerid, final int hostid, final int rating)
             throws SQLException {
         final PreparedStatement ps = getConnection().prepareStatement(
                 INSERT_INTO + "Traveler_Reviews VALUES (?, ?, ?)");
