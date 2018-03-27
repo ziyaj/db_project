@@ -60,7 +60,6 @@ public class App {
     private JTextField tidTextField;
     private JPasswordField tPasswordField;
     private JPanel registerPanel;
-
     private JPanel travellerEditorPanel;
     private JPanel filteredResultPanel;
     private JPanel postingFilterField1;
@@ -71,12 +70,9 @@ public class App {
     private JSpinner spinner1;
     private JButton submitButton;
     private JTextField tLoginTextField;
-
     private JPanel AdminPanel;
     private JButton A_awardButton;
     private JButton A_Delete;
-
-
     private JButton contractsButton;
     private JButton addReviewButton;
     private JSlider ratingSlider;
@@ -84,17 +80,17 @@ public class App {
 
     private int hid;
 
-
-    DefaultTableModel model = new DefaultTableModel();
+    DefaultTableModel hModel = new DefaultTableModel();
     //</editor-fold>
+
     public App() {
 
         //<editor-fold desc="Init">
-        panelMain.setPreferredSize(new Dimension(700, 300));
+        panelMain.setPreferredSize(new Dimension(1200, 600));
 
-        String[] hTableColumns = {"PID", "From_Date", "To_Date", "Description"};
-        model.setColumnIdentifiers(hTableColumns);
-        hTable.setModel(model);
+        //String[] hTableColumns = {"PID", "From_Date", "To_Date", "Description"};
+        //hModel.setColumnIdentifiers(hTableColumns);
+        //hTable.setModel(hModel);
         hTable.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
         hTable.setFillsViewportHeight(true);
 
@@ -106,9 +102,10 @@ public class App {
         final JPanel adminEditor = (JPanel) tab.getComponentAt(5);
         final JPanel travellerEditorPanel = (JPanel) tab.getComponentAt(6);
 
-        // Hide the HostEditor tab on Login window
+        // Hide the all Editor tabs before user is logged in
         tab.remove(hostEditor);
         tab.remove(register);
+        tab.remove(travellerEditorPanel);
 
         ratingSlider.setMaximum(10);
         ratingSlider.setMinimum(1);
@@ -120,8 +117,6 @@ public class App {
         ratingSlider.setPaintLabels(true);
 
         //</editor-fold>
-        tab.remove(travellerEditorPanel);
-
 
         //<editor-fold desc="Host Editor Events">
         logOutButton.addMouseListener(new MouseAdapter() {
@@ -134,50 +129,12 @@ public class App {
                 tab.setSelectedIndex(1);
             }
         });
-
-
-        //TODO
-        tSignInButton.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                super.mouseClicked(e);
-                try {
-                    hid = Integer.parseInt(tidTextField.getText());
-                } catch(Exception e1) {
-                    tLoginTextField.setText("Invalid traveller name");
-                    return;
-                }
-                ResultSet rs = SQLUtil.getStudent(hid);
-
-                try {
-                    if (rs.next()) {
-                        char[] pw = tPasswordField.getPassword();
-                        if (tidTextField.getText().equals(String.valueOf(pw))) {
-                            tab.add(travellerEditorPanel, 2);
-                            tab.setTitleAt(2, "TravellerEditor");
-                            tab.remove(travellerLogin);
-                            tab.setSelectedIndex(2);
-                        } else {
-                            tLoginTextField.setText("Invalid password. Try again.");
-                            JOptionPane.showMessageDialog(null, "Invalid password. Try again.","Error Message", JOptionPane.ERROR_MESSAGE);
-                        }
-                    } else {
-                        hid = -1;
-                        tLoginTextField.setText("User does not exist. Please sign up first.");
-                    }
-                } catch (SQLException e2) {
-                    e2.printStackTrace();
-                }
-            }
-        });
-        //</editor-fold>
-
         contractsButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
                 ResultSet rs = SQLUtil.findHostsContracts(hid);
-                loadTable(hTable, model, rs);
+                loadTable(hTable, hModel, rs);
             }
         });
         postsButton.addMouseListener(new MouseAdapter() {
@@ -185,7 +142,7 @@ public class App {
             @Override
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
-                search();
+                refreshAllPosts();
             }
         });
         reviewsButton.addMouseListener(new MouseAdapter() {
@@ -193,7 +150,7 @@ public class App {
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
                 ResultSet rs = SQLUtil.findHostsReviews(hid);
-                loadTable(hTable, model, rs);
+                loadTable(hTable, hModel, rs);
             }
         });
         hUpdateButton.addMouseListener(new MouseAdapter() {
@@ -213,8 +170,8 @@ public class App {
                     String description = descriptionTextField.getText();
                     int dialogResult = JOptionPane.showConfirmDialog (null, "Update selected record?","Warning", JOptionPane.YES_NO_OPTION);
                     if(dialogResult == JOptionPane.YES_OPTION) {
-                        int result = SQLUtil.updatePost(selectedRows, model, fromDate, toDate, description);
-                        search();
+                        int result = SQLUtil.updatePost(selectedRows, hModel, fromDate, toDate, description);
+                        refreshAllPosts();
                         if (result > 0) {
                             JOptionPane.showMessageDialog(null, "Update successful.", "Update Message", JOptionPane.INFORMATION_MESSAGE);
                             tab.remove(register);
@@ -250,7 +207,7 @@ public class App {
                 } else {
                     JOptionPane.showMessageDialog(null, "Insert failed. Please try again.", "New Posting Message", JOptionPane.ERROR_MESSAGE);
                 }
-                search();
+                refreshAllPosts();
             }
         });
         addReviewButton.addMouseListener(new MouseAdapter() {
@@ -271,11 +228,11 @@ public class App {
                         return;
                     }
                     */
-                    int tid = (Integer) model.getValueAt(selectedRows[0], 3);
+                    int tid = (Integer) hModel.getValueAt(selectedRows[0], 3);
                     int dialogResult = JOptionPane.showConfirmDialog (null, "Add a host review?","Warning", JOptionPane.YES_NO_OPTION);
                     if(dialogResult == JOptionPane.YES_OPTION) {
                         int result = SQLUtil.addHostReview(hid, tid, rating);
-                        search();
+                        refreshAllPosts();
                         if (result > 0) {
                             JOptionPane.showMessageDialog(null, "Added successfully.", "Add Review Message", JOptionPane.INFORMATION_MESSAGE);
                         } else {
@@ -297,10 +254,8 @@ public class App {
                 int dialogResult = JOptionPane.showConfirmDialog (null, "Delete selected records?","Warning", JOptionPane.YES_NO_OPTION);
                 if(dialogResult == JOptionPane.YES_OPTION){
 
-                    int[] result = SQLUtil.deletePost(selectedRows, model);
-                    postsButton.doClick();
-
-                    search();
+                    int[] result = SQLUtil.deletePost(selectedRows, hModel);
+                    refreshAllPosts();
                     if(result.length > 0) {
                         JOptionPane.showMessageDialog(null, "Selected records have been removed.", "Deletion Message", JOptionPane.INFORMATION_MESSAGE);
                         tab.remove(register);
@@ -400,13 +355,7 @@ public class App {
         });
         //</editor-fold>
 
-        hUpdateButton.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent mouseEvent) {
-                super.mouseClicked(mouseEvent);
-            }
-        });
-
+        //<editor-fold desc="Admin Editor Events">
         //show award message
         A_awardButton.addMouseListener(new MouseAdapter() {
             @Override
@@ -431,8 +380,8 @@ public class App {
 
                 int dialogResult = JOptionPane.showConfirmDialog (null, "Delete selected records?","Warning", JOptionPane.YES_NO_OPTION);
                 if(dialogResult == JOptionPane.YES_OPTION){
-                    int[] result = SQLUtil.deletePost(selectedRows, model);
-                    search();
+                    int[] result = SQLUtil.deletePost(selectedRows, hModel);
+                    refreshAllPosts();
                     if(result.length > 0) {
                         JOptionPane.showMessageDialog(null, "Selected records have been removed.", "Deletion Message", JOptionPane.INFORMATION_MESSAGE);
                         tab.remove(register);
@@ -440,11 +389,46 @@ public class App {
                         JOptionPane.showMessageDialog(null, "Deletion failed. Please try again.", "Deletion Message", JOptionPane.ERROR_MESSAGE);
                     }
                 }
-
-
             }
         });
+        //</editor-fold>
 
+        //<editor-fold desc="Traveller Editor Events">
+        //TODO
+        tSignInButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                try {
+                    hid = Integer.parseInt(tidTextField.getText());
+                } catch(Exception e1) {
+                    tLoginTextField.setText("Invalid traveller name");
+                    return;
+                }
+                ResultSet rs = SQLUtil.getStudent(hid);
+
+                try {
+                    if (rs.next()) {
+                        char[] pw = tPasswordField.getPassword();
+                        if (tidTextField.getText().equals(String.valueOf(pw))) {
+                            tab.add(travellerEditorPanel, 2);
+                            tab.setTitleAt(2, "TravellerEditor");
+                            tab.remove(travellerLogin);
+                            tab.setSelectedIndex(2);
+                        } else {
+                            tLoginTextField.setText("Invalid password. Try again.");
+                            JOptionPane.showMessageDialog(null, "Invalid password. Try again.","Error Message", JOptionPane.ERROR_MESSAGE);
+                        }
+                    } else {
+                        hid = -1;
+                        tLoginTextField.setText("User does not exist. Please sign up first.");
+                    }
+                } catch (SQLException e2) {
+                    e2.printStackTrace();
+                }
+            }
+        });
+        //</editor-fold>
     }
 
     //<editor-fold desc="Helper">
@@ -460,9 +444,9 @@ public class App {
     }
 
 
-    public void search() {
+    public void refreshAllPosts() {
         ResultSet rs = SQLUtil.findAllPosts(hid);
-        loadTable(hTable, model, rs);
+        loadTable(hTable, hModel, rs);
     }
 
     public int[] getSelected() {
@@ -485,6 +469,7 @@ public class App {
             }
 
             model.setRowCount(0);
+            model.setColumnCount(count);
             while (rs.next()) {
                 Object[] row = new Object[count];
                 for(int i = 0; i < count; i++) {
@@ -505,13 +490,13 @@ public class App {
             }
 
             model.setColumnIdentifiers(columnNames);
-            table.setModel(model);
             model.fireTableDataChanged();
-        } catch (Exception e1) {}
+            table.setModel(model);
+            table.setRowHeight(30);
+        } catch (Exception e1) {
+            e1.printStackTrace();
+        }
     }
     //</editor-fold>
 
-    private void createUIComponents() {
-        // TODO: place custom component creation code here
-    }
 }
