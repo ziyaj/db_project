@@ -520,11 +520,10 @@ public class SQLUtil {
     public static ResultSet findHostsContracts() {
         try {
             return getStatement().executeQuery(
-                    "SELECT HI.hostid, HI.hostname, HI.university, COUNT(CS.contractid) " +
-                    "FROM HostInfo HI, Contract_Signs CS " +
-                    "WHERE HI.hostid = CS.hostid " +
+                    "SELECT HI.hostid, COUNT(CS.contractid) " +
+                    "FROM HostInfo HI LEFT OUTER JOIN Contract_Signs CS ON HI.hostid = CS.hostid " +
                     "GROUP BY HI.hostid " +
-                    "HAVING COUNT(CS.contractid) > 0");
+                    "ORDER BY HI.hostid");
         } catch (final SQLException e) {
             System.err.println("An error occurred while executing query.");
             System.err.println(e.getMessage());
