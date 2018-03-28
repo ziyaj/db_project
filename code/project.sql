@@ -537,6 +537,15 @@ insert into Traveler_Reviews
 values(9, 1, 8);
 
 insert into Traveler_Reviews
+values(9, 2, 7);
+
+insert into Traveler_Reviews
+values(9, 3, 6);
+
+insert into Traveler_Reviews
+values(9, 4, 5);
+
+insert into Traveler_Reviews
 values(8, 2, 5);
 
 insert into Traveler_Reviews
@@ -555,70 +564,82 @@ insert into Traveler_Reviews
 values(3, 7, 9);
 
 insert into Traveler_Reviews
+values(5, 7, 4);
+
+insert into Traveler_Reviews
 values(2, 8, 6);
+
+insert into Traveler_Reviews
+values(4, 8, 7);
 
 insert into Traveler_Reviews
 values(1, 9, 8);
 
 insert into Traveler_Reviews
+values(1, 5, 10);
+
+insert into Traveler_Reviews
 values(5, 10, 7);
 
 insert into Contract_Signs
-values(1, '2018-01-01', '2018-01-30', 2, 1);
+values(99, '2019-01-01', '2019-01-30', 2, 1);
 
 insert into Contract_Signs
-values(2, '2018-01-01', '2018-01-30', 3, 1);
+values(1, '2018-01-01', '2018-01-05', 2, 1);
 
 insert into Contract_Signs
-values(3, '2018-01-01', '2018-01-30', 4, 1);
+values(2, '2018-01-05', '2018-01-10', 3, 1);
 
 insert into Contract_Signs
-values(4, '2018-01-01', '2018-01-30', 5, 1);
+values(3, '2018-01-11', '2018-01-16', 4, 1);
 
 insert into Contract_Signs
-values(5, '2018-01-01', '2018-01-30', 6, 1);
+values(4, '2018-02-01', '2018-02-04', 5, 1);
 
 insert into Contract_Signs
-values(6, '2018-01-01', '2018-01-30', 7, 1);
+values(5, '2018-03-10', '2018-03-15', 6, 1);
 
 insert into Contract_Signs
-values(7, '2018-01-01', '2018-01-30', 8, 1);
+values(6, '2018-04-01', '2018-04-08', 7, 1);
 
 insert into Contract_Signs
-values(8, '2018-01-01', '2018-01-30', 9, 1);
+values(7, '2018-04-10', '2018-04-15', 8, 1);
 
 insert into Contract_Signs
-values(9, '2018-01-01', '2018-01-30', 10, 1);
+values(8, '2018-05-01', '2018-05-25', 9, 1);
 
 insert into Contract_Signs
-values(10, '2018-01-01', '2018-01-30', 11, 1);
+values(9, '2018-06-01', '2018-06-22', 10, 1);
 
 insert into Contract_Signs
-values(11, '2018-01-01', '2018-01-30', 12, 1);
+values(10, '2017-01-01', '2017-01-30', 11, 1);
 
 insert into Contract_Signs
-values(12, '2018-01-01', '2018-01-30', 13, 1);
+values(11, '2017-01-01', '2017-01-30', 12, 1);
 
 insert into Contract_Signs
-values(13, '2018-01-01', '2018-01-30', 14, 1);
+values(12, '2016-01-01', '2016-01-30', 13, 1);
 
 insert into Contract_Signs
-values(14, '2018-01-01', '2018-01-30', 15, 1);
+values(13, '2015-01-01', '2015-01-30', 14, 1);
 
 insert into Contract_Signs
-values(15, '2018-01-01', '2018-01-30', 16, 1);
+values(14, '2014-01-01', '2014-01-30', 15, 1);
 
 insert into Contract_Signs
-values(16, '2018-01-01', '2018-01-30', 17, 1);
+values(15, '2013-01-01', '2013-01-30', 16, 1);
 
 insert into Contract_Signs
-values(17, '2018-01-01', '2018-01-30', 18, 1);
+values(16, '2012-01-01', '2012-01-30', 17, 1);
 
 insert into Contract_Signs
-values(18, '2018-01-01', '2018-01-30', 19, 1);
+values(17, '2011-01-01', '2011-01-30', 18, 1);
 
 insert into Contract_Signs
-values(19, '2018-01-01', '2018-01-30', 20, 1);
+values(18, '2014-04-03', '2014-04-25', 19, 1);
+
+insert into Contract_Signs
+values(19, '2016-08-11', '2016-08-30', 20, 1);
 
 insert into Contract_Signs
 values(20, '2018-01-01', '2018-01-30', 1, 2);
