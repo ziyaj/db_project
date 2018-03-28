@@ -224,6 +224,18 @@ public class SQLUtil {
         return null;
     }
 
+    private static int deletePostWithId(final int pid) {
+        try {
+            final PreparedStatement ps = getConnection().prepareStatement(DELETE_FROM + "Posting WHERE pid = ?");
+            ps.setInt(1, pid);
+            return ps.executeUpdate();
+        } catch (final SQLException e) {
+            System.err.println("An error occurred while executing query.");
+            System.err.println(e.getMessage());
+        }
+        return -1;
+    }
+
     /**
      * T1. a traveler can find postings with
      --     I. conditions:
@@ -348,7 +360,28 @@ public class SQLUtil {
     /**
      * T3. a traveler can sign up contract
      */
-    public static int signContract(final int hostid, final int travelerid, final Date fromDate, final Date toDate) {
+    public static int transformPostingToContract(final int pid, final int travelerid) {
+        try {
+            final ResultSet rs = getStatement().executeQuery(
+                    "SELECT PI.hostid, PI.fromdate, PI.todate " +
+                    "FROM PostingInfo PI WHERE PI.pid = " + pid);
+            if (rs.next()) {
+                final int hostid = rs.getInt(1);
+                final Date fromdate = rs.getDate(2);
+                final Date todate = rs.getDate(3);
+                final int result = signContract(hostid, travelerid, fromdate, todate);
+                if (result != -1) {
+                    return deletePostWithId(pid);
+                }
+            }
+        } catch (final SQLException e) {
+            System.err.println("An error occurred while executing query.");
+            System.err.println(e.getMessage());
+        }
+        return -1;
+    }
+
+    private static int signContract(final int hostid, final int travelerid, final Date fromDate, final Date toDate) {
         try {
             final PreparedStatement ps = getConnection().prepareStatement(
                     INSERT_INTO + "Contract_Signs VALUES (?, ?, ?, ?, ?)");

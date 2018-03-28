@@ -1,11 +1,11 @@
 1 == Selection and projection query ==
   REQ: pick one query of this category and provide an interface for the user to specify the selection condition and the attributes to be returned.
   - Rerun with another constant
-  QUERY: T1
+  QUERY: T1, T4, H2, H4, H5, A1, A4
 
 2 == Join query ==
   REQ: pick one query of this category and provide an interface for the user to choose this query.
-  QUERY: T4, A1
+  QUERY: T4, A1, T0, H0
 
 3 == Division query ==
   REQ: pick one query of this category and provide an interface for the user to choose this query.

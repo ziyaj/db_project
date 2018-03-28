@@ -2,17 +2,6 @@
 -- set wrap off
 
 -- LOGIN --
-
--- traveler login
-SELECT T.cid
-FROM Student S, Traveler T
-WHERE T.cid = S.cid AND T.cid = 1;
-
--- host login
-SELECT H.cid
-FROM Student S, Hosts H
-WHERE H.cid = S.cid AND H.cid = 1;
-
 -- check password
 SELECT S.cid
 FROM Student S
@@ -20,6 +9,11 @@ WHERE S.cid = 1 AND S.password = "123456";
 
 
 -- AS TRAVELER --
+
+-- T0. Traveler login
+SELECT T.cid
+FROM Student S, Traveler T
+WHERE T.cid = S.cid AND T.cid = 1;
 
 -- T1. can find postings with
 --     I. conditions:
@@ -46,6 +40,10 @@ WHERE PI.dailyrate = (SELECT MIN(dailyrate)
                       FROM PostingInfo);
 
 -- T3. can sign a contract
+SELECT PI.hostid, PI.fromdate, PI.todate
+FROM PostingInfo PI
+WHERE PI.pid = 1;
+
 INSERT INTO Contract_Signs
 VALUES(55, '2018-03-25', '2018-03-30', 5, 2);
 
@@ -71,6 +69,12 @@ INSERT INTO Traveler_Reviews
 VALUES(3, 5, 4);
 
 -- AS HOST --
+
+-- H0. Host login
+SELECT H.cid
+FROM Student S, Hosts H
+WHERE H.cid = S.cid AND H.cid = 1;
+
 -- H1. can make a post
 INSERT INTO Posting
 VALUES(63, '2018-03-20', '2018-04-05', 'clean, neat residence with cheap rate', 3);
