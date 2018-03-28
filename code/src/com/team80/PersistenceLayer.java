@@ -11,7 +11,7 @@ public class PersistenceLayer {
     // the connection is created upon initializing the PersistenceLayer singleton object
     //
     // below is the command to open an ssh tunnel, you can use your own cs account
-    // ssh -l i1b0b -N -L localhost:1522:dbhost.ugrad.cs.ubc.ca:1522 valdes.ugrad.cs.ubc.ca
+    // ssh -l f4a0b -N -L localhost:1522:dbhost.ugrad.cs.ubc.ca:1522 valdes.ugrad.cs.ubc.ca
     // git stash save PersistenceLayer.java
     // git pull
     // git stash pop

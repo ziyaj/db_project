@@ -20,7 +20,6 @@ public class App {
 
     private JTextField aidTextField;
     private JPasswordField aPasswordField;
-    private JButton adminSignUpButton;
     private JButton adminSignInButton;
     private JButton hSignUpButton;
     private JButton hSignInButton;
@@ -76,9 +75,6 @@ public class App {
 
     private int hid;
     DefaultTableModel hModel = new DefaultTableModel();
-
-    //admin id
-    private int aid;
 
     //table model for Admin
     private JTable A_Table;
@@ -392,23 +388,21 @@ public class App {
 
             public void actionPerformed(ActionEvent e) {
 
-                try {
-                    aid = Integer.parseInt(aidTextField.getText());
-                } catch (Exception e1) {
-                    aidTextField.setText("Invalid username");
+                final String aidText = aidTextField.getText();
+
+                if (aidText == null || aidText.isEmpty()) {
+                    JOptionPane.showMessageDialog(null, "Please enter a user name", "Error Message", JOptionPane.ERROR_MESSAGE);
                     return;
-                }
-
-                char[] pw = aPasswordField.getPassword();
-
-                if (aidTextField.getText().equals("123") && String.valueOf(pw).equals("123456")) {
-                    tab.add(AdminEditor, 0);
-                    tab.setTitleAt(0, "AdminEditor");
-                    tab.remove(adminPanel);
-                    tab.setSelectedIndex(0);
                 } else {
-                    AdminLoginText.setText("Invalid password. Try again.");
-                    JOptionPane.showMessageDialog(null, "Invalid password. Try again.", "Error Message", JOptionPane.ERROR_MESSAGE);
+                    final char[] pw = aPasswordField.getPassword();
+                    if (aidText.equals("admin") && String.valueOf(pw).equals("123456")) {
+                        tab.add(AdminEditor, 0);
+                        tab.setTitleAt(0, "AdminEditor");
+                        tab.remove(adminPanel);
+                        tab.setSelectedIndex(0);
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Invalid username/password combination. Try again.", "Error Message", JOptionPane.ERROR_MESSAGE);
+                    }
                 }
             }
         });

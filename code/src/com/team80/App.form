@@ -118,15 +118,6 @@
                           <grid row="5" column="2" row-span="1" col-span="2" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
                         </constraints>
                       </vspacer>
-                      <component id="50b92" class="javax.swing.JButton" binding="adminSignUpButton">
-                        <constraints>
-                          <grid row="3" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-                        </constraints>
-                        <properties>
-                          <enabled value="false"/>
-                          <text value="Sign Up"/>
-                        </properties>
-                      </component>
                       <component id="ca42f" class="javax.swing.JButton" binding="adminSignInButton">
                         <constraints>
                           <grid row="3" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
@@ -140,18 +131,6 @@
                           <grid row="0" column="3" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
                         </constraints>
                       </vspacer>
-                      <component id="bccb3" class="javax.swing.JTextField" binding="AdminLoginText">
-                        <constraints>
-                          <grid row="4" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
-                            <preferred-size width="150" height="-1"/>
-                          </grid>
-                        </constraints>
-                        <properties>
-                          <editable value="false"/>
-                          <enabled value="true"/>
-                          <text value=""/>
-                        </properties>
-                      </component>
                     </children>
                   </grid>
                 </children>
