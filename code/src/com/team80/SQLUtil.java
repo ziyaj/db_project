@@ -271,9 +271,28 @@ public class SQLUtil {
                                                    final boolean showRate) {
         try {
             final String select = computeSelectPosts(showDateRange, showHost, showAddress, showUniv, showRate);
-            final String sql = select + " FROM PostingInfo PI " + computeWherePosts(univ, startDate, endDate, lowPrice, highPrice);
-            final PreparedStatement ps = getConnection().prepareStatement(sql);
-            return ps.executeQuery();
+            final String sql = select + " FROM PostingInfo PI " + computeWherePosts(univ, lowPrice, highPrice);
+            if (startDate != null && endDate != null) {
+                System.out.println("user choose from date: " + startDate);
+                System.out.println("user choose todate: " + endDate);
+                final PreparedStatement ps = getConnection().prepareStatement(sql + " AND PI.fromdate >= ? AND PI.todate <= ? ");
+                ps.setDate(1, startDate);
+                ps.setDate(2, endDate);
+                return ps.executeQuery();
+            } else if (startDate != null) {
+                System.out.println("user choose from date: " + startDate);
+                final PreparedStatement ps = getConnection().prepareStatement(sql + " AND PI.fromdate >= ? ");
+                ps.setDate(1, startDate);
+                return ps.executeQuery();
+            } else if (endDate != null) {
+                System.out.println("user choose todate: " + endDate);
+                final PreparedStatement ps = getConnection().prepareStatement(sql + " AND PI.todate <= ? ");
+                ps.setDate(1, endDate);
+                return ps.executeQuery();
+            } else {
+                final PreparedStatement ps = getConnection().prepareStatement(sql);
+                return ps.executeQuery();
+            }
         } catch (final SQLException e) {
             System.err.println("An error occurred while executing query.");
             System.err.println(e.getMessage());
@@ -305,17 +324,10 @@ public class SQLUtil {
         return select + " ";
     }
 
-    private static String computeWherePosts(final String university, final Date startDate, final Date endDate, final int
-            lowPrice, final int highPrice) {
+    private static String computeWherePosts(final String university,  final int lowPrice, final int highPrice) {
         String where = "WHERE PI.dailyrate BETWEEN " + lowPrice + " AND " + highPrice;
         if (university != null && !university.isEmpty()) {
             where += " AND PI.university LIKE '%" + university + "%' ";
-        }
-        if (startDate != null) {
-            where += " AND PI.fromdate <= " + startDate;
-        }
-        if (endDate != null) {
-            where += " AND PI.todate >= " + endDate;
         }
         return where;
     }
