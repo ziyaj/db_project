@@ -60,7 +60,6 @@ public class App {
     private JPanel postingFilterField1;
     private JPanel postingFilterField2;
     private JButton tFindPostingsButton;
-    private JTextField tLoginTextField;
     private JPanel AdminPanel;
     private JButton contractsButton;
     private JButton addReviewButton;
@@ -464,29 +463,29 @@ public class App {
                 try {
                     tid = Integer.parseInt(tidTextField.getText());
                 } catch(Exception e1) {
-                    tLoginTextField.setText("Invalid traveller name");
-                    return;
+                    JOptionPane.showMessageDialog(null, "Invalid traveler name. Please try again.", "Error Message", JOptionPane.ERROR_MESSAGE);                   return;
                 }
                 ResultSet rs = SQLUtil.getStudent(tid);
+                String pw = String.valueOf(tPasswordField.getPassword());
+                if (pw.equals("")) {
+                    JOptionPane.showMessageDialog(null, "Please enter your password.", "Error Message", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
 
-                try {
-                    if (rs.next()) {
-                        char[] pw = tPasswordField.getPassword();
-                        if (tidTextField.getText().equals(String.valueOf(pw))) {
-                            tab.add(travellerEditorPanel, 2);
-                            tab.setTitleAt(2, "TravellerEditor");
-                            tab.remove(travellerPanel);
-                            tab.setSelectedIndex(2);
-                        } else {
-                            tLoginTextField.setText("Invalid password. Try again.");
-                            JOptionPane.showMessageDialog(null, "Invalid password. Try again.","Error Message", JOptionPane.ERROR_MESSAGE);
-                        }
+                if (SQLUtil.travelerExists(tid)) {
+                    if (SQLUtil.hasCorrectPassword(tid, pw)) {
+                        tidTextField.setText("");
+                        tPasswordField.setText("");
+                        tab.add(travellerEditorPanel, 1);
+                        tab.setTitleAt(1, "Traveller Editor");
+                        tab.remove(travellerPanel);
+                        tab.setSelectedIndex(1);
                     } else {
-                        tid = -1;
-                        tLoginTextField.setText("User does not exist. Please sign up first.");
+                        JOptionPane.showMessageDialog(null, "Invalid password. Try again.", "Error Message", JOptionPane.ERROR_MESSAGE);
                     }
-                } catch (SQLException e2) {
-                    e2.printStackTrace();
+                } else {
+                    tid = -1;
+                    JOptionPane.showMessageDialog(null, "User does not exist. Please sign up first.", "Login error", JOptionPane.ERROR_MESSAGE);
                 }
             }
         });
@@ -498,7 +497,7 @@ public class App {
                 tab.add(travellerPanel, 1);
                 tab.setTitleAt(1, "Traveller");
                 tab.remove(travellerEditorPanel);
-                tab.setSelectedIndex(2);
+                tab.setSelectedIndex(1);
             }
         });
 
