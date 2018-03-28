@@ -345,18 +345,26 @@ public class App {
         hSignInButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                try {
-                    hid = Integer.parseInt(hidTextField.getText());
-                } catch (Exception e1) {
-                    JOptionPane.showMessageDialog(null, "Invalid username.", "Login error", JOptionPane.ERROR_MESSAGE);
+                final String hidText = hidTextField.getText();
+                if (hidText == null || hidText.isEmpty()) {
+                    pleaseEnterUsername();
                     return;
                 }
 
-                String pw = String.valueOf(hPasswordField.getPassword());
-                if (pw.equals("")) {
-                    JOptionPane.showMessageDialog(null, "Please enter password.", "Error Message", JOptionPane.ERROR_MESSAGE);
+                try {
+                    hid = Integer.parseInt(hidTextField.getText());
+                } catch (Exception e1) {
+                    invalideUsername();
                     return;
                 }
+
+                final char[] pwText = hPasswordField.getPassword();
+                if (pwText == null || pwText.length == 0) {
+                    pleaseEnterPassword();
+                    return;
+                }
+
+                final String pw = String.valueOf(pwText);
 
                 if (SQLUtil.hostExists(hid)) {
                     if (SQLUtil.hasCorrectPassword(hid, pw)) {
@@ -367,7 +375,7 @@ public class App {
                         tab.remove(hostPanel);
                         tab.setSelectedIndex(1);
                     } else {
-                        JOptionPane.showMessageDialog(null, "Invalid password. Try again.", "Error Message", JOptionPane.ERROR_MESSAGE);
+                        invalidUsernamePassword();
                     }
                 } else {
                     hid = -1;
@@ -391,11 +399,11 @@ public class App {
                 final String aidText = aidTextField.getText();
 
                 if (aidText == null || aidText.isEmpty()) {
-                    JOptionPane.showMessageDialog(null, "Please enter a user name", "Error Message", JOptionPane.WARNING_MESSAGE);
+                    pleaseEnterUsername();
                 } else {
                     final char[] pw = aPasswordField.getPassword();
                     if (pw == null || pw.length == 0) {
-                        JOptionPane.showMessageDialog(null, "Please enter a user password", "Error Message", JOptionPane.WARNING_MESSAGE);
+                        pleaseEnterPassword();
                     } else {
                         if (aidText.equals("admin") && String.valueOf(pw).equals("123456")) {
                             tab.add(AdminEditor, 0);
@@ -403,7 +411,7 @@ public class App {
                             tab.remove(adminPanel);
                             tab.setSelectedIndex(0);
                         } else {
-                            JOptionPane.showMessageDialog(null, "Invalid username/password combination. Try again.", "Error Message", JOptionPane.ERROR_MESSAGE);
+                            invalidUsernamePassword();
                         }
                     }
                 }
@@ -554,19 +562,26 @@ public class App {
         tSignInButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                try {
-                    tid = Integer.parseInt(tidTextField.getText());
-                } catch (Exception e1) {
-                    JOptionPane.showMessageDialog(null, "Invalid traveler name. Please try again.", "Error Message", JOptionPane.ERROR_MESSAGE);
+                final String tidText = tidTextField.getText();
+                if (tidText == null || tidText.isEmpty()) {
+                    pleaseEnterUsername();
                     return;
                 }
-                ResultSet rs = SQLUtil.getStudent(tid);
-                String pw = String.valueOf(tPasswordField.getPassword());
-                if (pw.equals("")) {
-                    JOptionPane.showMessageDialog(null, "Please enter your password.", "Error Message", JOptionPane.ERROR_MESSAGE);
+                try {
+                    tid = Integer.parseInt(tidText);
+                } catch (Exception e1) {
+                    invalideUsername();
                     return;
                 }
 
+                final char[] pwText = tPasswordField.getPassword();
+
+                if (pwText == null || pwText.length == 0) {
+                    pleaseEnterPassword();
+                    return;
+                }
+
+                final String pw = String.valueOf(pwText);
                 if (SQLUtil.travelerExists(tid)) {
                     if (SQLUtil.hasCorrectPassword(tid, pw)) {
                         tidTextField.setText("");
@@ -576,11 +591,11 @@ public class App {
                         tab.remove(travellerPanel);
                         tab.setSelectedIndex(1);
                     } else {
-                        JOptionPane.showMessageDialog(null, "Invalid password. Try again.", "Error Message", JOptionPane.ERROR_MESSAGE);
+                        invalidUsernamePassword();
                     }
                 } else {
                     tid = -1;
-                    JOptionPane.showMessageDialog(null, "User does not exist. Please sign up first.", "Login error", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(null, "User does not exist.", "Login error", JOptionPane.ERROR_MESSAGE);
                 }
             }
         });
@@ -737,11 +752,13 @@ public class App {
 
             }
         });
+
+        PersistenceLayer.getInstance();
     }
 
         //<editor-fold desc="Helper">
 
-        public int[] tGetSelected () {
+        private int[] tGetSelected () {
             int[] selection = tTable.getSelectedRows();
             for (int i = 0; i < selection.length; i++) {
                 selection[i] = tTable.convertRowIndexToModel(selection[i]);
@@ -749,8 +766,7 @@ public class App {
             return selection;
         }
 
-
-        public void printTable (JTable table, DefaultTableModel model, ResultSet rs){
+        private void printTable (JTable table, DefaultTableModel model, ResultSet rs){
             try {
                 ResultSetMetaData rsmd = rs.getMetaData();
                 int count = rsmd.getColumnCount();
@@ -791,7 +807,7 @@ public class App {
             }
         }
 
-        public int isIdValid (String id){
+        private int isIdValid (String id){
             int cid = -1;
             try {
                 cid = Integer.parseInt(id);
@@ -802,12 +818,12 @@ public class App {
             return cid;
         }
 
-        public void refreshAllPosts () {
+        private void refreshAllPosts () {
             ResultSet rs = SQLUtil.findHostsPostings(hid);
             printTable(hTable, hModel, rs);
         }
 
-        public int[] getSelected () {
+        private int[] getSelected () {
             int[] selection = hTable.getSelectedRows();
             for (int i = 0; i < selection.length; i++) {
                 selection[i] = hTable.convertRowIndexToModel(selection[i]);
@@ -815,6 +831,23 @@ public class App {
             return selection;
         }
         //</editor-fold>
+
+        private void pleaseEnterUsername() {
+            JOptionPane.showMessageDialog(null, "Please enter a username.", "Login error", JOptionPane.WARNING_MESSAGE);
+        }
+
+        private void pleaseEnterPassword() {
+            JOptionPane.showMessageDialog(null, "Please enter password.", "Login error", JOptionPane.WARNING_MESSAGE);
+        }
+
+        private void invalidUsernamePassword() {
+            JOptionPane.showMessageDialog(null, "Invalid username/password combination. Please try again.", "Login error", JOptionPane.ERROR_MESSAGE);
+        }
+
+        private void invalideUsername() {
+            JOptionPane.showMessageDialog(null, "Invalid username. Username is your id.", "Login error", JOptionPane.ERROR_MESSAGE);
+        }
+
     }
 
 
