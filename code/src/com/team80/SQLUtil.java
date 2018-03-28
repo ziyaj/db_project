@@ -18,37 +18,30 @@ public class SQLUtil {
         return getConnection().createStatement();
     }
 
-    public static boolean hostExists(final int hostid) {
-        try {
-            final ResultSet rs = getStatement().executeQuery(
-                    "SELECT H.cid FROM Student S, Hosts H " +
-                            "WHERE H.cid = S.cid AND H.cid = " + hostid);
-            return rs.next();
-        } catch (final SQLException e) {
-            System.err.println("An error occurred while executing query.");
-            System.err.println(e.getMessage());
-        }
-        return false;
-    }
-
-    public static boolean travelerExists(final int travelerid) {
-        try {
-            final ResultSet rs = getStatement().executeQuery(
-                    "SELECT T.cid FROM Student S, Traveler T " +
-                            "WHERE T.cid = S.cid AND T.cid = " + travelerid);
-            return rs.next();
-        } catch (final SQLException e) {
-            System.err.println("An error occurred while executing query.");
-            System.err.println(e.getMessage());
-        }
-        return false;
-    }
-
+    /**
+     * LOGIN: check if the given cid, password pair is in the datebase
+     */
     public static boolean hasCorrectPassword(final int cid, final String password) {
         try {
             final ResultSet rs = getStatement().executeQuery(
                     "SELECT S.cid FROM Student S " +
                             "WHERE S.cid = " + cid + " AND S.password = " + password);
+            return rs.next();
+        } catch (final SQLException e) {
+            System.err.println("An error occurred while executing query.");
+            System.err.println(e.getMessage());
+        }
+        return false;
+    }
+
+    /**
+     * H0. check if the host exists
+     */
+    public static boolean hostExists(final int hostid) {
+        try {
+            final ResultSet rs = getStatement().executeQuery(
+                    "SELECT H.cid FROM Student S, Hosts H " +
+                            "WHERE H.cid = S.cid AND H.cid = " + hostid);
             return rs.next();
         } catch (final SQLException e) {
             System.err.println("An error occurred while executing query.");
@@ -234,6 +227,23 @@ public class SQLUtil {
             System.err.println(e.getMessage());
         }
         return -1;
+    }
+
+
+    /**
+     * T0. check if the traveler exists
+     */
+    public static boolean travelerExists(final int travelerid) {
+        try {
+            final ResultSet rs = getStatement().executeQuery(
+                    "SELECT T.cid FROM Student S, Traveler T " +
+                            "WHERE T.cid = S.cid AND T.cid = " + travelerid);
+            return rs.next();
+        } catch (final SQLException e) {
+            System.err.println("An error occurred while executing query.");
+            System.err.println(e.getMessage());
+        }
+        return false;
     }
 
     /**
@@ -522,8 +532,7 @@ public class SQLUtil {
             return getStatement().executeQuery(
                     "SELECT HI.hostid, COUNT(CS.contractid) " +
                     "FROM HostInfo HI LEFT OUTER JOIN Contract_Signs CS ON HI.hostid = CS.hostid " +
-                    "GROUP BY HI.hostid " +
-                    "ORDER BY HI.hostid");
+                    "GROUP BY HI.hostid ORDER BY HI.hostid");
         } catch (final SQLException e) {
             System.err.println("An error occurred while executing query.");
             System.err.println(e.getMessage());

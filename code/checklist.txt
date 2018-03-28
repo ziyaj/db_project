@@ -1,11 +1,11 @@
 1 == Selection and projection query ==
   REQ: pick one query of this category and provide an interface for the user to specify the selection condition and the attributes to be returned.
   - Rerun with another constant
-  QUERY: T1, T4, H2, H4, H5, A1, A4
+  QUERY: T1
 
 2 == Join query ==
   REQ: pick one query of this category and provide an interface for the user to choose this query.
-  QUERY: T4, A1, T0, H0
+  QUERY: T0
 
 3 == Division query ==
   REQ: pick one query of this category and provide an interface for the user to choose this query.
@@ -28,6 +28,9 @@
   - Case 1 - deletion causing cascades. Student to explain policy regarding blocking and show their code that implements this
   - Case 2 – deletion without cascade
   QUERY: A3, T5
+  *** Host 22 has no postings and no contracts, deleting host 22 will just delete itself.
+  *** Host 21 has postings but has no contracts, deleting host 21 will cascade deleting all its postings.
+  *** Host 3 has contracts, so deleting host 3 will be blocked.
 
 7 == Update operation ==
   REQ: implement a constraint using the check statement. Provide an interface for the user to specify some input for the update operation. Some input values would successfully satisfy a constraint while others would fail. Provide an interface for the user to display the relation after the operation.
@@ -43,3 +46,6 @@
 
 9 == Extra features ==
   REQ: Create unique features that your application supports. You can really be creative about this. Some examples are using Bootstrap to prettify your UI, implementing Triggers and Privileges in the database, using any cloud-based databases. See the marking scheme for more examples and the breakdown.
+
+  -- we implemented trigger for checking that hosts do not have overlapping postings and contracts.
+  -- we used opensource swingx extension to prettify our date picker.

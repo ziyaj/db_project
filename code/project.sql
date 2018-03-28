@@ -1,17 +1,4 @@
 -- Drop pre-existing tables
--- drop table salesdetails;
--- drop table sales;
--- drop table titleditors;
--- drop table titleauthors;
--- drop table titles;
--- drop table publishers;
--- drop table authors;
--- drop table editors;
--- drop table EXAM;
--- drop table LICENSE;
--- drop table DRIVER;
--- drop table BRANCH;
-
 drop table Host_Reviews;
 drop table Traveler_Reviews;
 drop table Contract_Signs;
@@ -383,6 +370,9 @@ values(20, '121', 'Mellon House', 50);
 insert into Hosts
 values(21, '420C', 'Maple Castle', 24);
 
+insert into Hosts
+values(22, '102', 'Grapehawk Village', 24);
+
 insert into Traveler
 values(1);
 
@@ -496,6 +486,12 @@ values(17, '2018-05-06', '2018-05-30', 'best time to rent', 5);
 
 insert into Posting
 values(18, '2018-08-10', '2018-08-12', 'best place to live in world', 8);
+
+insert into Posting
+values(19, '2019-08-10', '2019-08-12', 'please rent my place', 21);
+
+insert into Posting
+values(20, '2019-01-04', '2019-01-08', 'an impolite description', 21);
 
 insert into Host_Reviews
 values(2, 1, 5);

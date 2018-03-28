@@ -7,10 +7,10 @@ SELECT S.cid
 FROM Student S
 WHERE S.cid = 1 AND S.password = "123456";
 
-
 -- AS TRAVELER --
 
 -- T0. Traveler login
+-- check if the cid exists for the traveler
 SELECT T.cid
 FROM Student S, Traveler T
 WHERE T.cid = S.cid AND T.cid = 1;
@@ -20,23 +20,27 @@ WHERE T.cid = S.cid AND T.cid = 1;
 --        a) university
 --        b) within date range (fromdate <= STARTDATE AND todate >= ENDDATE)
 --        c) daily rate range (daily rate BETWEEN AMT1 AND AMT2)
---    II. display options:
---        a) pid
---        b) date range (fromdate + todate)
---        c) host name
---        d) address (roomno + residencename)
---        e) university
+--    II. display options: pid, description [must display]
+--        a) date range (fromdate + todate)
+--        b) host name
+--        c) address (roomno + residencename)
+--        d) university
 --        f) dailyrate
 SELECT PI.pid, PI.fromdate, PI.todate, PI.hostname, PI.roomno, PI.residencename, PI.university, PI.dailyrate
 FROM PostingInfo PI
-WHERE PI.university LIKE '%British Columbia%'
-      AND PI.fromdate <= '2018-01-01' AND PI.todate >= '2018-01-30'
+WHERE PI.university LIKE '%Toronto%'
+      AND PI.fromdate >= '2018-01-01' AND PI.todate <= '2018-01-30'
       AND PI.dailyrate BETWEEN 20 AND 40;
 
 -- T2. can view the cheapest/most expensive postings
 SELECT *
 FROM PostingInfo PI
 WHERE PI.dailyrate = (SELECT MIN(dailyrate)
+                      FROM PostingInfo);
+
+SELECT *
+FROM PostingInfo PI
+WHERE PI.dailyrate = (SELECT MAX(dailyrate)
                       FROM PostingInfo);
 
 -- T3. can sign a contract
@@ -116,11 +120,10 @@ WHERE P.pid = 1;
 
 -- AS ADMIN --
 -- A1. can see hosts with contracts
-SELECT HI.hostid, HI.hostname, HI.university, COUNT(CS.contractid)
-FROM HostInfo HI, Contract_Signs CS
-WHERE HI.hostid = CS.hostid
+SELECT HI.hostid, COUNT(CS.contractid)
+FROM HostInfo HI LEFT OUTER JOIN Contract_Signs CS ON HI.hostid = CS.hostid
 GROUP BY HI.hostid
-HAVING COUNT(CS.contractid) > 0;
+ORDER BY HI.hostid;
 
 -- A2. can find highest/lowest rated hosts
 WITH HostRating(hostid, rating) AS
@@ -131,6 +134,16 @@ SELECT HI.hostid, HI.hostname, HI.university, HR.rating
 FROM HostInfo HI, HostRating HR
 WHERE HI.hostid = HR.hostid
       AND HR.rating = (SELECT MAX(rating)
+                       FROM HostRating);
+
+WITH HostRating(hostid, rating) AS
+     (SELECT TR.hostid, AVG(TR.rating)
+      FROM Traveler_Reviews TR
+      GROUP BY TR.hostid)
+SELECT HI.hostid, HI.hostname, HI.university, HR.rating
+FROM HostInfo HI, HostRating HR
+WHERE HI.hostid = HR.hostid
+      AND HR.rating = (SELECT MIN(rating)
                        FROM HostRating);
 
 -- A3. can delete a host
