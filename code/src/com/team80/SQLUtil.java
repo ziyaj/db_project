@@ -271,7 +271,7 @@ public class SQLUtil {
                                                    final boolean showRate) {
         try {
             final String select = computeSelectPosts(showDateRange, showHost, showAddress, showUniv, showRate);
-            final String sql = select + "FROM PostingInfo PI " + computeWherePosts(univ, startDate, endDate, lowPrice, highPrice);
+            final String sql = select + " FROM PostingInfo PI " + computeWherePosts(univ, startDate, endDate, lowPrice, highPrice);
             final PreparedStatement ps = getConnection().prepareStatement(sql);
             return ps.executeQuery();
         } catch (final SQLException e) {
@@ -300,7 +300,9 @@ public class SQLUtil {
         if (showRate) {
             select += "PI.dailyrate,";
         }
-        return select.substring(0, select.length()-1) + " ";
+        select += "PI.description";
+        //return select.substring(0, select.length()-1) + " ";
+        return select + " ";
     }
 
     private static String computeWherePosts(final String university, final Date startDate, final Date endDate, final int
@@ -413,7 +415,8 @@ public class SQLUtil {
             return getStatement().executeQuery(
                     "SELECT CS.contractid, CS.fromdate, CS.todate, HI.hostid, HI.hostname, HI.university, HI.roomno, HI.residencename " +
                     "FROM Contract_Signs CS, HostInfo HI " +
-                    "WHERE CS.travelerid = " + travlerid + " AND CS.hostid = HI.hostid");
+                    "WHERE CS.travelerid = " + travlerid + " AND CS.hostid = HI.hostid " +
+                            "ORDER BY CS.contractid");
         } catch (final SQLException e) {
             System.err.println("An error occurred while executing query.");
             System.err.println(e.getMessage());

@@ -59,17 +59,14 @@ public class App {
     private JPanel filteredResultPanel;
     private JPanel postingFilterField1;
     private JPanel postingFilterField2;
-    private JPanel contractReviewField;
-    private JComboBox comboBox1;
-    private JButton buttonForGO;
-    private JSpinner spinner1;
-    private JButton submitButton;
+    private JButton tFindPostingsButton;
     private JTextField tLoginTextField;
     private JPanel AdminPanel;
     private JButton contractsButton;
     private JButton addReviewButton;
     private JSlider ratingSlider;
     private JButton reviewsButton;
+
     private JPanel AdminEditor;
     private JButton A_awardButton;
     private JButton A_Delete;
@@ -92,6 +89,31 @@ public class App {
     private JButton FindHost;
     DefaultTableModel A_model = new DefaultTableModel();
 
+
+
+    private JSlider travellerReviewSlider;
+    private JTable tTable;
+    private JButton tSignContractButton;
+    private JTextField universityTextField;
+    private JXDatePicker tFromDatePanel;
+    private JXDatePicker tToDatePanel;
+    private JTextField tLowestPrice;
+    private JTextField tHighestPrice;
+    private JButton tLogOutButton;
+    private JPanel contractReviewField;
+    private JButton tFindAllExistingContractButton;
+    private JButton tReviewHost;
+    private JButton tCancelContractButton;
+    private JCheckBox tDateRangeCheckBox;
+    private JCheckBox tAddressCheckBox;
+    private JCheckBox tUniversityCheckBox;
+    private JCheckBox tHostCheckBox;
+    private JCheckBox tRateCheckBox;
+    private JTextField tHostID;
+
+    private int tid;
+
+    DefaultTableModel tModel = new DefaultTableModel();
 
     //</editor-fold>
 
@@ -117,12 +139,18 @@ public class App {
 
         ratingSlider.setMaximum(10);
         ratingSlider.setMinimum(1);
+        travellerReviewSlider.setMaximum(10);
+        travellerReviewSlider.setMinimum(1);
         Hashtable labelTable = new Hashtable();
         for (int i = 1; i <= 10; i++) {
             labelTable.put(i, new JLabel(String.valueOf(i)));
         }
         ratingSlider.setLabelTable(labelTable);
         ratingSlider.setPaintLabels(true);
+        travellerReviewSlider.setLabelTable(labelTable);
+        travellerReviewSlider.setPaintLabels(true);
+
+
 
         //</editor-fold>
 
@@ -410,6 +438,7 @@ public class App {
             }
         });
 
+
         //A2
         //Find host with lowest rating
         LR_HostButton.addActionListener(new ActionListener() {
@@ -420,6 +449,163 @@ public class App {
                 printTable(A_Table, A_model, rs);
             }
         });
+
+        //<editor-fold desc="Traveller Editor Events">
+
+
+
+        tSignInButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    tid = Integer.parseInt(tidTextField.getText());
+                } catch(Exception e1) {
+                    tLoginTextField.setText("Invalid traveller name");
+                    return;
+                }
+                ResultSet rs = SQLUtil.getStudent(tid);
+
+                try {
+                    if (rs.next()) {
+                        char[] pw = tPasswordField.getPassword();
+                        if (tidTextField.getText().equals(String.valueOf(pw))) {
+                            tab.add(travellerEditorPanel, 2);
+                            tab.setTitleAt(2, "TravellerEditor");
+                            tab.remove(travellerPanel);
+                            tab.setSelectedIndex(2);
+                        } else {
+                            tLoginTextField.setText("Invalid password. Try again.");
+                            JOptionPane.showMessageDialog(null, "Invalid password. Try again.","Error Message", JOptionPane.ERROR_MESSAGE);
+                        }
+                    } else {
+                        tid = -1;
+                        tLoginTextField.setText("User does not exist. Please sign up first.");
+                    }
+                } catch (SQLException e2) {
+                    e2.printStackTrace();
+                }
+            }
+        });
+
+
+        tLogOutButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                tab.add(travellerPanel, 1);
+                tab.setTitleAt(1, "Traveller");
+                tab.remove(travellerEditorPanel);
+                tab.setSelectedIndex(2);
+            }
+        });
+
+        tFindPostingsButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                tSignContractButton.setEnabled(true);
+                tCancelContractButton.setEnabled(false);
+                Date fromDate = (tFromDatePanel.getDate() == null) ? null : new Date(tFromDatePanel.getDate().getTime());
+                Date toDate = (tToDatePanel.getDate() == null) ? null : new Date(tToDatePanel.getDate().getTime());
+                String tUniversity = (universityTextField.getText() == null)? null : new String(universityTextField.getText());
+
+                int tLowestPriceVal = (tLowestPrice.getText().equals(""))? 0 : Integer.parseInt(tLowestPrice.getText());
+                int tHighestPriceVal = (tHighestPrice.getText().equals(""))? 200 : Integer.parseInt(tHighestPrice.getText());
+
+                ResultSet rs = SQLUtil.findPostsWithCondition(tUniversity,fromDate, toDate,
+                        tLowestPriceVal,tHighestPriceVal,
+                        tDateRangeCheckBox.isSelected(), tHostCheckBox.isSelected(), tAddressCheckBox.isSelected(),
+                        tUniversityCheckBox.isSelected(), tRateCheckBox.isSelected());
+                printTable(tTable, tModel, rs);
+            }
+        });
+
+        tReviewHost.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                tSignContractButton.setEnabled(false);
+                tCancelContractButton.setEnabled(false);
+                int hostID = 0;
+                int rating = travellerReviewSlider.getValue();
+                if (tHostID.getText().equals("")) {
+                    JOptionPane.showMessageDialog(null, "Please enter a host ID to find your review","Error Message", JOptionPane.ERROR_MESSAGE);
+                } else {
+                    hostID = Integer.parseInt(tHostID.getText());
+                }
+                if (SQLUtil.addTravelerReview(tid,hostID,rating) == -1) {
+                    JOptionPane.showMessageDialog(null, "Review not successful. Please try again.","Error Message", JOptionPane.ERROR_MESSAGE);
+                } else {
+                    JOptionPane.showMessageDialog(null, "Review successfully added!","Review Message", JOptionPane.INFORMATION_MESSAGE);
+                }
+
+            }
+        });
+
+        tFindAllExistingContractButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                tSignContractButton.setEnabled(false);
+                tCancelContractButton.setEnabled(true);
+                ResultSet rs = SQLUtil.findTravelerContracts(tid);
+                printTable(tTable, tModel, rs);
+            }
+        });
+
+
+        tCancelContractButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int[] selectedRows = tGetSelected();
+
+                //If nothing get selected
+                if (selectedRows.length == 0) {
+                    JOptionPane.showMessageDialog(null, "Please select a contract", "Deletion Message", JOptionPane.WARNING_MESSAGE);
+                    return;
+                }
+
+                int dialogResult = JOptionPane.showConfirmDialog (null, "Cancel selected contract?","Warning", JOptionPane.YES_NO_OPTION);
+                if(dialogResult == JOptionPane.YES_OPTION){
+                    //TODO: Validate if this successfully cancel selected contract
+                    for (final int column : selectedRows) {
+                        int cid = (Integer) tModel.getValueAt(column, 0);
+                        if (SQLUtil.deleteContract(cid) == -1) {
+                            JOptionPane.showMessageDialog(null, "Cancellation not successful!", "Error Message", JOptionPane.WARNING_MESSAGE);
+                        }
+                    }
+
+                    refreshAllPosts();
+
+                }
+            }
+        });
+
+        tSignContractButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int[] selectedRows = tGetSelected();
+
+                //If nothing get selected
+                if (selectedRows.length == 0) {
+                    JOptionPane.showMessageDialog(null, "Please select a contract", "Deletion Message", JOptionPane.WARNING_MESSAGE);
+                    return;
+                }
+
+                int dialogResult = JOptionPane.showConfirmDialog (null, "Sign contract for selected posting?","Warning", JOptionPane.YES_NO_OPTION);
+                if(dialogResult == JOptionPane.YES_OPTION){
+                    for (final int column : selectedRows) {
+                        int pid = (Integer) tModel.getValueAt(column, 0);
+                        //TODO: sign contract can not get host id.
+                        if (SQLUtil.transformPostingToContract(pid,tid) == -1) {
+                            JOptionPane.showMessageDialog(null, "Signing not successful!", "Error Message", JOptionPane.WARNING_MESSAGE);
+                        } else {
+                            JOptionPane.showMessageDialog(null, "Contract successfully generated!", "Contract Message", JOptionPane.INFORMATION_MESSAGE);
+                        }
+                    }
+
+
+
+                }
+            }
+        });
+
 
         //A3: Delete a Host
         A_Delete.addActionListener(new ActionListener() {
@@ -459,7 +645,18 @@ public class App {
 
     }
 
+
     //<editor-fold desc="Helper">
+
+    public int[] tGetSelected() {
+        int[] selection = tTable.getSelectedRows();
+        for (int i = 0; i < selection.length; i++) {
+            selection[i] = tTable.convertRowIndexToModel(selection[i]);
+        }
+        return selection;
+    }
+
+
     public void printTable(JTable table, DefaultTableModel model, ResultSet rs) {
         try {
             ResultSetMetaData rsmd = rs.getMetaData();
