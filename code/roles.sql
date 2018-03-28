@@ -160,3 +160,9 @@ AND NOT EXISTS
 -- A5. can find all hosts
 SELECT *
 FROM HostInfo;
+
+-- A6. can find all travelers
+SELECT S.cid, S.name, S.gender, U.name AS UNIVERSITY
+FROM Traveler T, Student S, University U
+WHERE T.cid = S.cid AND S.unid = U.unid;
+

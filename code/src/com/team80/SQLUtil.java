@@ -607,6 +607,18 @@ public class SQLUtil {
         return null;
     }
 
+    public static ResultSet findAllTravelers() {
+        try {
+            return getStatement().executeQuery("SELECT S.cid, S.name, S.gender, U.name AS UNIVERSITY " +
+                    "FROM Traveler T, Student S, University U " +
+                    "WHERE T.cid = S.cid AND S.unid = U.unid ");
+        } catch (final SQLException e) {
+            System.err.println("An error occurred while executing query.");
+            System.err.println(e.getMessage());
+        }
+        return null;
+    }
+
     public static ResultSet getHost(final int hostid) {
         try {
             final PreparedStatement ps = getConnection().prepareStatement(SELECT_ALL_FROM + "Hosts WHERE cid = ?");

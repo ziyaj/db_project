@@ -311,6 +311,15 @@ values(20, 'Eric Xing', 'M', 18, '123456');
 insert into Student
 values(21, 'Paul Friedman', 'M', 12, '123456');
 
+insert into Student
+values(22, 'David Baker', 'M', 12, '123456');
+
+insert into Student
+values(23, 'Richard Stallman', 'M', 12, '123456');
+
+insert into Student
+values(24, 'Robert Fakerman', 'M', 12, '123456');
+
 insert into Hosts
 values(1, '1024', 'Dragon Crescent', 35);
 
