@@ -696,7 +696,7 @@ public class SQLUtil {
                 ps.setDate(5, tDate);
                 ps.setDate(6, tDate);
                 ResultSet rs = ps.executeQuery();
-                return rs.next();
+                return rs.next() && rs.getInt(1) > 0;
             }
         } catch (final SQLException e) {
             System.err.println("An error occurred while executing query.");

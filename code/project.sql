@@ -106,60 +106,60 @@ CHECK (contractid > 0 AND fromdate < todate AND hostid <> travelerid)
 grant select on Contract_Signs to public;
 
 
-CREATE OR REPLACE TRIGGER No_Overlap_Posting
-BEFORE INSERT OR UPDATE ON Posting
-FOR EACH ROW
+-- CREATE OR REPLACE TRIGGER No_Overlap_Posting
+-- BEFORE INSERT OR UPDATE ON Posting
+-- FOR EACH ROW
 
-DECLARE
-    NumExists         NUMBER;
-    Overlap_Posting   EXCEPTION;
+-- DECLARE
+--     NumExists         NUMBER;
+--     Overlap_Posting   EXCEPTION;
 
-BEGIN
+-- BEGIN
 
-    SELECT COUNT(*) INTO NumExists FROM Posting P
-    WHERE :new.hostid = P.hostid AND :new.pid <> P.pid
-          AND ((:new.fromdate >= P.fromdate AND :new.fromdate <= P.todate)
-          OR (:new.todate >= P.fromdate AND :new.todate <= P.todate));
+--     SELECT COUNT(*) INTO NumExists FROM Posting
+--     WHERE :new.hostid = :old.hostid AND :new.pid <> :old.pid
+--           AND ((:new.fromdate >= :old.fromdate AND :new.fromdate <= :old.todate)
+--           OR (:new.todate >= :old.fromdate AND :new.todate <= :old.todate));
 
-    IF (NumExists > 0) THEN
-        RAISE Overlap_Posting;
-    END IF;
+--     IF (NumExists > 0) THEN
+--         RAISE Overlap_Posting;
+--     END IF;
 
-EXCEPTION
-   WHEN Overlap_Posting THEN
-      Raise_application_error (-20301,
-         'The posting is overlapped with an existing one for that host');
-END;
+-- EXCEPTION
+--    WHEN Overlap_Posting THEN
+--       Raise_application_error (-20301,
+--          'The posting is overlapped with an existing one for that host');
+-- END;
 
-/
+-- /
 
 
-CREATE OR REPLACE TRIGGER No_Overlap_Contracts
-BEFORE INSERT OR UPDATE ON Contract_Signs
-FOR EACH ROW
+-- CREATE OR REPLACE TRIGGER No_Overlap_Contracts
+-- BEFORE INSERT OR UPDATE ON Contract_Signs
+-- FOR EACH ROW
 
-DECLARE
-    NumExists          NUMBER;
-    Overlap_Contract   EXCEPTION;
+-- DECLARE
+--     NumExists          NUMBER;
+--     Overlap_Contract   EXCEPTION;
 
-BEGIN
+-- BEGIN
 
-    SELECT COUNT(*) INTO NumExists FROM Contract_Signs CS
-    WHERE :new.hostid = CS.hostid AND :new.contractid <> CS.contractid
-          AND ((:new.fromdate >= CS.fromdate AND :new.fromdate <= CS.todate)
-          OR (:new.todate >= CS.fromdate AND :new.todate <= CS.todate));
+--     SELECT COUNT(*) INTO NumExists FROM Contract_Signs CS
+--     WHERE :new.hostid = CS.hostid AND :new.contractid <> CS.contractid
+--           AND ((:new.fromdate >= CS.fromdate AND :new.fromdate <= CS.todate)
+--           OR (:new.todate >= CS.fromdate AND :new.todate <= CS.todate));
 
-    IF (NumExists > 0) THEN
-        RAISE Overlap_Contract;
-    END IF;
+--     IF (NumExists > 0) THEN
+--         RAISE Overlap_Contract;
+--     END IF;
 
-EXCEPTION
-   WHEN Overlap_Contract THEN
-      Raise_application_error (-20300,
-         'The contract is overlapped with an existing one');
-END;
+-- EXCEPTION
+--    WHEN Overlap_Contract THEN
+--       Raise_application_error (-20300,
+--          'The contract is overlapped with an existing one');
+-- END;
 
-/
+-- /
 
 -- special view for posting info
 CREATE VIEW PostingInfo(pid, fromdate, todate, hostid, hostname, roomno, residencename, university, dailyrate, description) AS

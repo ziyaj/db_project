@@ -215,7 +215,10 @@ public class App {
                 } else {
                     Date fromDate = (fromDatePicker.getDate() == null) ? null : new Date(fromDatePicker.getDate().getTime());
                     Date toDate = (toDatePicker.getDate() == null) ? null : new Date(toDatePicker.getDate().getTime());
-                    String description = descriptionTextField.getText();
+                    // model.getValueAt(selection[0], 2)
+                    final String existingDescription = (String) hModel.getValueAt(selectedRows[0], 6);
+                    final String textFieldDescription = descriptionTextField.getText();
+                    final String description = (textFieldDescription == null || textFieldDescription.isEmpty()) ? existingDescription : textFieldDescription;
 
                     int dialogResult = JOptionPane.showConfirmDialog(null, "Update selected record?", "Warning", JOptionPane.YES_NO_OPTION);
                     if (dialogResult == JOptionPane.YES_OPTION) {
@@ -225,7 +228,7 @@ public class App {
                             return;
                         }
 
-                        int result = SQLUtil.updatePost(selectedRows, hModel, fromDate, toDate, description);
+                        final int result = SQLUtil.updatePost(selectedRows, hModel, fromDate, toDate, description);
                         refreshAllPosts();
 
                         if (result > 0) {
@@ -432,63 +435,36 @@ public class App {
         group2.add(AmazingTravelerRadioButton);
         group2.add(AllTravelerRadioButton);
 
-
         //Search Host
         HostSearch.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
 
                 if (allHostsRadioButton.isSelected()) {
-                    ResultSet rs = SQLUtil.findAllHosts();
-                    printTable(A_Table, A_model, rs);
-                }
-
-                //Search Host by ID
-                else if (searchByIDRadioButton.isSelected()) {
-
-                    if (A_hidTextfield.getText().equals("")) {
-                        JOptionPane.showMessageDialog(null, "Please input hostid.", "Deletion Message", JOptionPane.INFORMATION_MESSAGE);
+                    printTable(A_Table, A_model, SQLUtil.findAllHosts());
+                } else if (searchByIDRadioButton.isSelected()) {
+                    final String hidText = A_hidTextfield.getText();
+                    if (hidText == null || hidText.isEmpty()) {
+                        JOptionPane.showMessageDialog(null, "Please input a hostid.", "Warning", JOptionPane.INFORMATION_MESSAGE);
                     } else {
-
-                        hid = Integer.parseInt(A_hidTextfield.getText());
-
-                        hid = Integer.parseInt(A_hidTextfield.getText());
-
-                        //host does not exist,send error message
+                        hid = Integer.parseInt(hidText);
+                        // host does not exist, send error message
                         if (!SQLUtil.hostExists(hid)) {
-                            A_hidTextfield.setText("Invalid Host ID!");
+                            hostNotExist();
                         } else {
-                            //host info
-                            ResultSet rs = SQLUtil.getHost(hid);
-                            printTable(A_Table, A_model, rs);
+                            // host info
+                            printTable(A_Table, A_model, SQLUtil.getHost(hid));
                         }
-
                     }
-
-
-                }
-
-
-                //A2
-                //Find Host with highest rating
-                else if (bestHostRadioButton.isSelected()) {
-                    ResultSet rs = SQLUtil.findBestHosts();
-                    printTable(A_Table, A_model, rs);
-                }
-
-
-                //A2
-                //Find host with lowest rating
-                else if (worstHostRadioButton.isSelected()) {
-                    ResultSet rs = SQLUtil.findWorstHosts();
-                    printTable(A_Table, A_model, rs);
+                } else if (bestHostRadioButton.isSelected()) {
+                    printTable(A_Table, A_model, SQLUtil.findBestHosts());
+                } else if (worstHostRadioButton.isSelected()) {
+                    printTable(A_Table, A_model, SQLUtil.findWorstHosts());
                 } else if (hostWithContractsRadioButton.isSelected()) {
-                    ResultSet rs = SQLUtil.findHostsContracts();
-                    printTable(A_Table, A_model, rs);
+                    printTable(A_Table, A_model, SQLUtil.findHostsContracts());
                 } else {
                     JOptionPane.showMessageDialog(null, "Please make a selection!", "Warning!", JOptionPane.INFORMATION_MESSAGE);
                 }
-
 
             }
         });
@@ -505,10 +481,9 @@ public class App {
 
                     hid = Integer.parseInt(A_DeleteText.getText());
 
-
                     //host does not exist,send error message
                     if (!SQLUtil.hostExists(hid)) {
-                        A_DeleteText.setText("Invalid Host ID!");
+                        hostNotExist();
                     } else {
                         //host info
                         ResultSet rs = SQLUtil.getHost(hid);
@@ -525,10 +500,7 @@ public class App {
                             JOptionPane.showMessageDialog(null, "Host record have been removed.", "Deletion Message", JOptionPane.INFORMATION_MESSAGE);
                         }
                     }
-
-
                 }
-
 
             }
         });
@@ -846,6 +818,10 @@ public class App {
 
         private void invalideUsername() {
             JOptionPane.showMessageDialog(null, "Invalid username. Username is your id.", "Login error", JOptionPane.ERROR_MESSAGE);
+        }
+
+        private void hostNotExist() {
+            JOptionPane.showMessageDialog(null, "Host does not exist.", "Error", JOptionPane.ERROR_MESSAGE);
         }
 
     }
