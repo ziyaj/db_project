@@ -663,15 +663,19 @@ public class SQLUtil {
 
     public static boolean isNewPostOverlapped(final int hid, final Date fromDate, final Date toDate) {
         try {
-            final String sql = SELECT_COUNT + " FROM Posting WHERE hostid = ? AND (? >= fromdate AND ? <= todate) OR (? >= fromdate AND ? <= todate)";
+            final String sql = SELECT_COUNT + " FROM Posting " +
+                    "WHERE hostid = ? " +
+                    "AND (((? >= fromdate AND ? <= todate) OR (? >= fromdate AND ? <= todate)) OR (? <= fromdate AND ? >= todate))";
             final PreparedStatement ps = getConnection().prepareStatement(sql);
             ps.setInt(1, hid);
             ps.setDate(2, fromDate);
             ps.setDate(3, fromDate);
             ps.setDate(4, toDate);
             ps.setDate(5, toDate);
+            ps.setDate(6, fromDate);
+            ps.setDate(7, toDate);
             ResultSet rs = ps.executeQuery();
-            return rs.next();
+            return rs.next() && rs.getInt(1) > 0;
         } catch (final SQLException e) {
             System.err.println("An error occurred while executing query.");
             System.err.println(e.getMessage());

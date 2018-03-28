@@ -7,8 +7,6 @@ import java.awt.event.*;
 import java.sql.*;
 import java.util.Hashtable;
 import org.jdesktop.swingx.JXDatePicker;
-import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
-
 import static java.sql.Types.*;
 
 
@@ -19,10 +17,22 @@ public class App {
 
     //<editor-fold desc="Fields">
     JPanel panelMain;
+    private JPanel adminPanel;
+    private JPanel hostPanel;
+    private JPanel travellerPanel;
+    private JPanel hostEditorPanel;
+    private JPanel toDatePanel;
+    private JPanel fromDatePanel;
+    private JPanel registerPanel;
+    private JPanel travellerEditorPanel;
+    private JPanel filteredResultPanel;
+    private JPanel postingFilterField1;
+    private JPanel postingFilterField2;
+    private JPanel AdminEditor;
+    private JPanel contractReviewField;
 
-    private JTextField aidTextField;
-    private JPasswordField aPasswordField;
-    private JButton adminSignInButton;
+    private JTabbedPane tab;
+
     private JButton hSignUpButton;
     private JButton hSignInButton;
     private JButton tSignInButton;
@@ -30,61 +40,67 @@ public class App {
     private JButton hDeleteButton;
     private JButton postsButton;
     private JButton addPostButton;
-    private JTextField descriptionTextField;
-    private JTable hTable;
-    private JTextField ratingTextField;
+    private JButton adminSignInButton;
     private JButton logOutButton;
+    private JButton rSignUpButton;
+    private JButton tFindPostingsButton;
+    private JButton contractsButton;
+    private JButton addReviewButton;
+    private JButton reviewsButton;
+    private JButton A_awardButton;
+    private JButton A_Delete;
+    private JButton A_Logout;
+    private JButton HostSearch;
+    private JButton TravelerSearch;
+    private JButton tSignContractButton;
+    private JButton tLogOutButton;
+    private JButton tFindAllExistingContractButton;
+    private JButton tReviewHost;
+    private JButton tCancelContractButton;
+    private JButton tFindCheapestPostingsButton;
+    private JButton tFindMostExpensivePostings;
+
+    private JTextField descriptionTextField;
+    private JTextField aidTextField;
+    private JTextField ratingTextField;
     private JTextField hostMsg;
-    static PersistenceLayer persistenceLayer;
     private JTextField hidTextField;
-    private JPanel adminPanel;
-    private JPanel hostPanel;
-    private JPanel travellerPanel;
-    private JPanel hostEditorPanel;
-    private JPasswordField hPasswordField;
     private JTextField roomTextField;
     private JTextField residenceTextField;
     private JTextField dailyRateTextField;
     private JTextField rTextField;
-    private JPasswordField rPasswordField;
-    private JButton rSignUpButton;
-    private JTextField fromDateTextField;
-    private JPanel toDatePanel;
-    private JXDatePicker toDatePicker;
-    private JPanel fromDatePanel;
-    private JXDatePicker fromDatePicker;
     private JTextField tidTextField;
-    private JPasswordField tPasswordField;
-    private JPanel registerPanel;
-    private JPanel travellerEditorPanel;
-    private JPanel filteredResultPanel;
-    private JPanel postingFilterField1;
-    private JPanel postingFilterField2;
-    private JButton tFindPostingsButton;
-    private JPanel AdminPanel;
-    private JButton contractsButton;
-    private JButton addReviewButton;
-    private JSlider ratingSlider;
-    private JButton reviewsButton;
-
-    private JPanel AdminEditor;
-    private JButton A_awardButton;
-    private JButton A_Delete;
-    private JButton A_Logout;
-    private JTextField AdminLoginText;
-    private JTabbedPane tab;
+    private JTextField A_DeleteText;
     private JTextField A_hidTextfield;
+    private JTextField universityTextField;
+    private JTextField tLowestPrice;
+    private JTextField tHighestPrice;
+    private JTextField tHostID;
 
-    private int hid;
-    DefaultTableModel hModel = new DefaultTableModel();
+    private JPasswordField aPasswordField;
+    private JPasswordField hPasswordField;
+    private JPasswordField rPasswordField;
+    private JPasswordField tPasswordField;
 
-    //table model for Admin
+    private JXDatePicker toDatePicker;
+    private JXDatePicker fromDatePicker;
+    private JXDatePicker tFromDatePanel;
+    private JXDatePicker tToDatePanel;
+
+    private JSlider ratingSlider;
+    private JSlider travellerReviewSlider;
+
+    private JTable hTable;
     private JTable A_Table;
-    private JButton HostSearch;
+    private JTable tTable;
 
-    //button group
+    DefaultTableModel hModel = createModel();
+    DefaultTableModel A_model = createModel();
+    DefaultTableModel tModel = createModel();
+
     private ButtonGroup group;
     private ButtonGroup group2;
+
     private JRadioButton bestHostRadioButton;
     private JRadioButton worstHostRadioButton;
     private JRadioButton hostWithContractsRadioButton;
@@ -92,42 +108,22 @@ public class App {
     private JRadioButton searchByIDRadioButton;
     private JRadioButton AllTravelerRadioButton;
     private JRadioButton AmazingTravelerRadioButton;
-    private JButton TravelerSearch;
-    private JTextField A_DeleteText;
-    DefaultTableModel A_model = new DefaultTableModel();
 
-
-    private JSlider travellerReviewSlider;
-    private JTable tTable;
-    private JButton tSignContractButton;
-    private JTextField universityTextField;
-    private JXDatePicker tFromDatePanel;
-    private JXDatePicker tToDatePanel;
-    private JTextField tLowestPrice;
-    private JTextField tHighestPrice;
-    private JButton tLogOutButton;
-    private JPanel contractReviewField;
-    private JButton tFindAllExistingContractButton;
-    private JButton tReviewHost;
-    private JButton tCancelContractButton;
     private JCheckBox tDateRangeCheckBox;
     private JCheckBox tAddressCheckBox;
     private JCheckBox tUniversityCheckBox;
     private JCheckBox tHostCheckBox;
     private JCheckBox tRateCheckBox;
-    private JTextField tHostID;
-    private JButton tFindCheapestPostingsButton;
-    private JButton tFindMostExpensivePostings;
 
+    private int hid;
     private int tid;
-
-    DefaultTableModel tModel = new DefaultTableModel();
 
     //</editor-fold>
 
     public App() {
 
         //<editor-fold desc="Init">
+
         panelMain.setPreferredSize(new Dimension(1200, 600));
         hTable.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
         hTable.setFillsViewportHeight(true);
@@ -141,7 +137,6 @@ public class App {
         A_Table.setFillsViewportHeight(true);
 
         // Hide the all Editor tabs before user is logged in
-
         tab.remove(hostEditorPanel);
         tab.remove(registerPanel);
         tab.remove(AdminEditor);
@@ -160,185 +155,37 @@ public class App {
         travellerReviewSlider.setLabelTable(labelTable);
         travellerReviewSlider.setPaintLabels(true);
 
-
         //</editor-fold>
 
-        //<editor-fold desc="Host Editor Events">
-        logOutButton.addActionListener(new ActionListener() {
-            @Override
+        //<editor-fold desc="Admin Events">
+
+        adminSignInButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                tab.add(hostPanel, 1);
-                tab.setTitleAt(1, "Host");
-                tab.remove(hostEditorPanel);
-                tab.setSelectedIndex(1);
-            }
-        });
-        contractsButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                hUpdateButton.setEnabled(false);
-                addPostButton.setEnabled(false);
-                hDeleteButton.setEnabled(false);
-                addReviewButton.setEnabled(true);
-                ResultSet rs = SQLUtil.findHostsContracts(hid);
-                printTable(hTable, hModel, rs);
-            }
-        });
-        postsButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                addReviewButton.setEnabled(false);
-                hUpdateButton.setEnabled(true);
-                addPostButton.setEnabled(true);
-                hDeleteButton.setEnabled(true);
-                refreshAllPosts();
-            }
-        });
-        reviewsButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                hUpdateButton.setEnabled(false);
-                addPostButton.setEnabled(false);
-                hDeleteButton.setEnabled(false);
-                addReviewButton.setEnabled(false);
-                ResultSet rs = SQLUtil.findHostsReviews(hid);
-                printTable(hTable, hModel, rs);
-            }
-        });
-        hUpdateButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                int[] selectedRows = getSelected();
-                if (selectedRows.length == 0) {
-                    JOptionPane.showMessageDialog(null, "Please select a record", "Update Message", JOptionPane.WARNING_MESSAGE);
-                    return;
-                } else if (selectedRows.length > 1) {
-                    JOptionPane.showMessageDialog(null, "Please select only one record at a time", "Update Message", JOptionPane.WARNING_MESSAGE);
+                final String aidText = aidTextField.getText();
+                if (aidText == null || aidText.isEmpty()) {
+                    pleaseEnterUsername();
                 } else {
-                    Date fromDate = (fromDatePicker.getDate() == null) ? null : new Date(fromDatePicker.getDate().getTime());
-                    Date toDate = (toDatePicker.getDate() == null) ? null : new Date(toDatePicker.getDate().getTime());
-                    // model.getValueAt(selection[0], 2)
-                    final String existingDescription = (String) hModel.getValueAt(selectedRows[0], 6);
-                    final String textFieldDescription = descriptionTextField.getText();
-                    final String description = (textFieldDescription == null || textFieldDescription.isEmpty()) ? existingDescription : textFieldDescription;
-
-                    int dialogResult = JOptionPane.showConfirmDialog(null, "Update selected record?", "Warning", JOptionPane.YES_NO_OPTION);
-                    if (dialogResult == JOptionPane.YES_OPTION) {
-
-                        if (SQLUtil.isUpdatedPostOverlapped(hid, selectedRows, hModel, fromDate, toDate)) {
-                            JOptionPane.showMessageDialog(null, "Post overlaps with others", "Update Message", JOptionPane.ERROR_MESSAGE);
-                            return;
-                        }
-
-                        final int result = SQLUtil.updatePost(selectedRows, hModel, fromDate, toDate, description);
-                        refreshAllPosts();
-
-                        if (result > 0) {
-                            JOptionPane.showMessageDialog(null, "Update successful.", "Update Message", JOptionPane.INFORMATION_MESSAGE);
-                        } else {
-                            JOptionPane.showMessageDialog(null, "Update failed. Please try again", "Update Message", JOptionPane.ERROR_MESSAGE);
-                        }
-                    }
-                }
-            }
-        });
-        addPostButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (fromDatePicker.getDate() == null || toDatePicker.getDate() == null) {
-                    JOptionPane.showMessageDialog(null, "Missing date", "New Posting Message", JOptionPane.ERROR_MESSAGE);
-                    return;
-                }
-                Date fromDate = new Date(fromDatePicker.getDate().getTime());
-                Date toDate = new Date(toDatePicker.getDate().getTime());
-                String description = descriptionTextField.getText();
-                if (SQLUtil.isNewPostOverlapped(hid, fromDate, toDate)) {
-                    JOptionPane.showMessageDialog(null, "Post overlaps with others", "Update Message", JOptionPane.ERROR_MESSAGE);
-                    return;
-                }
-                int result = SQLUtil.addPost(hid, fromDate, toDate, description);
-                if (result == 1) {
-                    JOptionPane.showMessageDialog(null, "New posting has been added", "New Posting Message", JOptionPane.INFORMATION_MESSAGE);
-                } else {
-                    JOptionPane.showMessageDialog(null, "Insert failed. Post overlaps with others. Please try again.", "New Posting Message", JOptionPane.ERROR_MESSAGE);
-                }
-                refreshAllPosts();
-            }
-        });
-        addReviewButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                int[] selectedRows = getSelected();
-                if (selectedRows.length == 0) {
-                    JOptionPane.showMessageDialog(null, "Please select a record", "Add Review Message", JOptionPane.WARNING_MESSAGE);
-                    return;
-                } else if (selectedRows.length > 1) {
-                    JOptionPane.showMessageDialog(null, "Please select only one record at a time", "Add Review Message", JOptionPane.WARNING_MESSAGE);
-                } else {
-                    int rating = ratingSlider.getValue();
-                    int tid = (Integer) hModel.getValueAt(selectedRows[0], 3);
-                    int dialogResult = JOptionPane.showConfirmDialog(null, "Add a host review?", "Warning", JOptionPane.YES_NO_OPTION);
-                    if (dialogResult == JOptionPane.YES_OPTION) {
-                        int result = SQLUtil.addHostReview(hid, tid, rating);
-                        if (result > 0) {
-                            JOptionPane.showMessageDialog(null, "Added successfully.", "Add Review Message", JOptionPane.INFORMATION_MESSAGE);
-                        } else {
-                            JOptionPane.showMessageDialog(null, "Failed. Please try again", "Add Review Message", JOptionPane.ERROR_MESSAGE);
-                        }
-                    }
-                }
-            }
-        });
-
-        //</editor-fold>
-
-        //<editor-fold desc="Register Events">
-        rSignUpButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                int cID;
-                String roomNo = "";
-                String residence = "";
-                int dailyRate = -1;
-                if ((cID = isIdValid(rTextField.getText())) != -1) {
-                    ResultSet rs = SQLUtil.getHost(cID);
-                    try {
-                        if (rs.next()) {
-                            JOptionPane.showMessageDialog(null, "User already exists", "Register Message", JOptionPane.ERROR_MESSAGE);
-                            return;
-                        }
-                    } catch (SQLException e1) {
-                    }
-
-                    roomNo = roomTextField.getText();
-                    residence = residenceTextField.getText();
-                    try {
-                        dailyRate = Integer.parseInt(dailyRateTextField.getText());
-                    } catch (Exception e1) {
-                        JOptionPane.showMessageDialog(null, "Invalid daily rate", "Error Message", JOptionPane.ERROR_MESSAGE);
-                    }
-                    if (roomNo.equals("") || residence.equals("") || dailyRate == -1) {
-                        JOptionPane.showMessageDialog(null, "Info missing", "Error Message", JOptionPane.ERROR_MESSAGE);
-                        return;
-                    }
-                    int result = SQLUtil.addHost(cID, roomNo, residence, dailyRate);
-                    if (result == 1) {
-                        JOptionPane.showMessageDialog(null, "Registration successful. Please log in.", "Register Message", JOptionPane.INFORMATION_MESSAGE);
-                        tab.remove(registerPanel);
+                    final char[] pw = aPasswordField.getPassword();
+                    if (pw == null || pw.length == 0) {
+                        pleaseEnterPassword();
                     } else {
-                        JOptionPane.showMessageDialog(null, "Registration failed. Please try again", "Register Message", JOptionPane.ERROR_MESSAGE);
+                        if (aidText.equals("admin") && String.valueOf(pw).equals("123456")) {
+                            tab.add(AdminEditor, 0);
+                            tab.setTitleAt(0, "Admin Editor");
+                            tab.remove(adminPanel);
+                            tab.setSelectedIndex(0);
+                        } else {
+                            invalidUsernamePassword();
+                        }
                     }
-                } else {
-                    JOptionPane.showMessageDialog(null, "Invalid username. No such student", "Error Message", JOptionPane.ERROR_MESSAGE);
                 }
             }
         });
 
-
         //</editor-fold>
-
 
         //<editor-fold desc="Host Events">
+
         hSignUpButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -347,6 +194,7 @@ public class App {
                 tab.setSelectedIndex(3);
             }
         });
+
         hSignInButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -391,38 +239,253 @@ public class App {
 
         //</editor-fold>
 
-        //<editor-fold desc="Admin Editor Events">
-        /*
-        Functions for Admin
-         */
+        //<editor-fold desc="Traveller Events">
 
-        //login to admin panel
-        adminSignInButton.addActionListener(new ActionListener() {
-
+        tSignInButton.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
-
-                final String aidText = aidTextField.getText();
-
-                if (aidText == null || aidText.isEmpty()) {
+                final String tidText = tidTextField.getText();
+                if (tidText == null || tidText.isEmpty()) {
                     pleaseEnterUsername();
-                } else {
-                    final char[] pw = aPasswordField.getPassword();
-                    if (pw == null || pw.length == 0) {
-                        pleaseEnterPassword();
+                    return;
+                }
+                try {
+                    tid = Integer.parseInt(tidText);
+                } catch (Exception e1) {
+                    invalideUsername();
+                    return;
+                }
+
+                final char[] pwText = tPasswordField.getPassword();
+
+                if (pwText == null || pwText.length == 0) {
+                    pleaseEnterPassword();
+                    return;
+                }
+
+                final String pw = String.valueOf(pwText);
+                if (SQLUtil.travelerExists(tid)) {
+                    if (SQLUtil.hasCorrectPassword(tid, pw)) {
+                        tidTextField.setText("");
+                        tPasswordField.setText("");
+                        tab.add(travellerEditorPanel, 1);
+                        tab.setTitleAt(1, "Traveller Editor");
+                        tab.remove(travellerPanel);
+                        tab.setSelectedIndex(1);
                     } else {
-                        if (aidText.equals("admin") && String.valueOf(pw).equals("123456")) {
-                            tab.add(AdminEditor, 0);
-                            tab.setTitleAt(0, "AdminEditor");
-                            tab.remove(adminPanel);
-                            tab.setSelectedIndex(0);
+                        invalidUsernamePassword();
+                    }
+                } else {
+                    tid = -1;
+                    JOptionPane.showMessageDialog(null, "User does not exist.", "Login error", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
+
+        //</editor-fold>
+
+        //<editor-fold desc="Register Events">
+
+        rSignUpButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int cID;
+                String roomNo = "";
+                String residence = "";
+                int dailyRate = -1;
+                if ((cID = isIdValid(rTextField.getText())) != -1) {
+                    ResultSet rs = SQLUtil.getHost(cID);
+                    try {
+                        if (rs.next()) {
+                            JOptionPane.showMessageDialog(null, "User already exists", "Register Message", JOptionPane.ERROR_MESSAGE);
+                            return;
+                        }
+                    } catch (SQLException e1) {
+                    }
+
+                    roomNo = roomTextField.getText();
+                    residence = residenceTextField.getText();
+                    try {
+                        dailyRate = Integer.parseInt(dailyRateTextField.getText());
+                    } catch (Exception e1) {
+                        JOptionPane.showMessageDialog(null, "Invalid daily rate", "Error Message", JOptionPane.ERROR_MESSAGE);
+                    }
+                    if (roomNo.equals("") || residence.equals("") || dailyRate == -1) {
+                        JOptionPane.showMessageDialog(null, "Info missing", "Error Message", JOptionPane.ERROR_MESSAGE);
+                        return;
+                    }
+                    int result = SQLUtil.addHost(cID, roomNo, residence, dailyRate);
+                    if (result == 1) {
+                        JOptionPane.showMessageDialog(null, "Registration successful. Please log in.", "Register Message", JOptionPane.INFORMATION_MESSAGE);
+                        tab.remove(registerPanel);
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Registration failed. Please try again", "Register Message", JOptionPane.ERROR_MESSAGE);
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(null, "Invalid username. No such student", "Error Message", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
+
+        //</editor-fold>
+
+        //<editor-fold desc="Host Editor Events">
+
+        logOutButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                tab.add(hostPanel, 1);
+                tab.setTitleAt(1, "Host");
+                tab.remove(hostEditorPanel);
+                tab.setSelectedIndex(1);
+            }
+        });
+
+        contractsButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                hUpdateButton.setEnabled(false);
+                addPostButton.setEnabled(false);
+                hDeleteButton.setEnabled(false);
+                addReviewButton.setEnabled(true);
+                ResultSet rs = SQLUtil.findHostsContracts(hid);
+                printTable(hTable, hModel, rs);
+            }
+        });
+
+        postsButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                addReviewButton.setEnabled(false);
+                hUpdateButton.setEnabled(true);
+                addPostButton.setEnabled(true);
+                hDeleteButton.setEnabled(true);
+                refreshAllPosts();
+            }
+        });
+
+        reviewsButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                hUpdateButton.setEnabled(false);
+                addPostButton.setEnabled(false);
+                hDeleteButton.setEnabled(false);
+                addReviewButton.setEnabled(false);
+                ResultSet rs = SQLUtil.findHostsReviews(hid);
+                printTable(hTable, hModel, rs);
+            }
+        });
+
+        hUpdateButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int[] selectedRows = getSelected(hTable);
+                if (selectedRows.length == 0) {
+                    JOptionPane.showMessageDialog(null, "Please select a record", "Update Message", JOptionPane.WARNING_MESSAGE);
+                    return;
+                } else if (selectedRows.length > 1) {
+                    JOptionPane.showMessageDialog(null, "Please select only one record at a time", "Update Message", JOptionPane.WARNING_MESSAGE);
+                } else {
+                    Date fromDate = (fromDatePicker.getDate() == null) ? null : new Date(fromDatePicker.getDate().getTime());
+                    Date toDate = (toDatePicker.getDate() == null) ? null : new Date(toDatePicker.getDate().getTime());
+                    // model.getValueAt(selection[0], 2)
+                    final String existingDescription = (String) hModel.getValueAt(selectedRows[0], 6);
+                    final String textFieldDescription = descriptionTextField.getText();
+                    final String description = (textFieldDescription == null || textFieldDescription.isEmpty()) ? existingDescription : textFieldDescription;
+
+                    int dialogResult = JOptionPane.showConfirmDialog(null, "Update selected record?", "Warning", JOptionPane.YES_NO_OPTION);
+                    if (dialogResult == JOptionPane.YES_OPTION) {
+
+                        if (SQLUtil.isUpdatedPostOverlapped(hid, selectedRows, hModel, fromDate, toDate)) {
+                            JOptionPane.showMessageDialog(null, "Post overlaps with others", "Update Message", JOptionPane.ERROR_MESSAGE);
+                            return;
+                        }
+
+                        final int result = SQLUtil.updatePost(selectedRows, hModel, fromDate, toDate, description);
+                        refreshAllPosts();
+
+                        if (result > 0) {
+                            JOptionPane.showMessageDialog(null, "Update successful.", "Update Message", JOptionPane.INFORMATION_MESSAGE);
                         } else {
-                            invalidUsernamePassword();
+                            JOptionPane.showMessageDialog(null, "Update failed. Please try again", "Update Message", JOptionPane.ERROR_MESSAGE);
                         }
                     }
                 }
             }
         });
 
+        addPostButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (fromDatePicker.getDate() == null || toDatePicker.getDate() == null) {
+                    JOptionPane.showMessageDialog(null, "Missing date", "New Posting Message", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+                Date fromDate = new Date(fromDatePicker.getDate().getTime());
+                Date toDate = new Date(toDatePicker.getDate().getTime());
+                String description = descriptionTextField.getText();
+                if (SQLUtil.isNewPostOverlapped(hid, fromDate, toDate)) {
+                    JOptionPane.showMessageDialog(null, "Post overlaps with others", "Update Message", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+                int result = SQLUtil.addPost(hid, fromDate, toDate, description);
+                if (result == 1) {
+                    JOptionPane.showMessageDialog(null, "New posting has been added", "New Posting Message", JOptionPane.INFORMATION_MESSAGE);
+                } else {
+                    JOptionPane.showMessageDialog(null, "Insert failed. Post overlaps with others. Please try again.", "New Posting Message", JOptionPane.ERROR_MESSAGE);
+                }
+                refreshAllPosts();
+            }
+        });
+
+        addReviewButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int[] selectedRows = getSelected(hTable);
+                if (selectedRows.length == 0) {
+                    JOptionPane.showMessageDialog(null, "Please select a record", "Add Review Message", JOptionPane.WARNING_MESSAGE);
+                } else if (selectedRows.length > 1) {
+                    JOptionPane.showMessageDialog(null, "Please select only one record at a time", "Add Review Message", JOptionPane.WARNING_MESSAGE);
+                } else {
+                    int rating = ratingSlider.getValue();
+                    int tid = (Integer) hModel.getValueAt(selectedRows[0], 3);
+                    int dialogResult = JOptionPane.showConfirmDialog(null, "Add a host review?", "Warning", JOptionPane.YES_NO_OPTION);
+                    if (dialogResult == JOptionPane.YES_OPTION) {
+                        int result = SQLUtil.addHostReview(hid, tid, rating);
+                        if (result > 0) {
+                            JOptionPane.showMessageDialog(null, "Added successfully.", "Add Review Message", JOptionPane.INFORMATION_MESSAGE);
+                        } else {
+                            JOptionPane.showMessageDialog(null, "Failed. Please try again", "Add Review Message", JOptionPane.ERROR_MESSAGE);
+                        }
+                    }
+                }
+            }
+        });
+
+        hDeleteButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int[] selectedRows = getSelected(hTable);
+                if (selectedRows.length == 0) {
+                    JOptionPane.showMessageDialog(null, "Please select a record", "Deletion Message", JOptionPane.WARNING_MESSAGE);
+                    return;
+                }
+                int dialogResult = JOptionPane.showConfirmDialog (null, "Delete selected records?","Warning", JOptionPane.YES_NO_OPTION);
+                if(dialogResult == JOptionPane.YES_OPTION){
+                    int[] result = SQLUtil.deletePost(selectedRows, hModel);
+                    refreshAllPosts();
+                    if(result.length > 0) {
+                        JOptionPane.showMessageDialog(null, "Selected records have been removed.", "Deletion Message", JOptionPane.INFORMATION_MESSAGE);
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Deletion failed. Please try again.", "Deletion Message", JOptionPane.ERROR_MESSAGE);
+                    }
+                }
+            }
+        });
+
+        //</editor-fold>
+
+        //<editor-fold desc="Admin Editor Events">
 
         //Host Administration
         group = new ButtonGroup();
@@ -515,15 +578,15 @@ public class App {
             }
         });
 
-
         //A2
         //Find host with lowest rating
 
         //Log out and bring back the user to the login page
         A_Logout.addActionListener(new ActionListener() {
-
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
+                aidTextField.setText("");
+                aPasswordField.setText("");
                 tab.add(adminPanel, 0);
                 tab.setTitleAt(0, "Admin");
                 tab.remove(AdminEditor);
@@ -531,48 +594,26 @@ public class App {
             }
         });
 
-        //<editor-fold desc="Traveller Editor Events">
-
-        tSignInButton.addActionListener(new ActionListener() {
+        //A3: Delete a Host
+        TravelerSearch.addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(ActionEvent e) {
-                final String tidText = tidTextField.getText();
-                if (tidText == null || tidText.isEmpty()) {
-                    pleaseEnterUsername();
-                    return;
-                }
-                try {
-                    tid = Integer.parseInt(tidText);
-                } catch (Exception e1) {
-                    invalideUsername();
-                    return;
-                }
-
-                final char[] pwText = tPasswordField.getPassword();
-
-                if (pwText == null || pwText.length == 0) {
-                    pleaseEnterPassword();
-                    return;
-                }
-
-                final String pw = String.valueOf(pwText);
-                if (SQLUtil.travelerExists(tid)) {
-                    if (SQLUtil.hasCorrectPassword(tid, pw)) {
-                        tidTextField.setText("");
-                        tPasswordField.setText("");
-                        tab.add(travellerEditorPanel, 1);
-                        tab.setTitleAt(1, "Traveller Editor");
-                        tab.remove(travellerPanel);
-                        tab.setSelectedIndex(1);
-                    } else {
-                        invalidUsernamePassword();
-                    }
+            public void actionPerformed(ActionEvent actionEvent) {
+                if (AllTravelerRadioButton.isSelected()) {
+                    ResultSet rs = SQLUtil.findAllTravelers();
+                    printTable(A_Table, A_model, rs);
+                } else if (AmazingTravelerRadioButton.isSelected()) {
+                    ResultSet rs = SQLUtil.findAmazingTravelers();
+                    printTable(A_Table, A_model, rs);
                 } else {
-                    tid = -1;
-                    JOptionPane.showMessageDialog(null, "User does not exist.", "Login error", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(null, "Please make a selection!", "Warning!", JOptionPane.INFORMATION_MESSAGE);
                 }
+
             }
         });
+
+        //</editor-fold>
+
+        //<editor-fold desc="Traveller Editor Events">
 
         tLogOutButton.addActionListener(new ActionListener() {
             @Override
@@ -638,19 +679,19 @@ public class App {
         tCancelContractButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                int[] selectedRows = tGetSelected();
+                int[] selectedRows = getSelected(tTable);
 
                 //If nothing get selected
                 if (selectedRows.length == 0) {
                     JOptionPane.showMessageDialog(null, "Please select a contract", "Deletion Message", JOptionPane.WARNING_MESSAGE);
                     return;
                 }
+
                 int dialogResult = JOptionPane.showConfirmDialog(null, "Cancel selected contract?", "Warning", JOptionPane.YES_NO_OPTION);
                 if (dialogResult == JOptionPane.YES_OPTION) {
                     //TODO: Validate if this successfully cancel selected contract
                     for (final int column : selectedRows) {
                         int cid = (Integer) tModel.getValueAt(column, 0);
-                        System.out.println(cid);
                         if (SQLUtil.deleteContract(cid) == -1) {
                             JOptionPane.showMessageDialog(null, "Cancellation not successful!", "Error Message", JOptionPane.WARNING_MESSAGE);
                         }
@@ -665,7 +706,7 @@ public class App {
         tSignContractButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                int[] selectedRows = tGetSelected();
+                int[] selectedRows = getSelected(tTable);
 
                 //If nothing get selected
                 if (selectedRows.length == 0) {
@@ -709,123 +750,136 @@ public class App {
             }
         });
 
-        //A3: Delete a Host
-        TravelerSearch.addActionListener(new ActionListener() {
-
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-                if (AllTravelerRadioButton.isSelected()) {
-                    ResultSet rs = SQLUtil.findAllTravelers();
-                    printTable(A_Table, A_model, rs);
-                } else if (AmazingTravelerRadioButton.isSelected()) {
-                    ResultSet rs = SQLUtil.findAmazingTravelers();
-                    printTable(A_Table, A_model, rs);
-                } else {
-                    JOptionPane.showMessageDialog(null, "Please make a selection!", "Warning!", JOptionPane.INFORMATION_MESSAGE);
-                }
-
-            }
-        });
+        //</editor-fold>
 
         PersistenceLayer.getInstance();
     }
 
-        //<editor-fold desc="Helper">
+    //<editor-fold desc="Helper">
 
-        private int[] tGetSelected () {
-            int[] selection = tTable.getSelectedRows();
-            for (int i = 0; i < selection.length; i++) {
-                selection[i] = tTable.convertRowIndexToModel(selection[i]);
+    /**
+     * Create a new table model in which data is not editable
+     *
+     * @return selected rows in a given table
+     */
+    private DefaultTableModel createModel() {
+        return new DefaultTableModel(){
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
             }
-            return selection;
-        }
-
-        private void printTable (JTable table, DefaultTableModel model, ResultSet rs){
-            try {
-                ResultSetMetaData rsmd = rs.getMetaData();
-                int count = rsmd.getColumnCount();
-                String[] columnNames = new String[count];
-                int[] types = new int[count];
-                for (int i = 0; i < count; i++) {
-                    columnNames[i] = rsmd.getColumnLabel(i + 1);
-                    types[i] = rsmd.getColumnType(i + 1);
-                }
-
-                model.setRowCount(0);
-                model.setColumnCount(count);
-                while (rs.next()) {
-                    Object[] row = new Object[count];
-                    for (int i = 0; i < count; i++) {
-                        switch (types[i]) {
-                            case NUMERIC:
-                                row[i] = rs.getInt(i + 1);
-                                break;
-                            case CHAR:
-                                row[i] = rs.getString(i + 1);
-                                break;
-                            case TIMESTAMP:
-                                row[i] = rs.getDate(i + 1);
-                                break;
-                            default:
-                        }
-                    }
-                    model.addRow(row);
-                }
-
-                model.setColumnIdentifiers(columnNames);
-                model.fireTableDataChanged();
-                table.setModel(model);
-                table.setRowHeight(30);
-            } catch (Exception e1) {
-                e1.printStackTrace();
-            }
-        }
-
-        private int isIdValid (String id){
-            int cid = -1;
-            try {
-                cid = Integer.parseInt(id);
-                ResultSet rs = SQLUtil.getStudent(cid);
-                cid = rs.next() ? cid : -1;
-            } catch (Exception e1) {
-            }
-            return cid;
-        }
-
-        private void refreshAllPosts () {
-            ResultSet rs = SQLUtil.findHostsPostings(hid);
-            printTable(hTable, hModel, rs);
-        }
-
-        private int[] getSelected () {
-            int[] selection = hTable.getSelectedRows();
-            for (int i = 0; i < selection.length; i++) {
-                selection[i] = hTable.convertRowIndexToModel(selection[i]);
-            }
-            return selection;
-        }
-        //</editor-fold>
-
-        private void pleaseEnterUsername() {
-            JOptionPane.showMessageDialog(null, "Please enter a username.", "Login error", JOptionPane.WARNING_MESSAGE);
-        }
-
-        private void pleaseEnterPassword() {
-            JOptionPane.showMessageDialog(null, "Please enter password.", "Login error", JOptionPane.WARNING_MESSAGE);
-        }
-
-        private void invalidUsernamePassword() {
-            JOptionPane.showMessageDialog(null, "Invalid username/password combination. Please try again.", "Login error", JOptionPane.ERROR_MESSAGE);
-        }
-
-        private void invalideUsername() {
-            JOptionPane.showMessageDialog(null, "Invalid username. Username is your id.", "Login error", JOptionPane.ERROR_MESSAGE);
-        }
-
-        private void hostNotExist() {
-            JOptionPane.showMessageDialog(null, "Host does not exist.", "Error", JOptionPane.ERROR_MESSAGE);
-        }
-
+        };
     }
+
+    /**
+     * Return a selection in terms of the underlying TableModel
+     *
+     * @param table the table to fetch selected rows from
+     * @return selected rows in a given table
+     */
+    private int[] getSelected(JTable table) {
+        int[] selection = table.getSelectedRows();
+        for (int i = 0; i < selection.length; i++) {
+            selection[i] = table.convertRowIndexToModel(selection[i]);
+        }
+        return selection;
+    }
+
+    /**
+     * Load data to a given table and print it
+     *
+     * @param table the table to load the data
+     * @param model the model that houses the data
+     * @param rs the resultset that feeds desired data
+     */
+    private void printTable (JTable table, DefaultTableModel model, ResultSet rs){
+        try {
+            ResultSetMetaData rsmd = rs.getMetaData();
+            int count = rsmd.getColumnCount();
+            String[] columnNames = new String[count];
+            int[] types = new int[count];
+            for (int i = 0; i < count; i++) {
+                columnNames[i] = rsmd.getColumnLabel(i + 1);
+                types[i] = rsmd.getColumnType(i + 1);
+            }
+
+            model.setRowCount(0);
+            model.setColumnCount(count);
+            while (rs.next()) {
+                Object[] row = new Object[count];
+                for (int i = 0; i < count; i++) {
+                    switch (types[i]) {
+                        case NUMERIC:
+                            row[i] = rs.getInt(i + 1);
+                            break;
+                        case CHAR:
+                            row[i] = rs.getString(i + 1);
+                            break;
+                        case TIMESTAMP:
+                            row[i] = rs.getDate(i + 1);
+                            break;
+                        default:
+                    }
+                }
+                model.addRow(row);
+            }
+
+            model.setColumnIdentifiers(columnNames);
+            model.fireTableDataChanged();
+            table.setModel(model);
+            table.setRowHeight(30);
+        } catch (Exception e1) {
+            e1.printStackTrace();
+        }
+    }
+
+    /**
+     * Check if a given student exists in db and return their id as int
+     *
+     * @param id a string of the student id to search
+     * @return id the matching student id; -1 if no match
+     */
+    private int isIdValid (String id){
+        int cid = -1;
+        try {
+            cid = Integer.parseInt(id);
+            ResultSet rs = SQLUtil.getStudent(cid);
+            cid = rs.next() ? cid : -1;
+        } catch (Exception e1) {
+        }
+        return cid;
+    }
+
+    /**
+     * Used to fresh all posts after add, update, and delete action.
+     */
+    private void refreshAllPosts () {
+        ResultSet rs = SQLUtil.findHostsPostings(hid);
+        printTable(hTable, hModel, rs);
+    }
+
+    private void pleaseEnterUsername() {
+        JOptionPane.showMessageDialog(null, "Please enter a username.", "Login error", JOptionPane.WARNING_MESSAGE);
+    }
+
+    private void pleaseEnterPassword() {
+        JOptionPane.showMessageDialog(null, "Please enter password.", "Login error", JOptionPane.WARNING_MESSAGE);
+    }
+
+    private void invalidUsernamePassword() {
+        JOptionPane.showMessageDialog(null, "Invalid username/password combination. Please try again.", "Login error", JOptionPane.ERROR_MESSAGE);
+    }
+
+    private void invalideUsername() {
+        JOptionPane.showMessageDialog(null, "Invalid username. Username is your id.", "Login error", JOptionPane.ERROR_MESSAGE);
+    }
+
+    private void hostNotExist() {
+        JOptionPane.showMessageDialog(null, "Host does not exist.", "Error", JOptionPane.ERROR_MESSAGE);
+    }
+
+    //</editor-fold>
+
+}
 
 
