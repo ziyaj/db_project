@@ -598,6 +598,16 @@ public class SQLUtil {
         return null;
     }
 
+    public static ResultSet findAllHosts() {
+        try {
+            return getStatement().executeQuery("SELECT * FROM HostInfo");
+        } catch (final SQLException e) {
+            System.err.println("An error occurred while executing query.");
+            System.err.println(e.getMessage());
+        }
+        return null;
+    }
+
     public static ResultSet getHost(final int hostid) {
         try {
             final PreparedStatement ps = getConnection().prepareStatement(SELECT_ALL_FROM + "Hosts WHERE cid = ?");
