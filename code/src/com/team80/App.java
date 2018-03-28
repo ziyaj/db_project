@@ -196,6 +196,7 @@ public class App {
                 printTable(hTable, hModel, rs);
             }
         });
+
         hUpdateButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -212,13 +213,17 @@ public class App {
 
                     int dialogResult = JOptionPane.showConfirmDialog(null, "Update selected record?", "Warning", JOptionPane.YES_NO_OPTION);
                     if (dialogResult == JOptionPane.YES_OPTION) {
+
+                        if (SQLUtil.isUpdatedPostOverlapped(hid, selectedRows, hModel, fromDate, toDate)) {
+                            JOptionPane.showMessageDialog(null, "Post overlaps with others", "Update Message", JOptionPane.ERROR_MESSAGE);
+                            return;
+                        }
+
                         int result = SQLUtil.updatePost(selectedRows, hModel, fromDate, toDate, description);
                         refreshAllPosts();
 
                         if (result > 0) {
                             JOptionPane.showMessageDialog(null, "Update successful.", "Update Message", JOptionPane.INFORMATION_MESSAGE);
-                        } else if (result == 0) {
-                            JOptionPane.showMessageDialog(null, "Invalid period", "Update Message", JOptionPane.ERROR_MESSAGE);
                         } else {
                             JOptionPane.showMessageDialog(null, "Update failed. Please try again", "Update Message", JOptionPane.ERROR_MESSAGE);
                         }
@@ -235,17 +240,16 @@ public class App {
                 }
                 Date fromDate = new Date(fromDatePicker.getDate().getTime());
                 Date toDate = new Date(toDatePicker.getDate().getTime());
-                if (fromDate.after(toDate)) {
-                    JOptionPane.showMessageDialog(null, "Invalid period", "Update Message", JOptionPane.ERROR_MESSAGE);
+                String description = descriptionTextField.getText();
+                if (SQLUtil.isNewPostOverlapped(hid, fromDate, toDate)) {
+                    JOptionPane.showMessageDialog(null, "Post overlaps with others", "Update Message", JOptionPane.ERROR_MESSAGE);
                     return;
                 }
-
-                String description = descriptionTextField.getText();
                 int result = SQLUtil.addPost(hid, fromDate, toDate, description);
                 if (result == 1) {
                     JOptionPane.showMessageDialog(null, "New posting has been added", "New Posting Message", JOptionPane.INFORMATION_MESSAGE);
                 } else {
-                    JOptionPane.showMessageDialog(null, "Insert failed. Please try again.", "New Posting Message", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(null, "Insert failed. Post overlaps with others. Please try again.", "New Posting Message", JOptionPane.ERROR_MESSAGE);
                 }
                 refreshAllPosts();
             }

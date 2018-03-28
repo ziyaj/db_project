@@ -658,4 +658,49 @@ public class SQLUtil {
         return null;
     }
 
+    public static boolean isNewPostOverlapped(final int hid, final Date fromDate, final Date toDate) {
+        try {
+            final String sql = SELECT_COUNT + " FROM Posting WHERE hostid = ? AND (? >= fromdate AND ? <= todate) OR (? >= fromdate AND ? <= todate)";
+            final PreparedStatement ps = getConnection().prepareStatement(sql);
+            ps.setInt(1, hid);
+            ps.setDate(2, fromDate);
+            ps.setDate(3, fromDate);
+            ps.setDate(4, toDate);
+            ps.setDate(5, toDate);
+            ResultSet rs = ps.executeQuery();
+            return rs.next();
+        } catch (final SQLException e) {
+            System.err.println("An error occurred while executing query.");
+            System.err.println(e.getMessage());
+        }
+        return false;
+    }
+
+    public static boolean isUpdatedPostOverlapped(final int hid, final int[] selection, final DefaultTableModel model, final Date fromDate, final Date toDate) {
+        try {
+            final Date fDate = (fromDate == null) ? (Date) model.getValueAt(selection[0], 1) : fromDate;
+            final Date tDate = (toDate == null) ? (Date) model.getValueAt(selection[0], 2) : toDate;
+            if (fDate.after(tDate)) {
+                return false;
+            } else {
+                final int pid = (Integer) model.getValueAt(selection[0], 0);
+                final String sql = SELECT_COUNT + " FROM Posting WHERE hostid = ? AND pid <> ? AND ((? >= fromdate AND ? <= todate) OR (? >= fromdate AND ? <= todate))";
+                final PreparedStatement ps = getConnection().prepareStatement(sql);
+                ps.setInt(1, hid);
+                ps.setInt(2, pid);
+                ps.setDate(3, fDate);
+                ps.setDate(4, fDate);
+                ps.setDate(5, tDate);
+                ps.setDate(6, tDate);
+                ResultSet rs = ps.executeQuery();
+                return rs.next();
+            }
+        } catch (final SQLException e) {
+            System.err.println("An error occurred while executing query.");
+            System.err.println(e.getMessage());
+        }
+        return false;
+    }
+
+
 }
