@@ -22,8 +22,8 @@ public class PersistenceLayer {
             DriverManager.registerDriver(new oracle.jdbc.OracleDriver());
             this.con = DriverManager.getConnection(
                     "jdbc:oracle:thin:@localhost:1522:ug",
-                    "ora_f4a0b",      // don't forget to change this if you use your account
-                    "a34893140"); // don't forget to change this if you use your account
+                    "ora_i1b0b",      // don't forget to change this if you use your account
+                    "a20724143"); // don't forget to change this if you use your account
             System.out.println("Connection created.");
         } catch (final SQLException e) {
             System.err.println("An error occurred while creating connection to Oracle server.");

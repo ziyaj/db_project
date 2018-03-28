@@ -7,6 +7,8 @@ import java.awt.event.*;
 import java.sql.*;
 import java.util.Hashtable;
 import org.jdesktop.swingx.JXDatePicker;
+import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
+
 import static java.sql.Types.*;
 
 
@@ -643,18 +645,18 @@ public class App {
                     JOptionPane.showMessageDialog(null, "Please select a contract", "Deletion Message", JOptionPane.WARNING_MESSAGE);
                     return;
                 }
-
                 int dialogResult = JOptionPane.showConfirmDialog(null, "Cancel selected contract?", "Warning", JOptionPane.YES_NO_OPTION);
                 if (dialogResult == JOptionPane.YES_OPTION) {
                     //TODO: Validate if this successfully cancel selected contract
                     for (final int column : selectedRows) {
                         int cid = (Integer) tModel.getValueAt(column, 0);
+                        System.out.println(cid);
                         if (SQLUtil.deleteContract(cid) == -1) {
                             JOptionPane.showMessageDialog(null, "Cancellation not successful!", "Error Message", JOptionPane.WARNING_MESSAGE);
                         }
                     }
 
-                    refreshAllPosts();
+                    tFindAllExistingContractButton.doClick();
 
                 }
             }
