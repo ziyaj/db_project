@@ -157,3 +157,6 @@ AND NOT EXISTS
       WHERE CS.travelerid = T.cid AND CS.hostid = H.cid
             AND H.cid = S2.cid AND S2.unid = U3.unid));
 
+-- A5. can find all hosts
+SELECT *
+FROM HostInfo;

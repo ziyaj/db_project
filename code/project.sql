@@ -441,28 +441,52 @@ insert into Posting
 values(2, '2018-02-01', '2018-02-28', 'cheap clean place', 2);
 
 insert into Posting
-values(3, '2017-03-01', '2017-03-30', 'small dorm but nice', 2);
+values(3, '2018-03-28', '2018-03-30', 'small dorm but nice', 2);
 
 insert into Posting
-values(4, '2017-04-04', '2017-04-30', 'please rent it thanks', 3);
+values(4, '2018-12-01', '2018-12-15', 'small dorm but nice', 2);
 
 insert into Posting
-values(5, '2017-05-06', '2017-05-30', 'best time to rent', 5);
+values(5, '2018-05-01', '2018-05-05', 'small dorm but nice', 2);
 
 insert into Posting
-values(6, '2017-06-05', '2017-06-15', 'nice clean room', 3);
+values(6, '2018-06-05', '2018-06-08', 'small dorm but nice', 2);
 
 insert into Posting
-values(7, '2017-07-02', '2017-07-09', 'welcome to rent my place', 4);
+values(7, '2018-07-04', '2018-07-11', 'small dorm but nice', 2);
 
 insert into Posting
-values(8, '2017-08-10', '2017-08-12', 'best place to live in world', 8);
+values(8, '2018-08-08', '2018-08-10', 'small dorm but nice', 2);
 
 insert into Posting
-values(9, '2017-09-05', '2017-09-20', 'cheap but comfortable place', 4);
+values(9, '2018-09-12', '2018-09-22', 'small dorm but nice', 2);
 
 insert into Posting
-values(10, '2017-10-01', '2017-10-30', 'try my place and you will love', 4);
+values(10, '2018-10-11', '2018-10-30', 'small dorm but nice', 2);
+
+insert into Posting
+values(11, '2018-11-05', '2018-11-08', 'small dorm but nice', 2);
+
+insert into Posting
+values(12, '2018-04-04', '2018-04-30', 'please rent it thanks', 3);
+
+insert into Posting
+values(13, '2018-06-05', '2018-06-15', 'nice clean room', 3);
+
+insert into Posting
+values(14, '2018-07-02', '2018-07-09', 'welcome to rent my place', 4);
+
+insert into Posting
+values(15, '2018-09-05', '2018-09-20', 'cheap but comfortable place', 4);
+
+insert into Posting
+values(16, '2018-10-01', '2018-10-30', 'try my place and you will love', 4);
+
+insert into Posting
+values(17, '2018-05-06', '2018-05-30', 'best time to rent', 5);
+
+insert into Posting
+values(18, '2018-08-10', '2018-08-12', 'best place to live in world', 8);
 
 insert into Host_Reviews
 values(2, 1, 5);
@@ -600,15 +624,46 @@ insert into Contract_Signs
 values(23, '2018-02-05', '2018-02-10', 5, 2);
 
 insert into Contract_Signs
-values(24, '2018-03-01', '2018-03-08', 7, 2);
+values(24, '2018-02-11', '2018-02-13', 6, 2);
 
 insert into Contract_Signs
-values(25, '2018-02-15', '2018-02-22', 8, 2);
+values(25, '2018-03-01', '2018-03-08', 7, 2);
 
 insert into Contract_Signs
-values(26, '2018-05-04', '2018-05-08', 12, 2);
+values(26, '2018-02-15', '2018-02-22', 8, 2);
 
 insert into Contract_Signs
-values(27, '2018-10-01', '2018-10-05', 15, 2);
+values(27, '2018-02-15', '2018-02-22', 9, 2);
+
+insert into Contract_Signs
+values(28, '2018-02-15', '2018-02-22', 10, 2);
+
+insert into Contract_Signs
+values(29, '2018-02-15', '2018-02-22', 11, 2);
+
+insert into Contract_Signs
+values(30, '2018-02-15', '2018-02-22', 12, 2);
+
+insert into Contract_Signs
+values(31, '2018-02-15', '2018-02-22', 13, 2);
+
+insert into Contract_Signs
+values(32, '2018-02-15', '2018-02-22', 14, 2);
+
+insert into Contract_Signs
+values(33, '2018-05-04', '2018-05-08', 15, 2);
+
+insert into Contract_Signs
+values(34, '2018-10-01', '2018-10-05', 16, 2);
+
+insert into Contract_Signs
+values(35, '2018-10-01', '2018-10-05', 17, 2);
+
+insert into Contract_Signs
+values(36, '2018-10-01', '2018-10-05', 18, 2);
+
+insert into Contract_Signs
+values(37, '2018-10-01', '2018-10-05', 19, 2);
+
 
 
