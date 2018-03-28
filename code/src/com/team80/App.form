@@ -988,7 +988,7 @@
             <properties/>
             <border type="none"/>
             <children>
-              <grid id="6e11b" layout-manager="GridLayoutManager" row-count="11" column-count="3" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+              <grid id="6e11b" layout-manager="GridLayoutManager" row-count="13" column-count="3" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
                 <margin top="0" left="0" bottom="0" right="0"/>
                 <constraints>
                   <grid row="0" column="1" row-span="1" col-span="2" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
@@ -1035,7 +1035,7 @@
                   <grid id="a73cb" layout-manager="GridLayoutManager" row-count="2" column-count="3" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
                     <margin top="0" left="0" bottom="0" right="0"/>
                     <constraints>
-                      <grid row="5" column="0" row-span="3" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                      <grid row="5" column="0" row-span="5" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
                     </constraints>
                     <properties/>
                     <border type="none"/>
@@ -1238,7 +1238,7 @@
                   <grid id="74864" binding="contractReviewField" layout-manager="GridLayoutManager" row-count="2" column-count="9" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
                     <margin top="0" left="0" bottom="0" right="0"/>
                     <constraints>
-                      <grid row="8" column="0" row-span="2" col-span="2" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                      <grid row="10" column="0" row-span="2" col-span="2" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
                     </constraints>
                     <properties/>
                     <border type="none" title="Review"/>
@@ -1313,7 +1313,7 @@
                   </grid>
                   <component id="60dc4" class="javax.swing.JButton" binding="tLogOutButton">
                     <constraints>
-                      <grid row="10" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                      <grid row="12" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                     </constraints>
                     <properties>
                       <text value="Log out"/>
@@ -1327,9 +1327,25 @@
                       <text value="Cancel Selected Contract"/>
                     </properties>
                   </component>
-                  <component id="f066a" class="javax.swing.JButton" binding="tFindAllExistingContractButton">
+                  <component id="ee5f" class="javax.swing.JButton" binding="tFindCheapestPostingsButton">
                     <constraints>
                       <grid row="7" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <text value="Find Cheapest Postings"/>
+                    </properties>
+                  </component>
+                  <component id="96122" class="javax.swing.JButton" binding="tFindMostExpensivePostings">
+                    <constraints>
+                      <grid row="8" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <text value="Find Most Expensive Postings"/>
+                    </properties>
+                  </component>
+                  <component id="f066a" class="javax.swing.JButton" binding="tFindAllExistingContractButton">
+                    <constraints>
+                      <grid row="10" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                     </constraints>
                     <properties>
                       <text value="Find All Existing Contract"/>

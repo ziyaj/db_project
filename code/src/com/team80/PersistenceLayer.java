@@ -11,7 +11,10 @@ public class PersistenceLayer {
     // the connection is created upon initializing the PersistenceLayer singleton object
     //
     // below is the command to open an ssh tunnel, you can use your own cs account
-    // ssh -l f4a0b -L localhost:1522:dbhost.ugrad.cs.ubc.ca:1522 remote.ugrad.cs.ubc.ca
+    // ssh -l i1b0b -N -L localhost:1522:dbhost.ugrad.cs.ubc.ca:1522 lulu.ugrad.cs.ubc.ca
+    // git stash save PersistenceLayer.java
+    // git pull
+    // git stash pop
     private PersistenceLayer() {
         System.out.println();
         System.out.println("Connecting to Oracle...");
@@ -19,8 +22,8 @@ public class PersistenceLayer {
             DriverManager.registerDriver(new oracle.jdbc.OracleDriver());
             this.con = DriverManager.getConnection(
                     "jdbc:oracle:thin:@localhost:1522:ug",
-                    "ora_f4a0b",      // don't forget to change this if you use your account
-                    "a34893140"); // don't forget to change this if you use your account
+                    "ora_i1b0b",      // don't forget to change this if you use your account
+                    "a20724143"); // don't forget to change this if you use your account
             System.out.println("Connection created.");
         } catch (final SQLException e) {
             System.err.println("An error occurred while creating connection to Oracle server.");

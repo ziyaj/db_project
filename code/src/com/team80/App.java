@@ -118,6 +118,8 @@ public class App {
     private JCheckBox tHostCheckBox;
     private JCheckBox tRateCheckBox;
     private JTextField tHostID;
+    private JButton tFindCheapestPostingsButton;
+    private JButton tFindMostExpensivePostings;
 
     private int tid;
 
@@ -689,7 +691,6 @@ public class App {
                 if (dialogResult == JOptionPane.YES_OPTION) {
                     for (final int column : selectedRows) {
                         int pid = (Integer) tModel.getValueAt(column, 0);
-                        //TODO: sign contract can not get host id.
                         if (SQLUtil.transformPostingToContract(pid, tid) == -1) {
                             JOptionPane.showMessageDialog(null, "Signing not successful!", "Error Message", JOptionPane.WARNING_MESSAGE);
                         } else {
@@ -699,6 +700,26 @@ public class App {
 
 
                 }
+            }
+        });
+
+        tFindCheapestPostingsButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                tSignContractButton.setEnabled(true);
+                tCancelContractButton.setEnabled(false);
+                ResultSet rs = SQLUtil.findCheapestPosts();
+                printTable(tTable, tModel, rs);
+            }
+        });
+
+        tFindMostExpensivePostings.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                tSignContractButton.setEnabled(true);
+                tCancelContractButton.setEnabled(false);
+                ResultSet rs = SQLUtil.findMostExpensivePosts();
+                printTable(tTable, tModel, rs);
             }
         });
 
