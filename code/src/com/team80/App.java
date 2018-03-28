@@ -689,11 +689,13 @@ public class App {
 
                 int dialogResult = JOptionPane.showConfirmDialog(null, "Cancel selected contract?", "Warning", JOptionPane.YES_NO_OPTION);
                 if (dialogResult == JOptionPane.YES_OPTION) {
-                    //TODO: Validate if this successfully cancel selected contract
                     for (final int column : selectedRows) {
                         int cid = (Integer) tModel.getValueAt(column, 0);
                         if (SQLUtil.deleteContract(cid) == -1) {
                             JOptionPane.showMessageDialog(null, "Cancellation not successful!", "Error Message", JOptionPane.WARNING_MESSAGE);
+                        }
+                        if (SQLUtil.deleteContract(cid) == 0) {
+                            JOptionPane.showMessageDialog(null, "You can not cancel a current or past contract!", "Error Message", JOptionPane.WARNING_MESSAGE);
                         }
                     }
 
