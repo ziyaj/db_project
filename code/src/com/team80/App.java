@@ -29,7 +29,6 @@ public class App {
     private JButton hDeleteButton;
     private JButton postsButton;
     private JButton addPostButton;
-    private JTextField PID;
     private JTextField descriptionTextField;
     private JTable hTable;
     private JTextField ratingTextField;
@@ -66,19 +65,11 @@ public class App {
     private JSpinner spinner1;
     private JButton submitButton;
     private JTextField tLoginTextField;
-
     private JPanel AdminPanel;
-
-
     private JButton contractsButton;
     private JButton addReviewButton;
     private JSlider ratingSlider;
     private JButton reviewsButton;
-
-
-    DefaultTableModel hModel = new DefaultTableModel();
-
-
     private JPanel AdminEditor;
     private JButton A_awardButton;
     private JButton A_Delete;
@@ -91,6 +82,7 @@ public class App {
     private JTextField A_hidTextfield;
 
     private int hid;
+    DefaultTableModel hModel = new DefaultTableModel();
 
     //admin id
     private int aid;
@@ -118,18 +110,9 @@ public class App {
         A_Table.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
         A_Table.setFillsViewportHeight(true);
 
-
-        final JPanel adminLogin = (JPanel) tab.getComponentAt(0);
-        final JPanel hostLogin = (JPanel) tab.getComponentAt(1);
-        final JPanel travellerLogin = (JPanel) tab.getComponentAt(2);
-        final JPanel register = (JPanel) tab.getComponentAt(3);
-        final JPanel hostEditor = (JPanel) tab.getComponentAt(4);
-        final JPanel adminEditor = (JPanel) tab.getComponentAt(5);
-        final JPanel travellerEditorPanel = (JPanel) tab.getComponentAt(6);
-
         // Hide the all Editor tabs before user is logged in
-        tab.remove(hostEditor);
-        tab.remove(register);
+        tab.remove(hostEditorPanel);
+        tab.remove(registerPanel);
         tab.remove(travellerEditorPanel);
 
         ratingSlider.setMaximum(10);
@@ -147,15 +130,14 @@ public class App {
         logOutButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                tab.add(hostLogin, 1);
+                tab.add(hostPanel, 1);
                 tab.setTitleAt(1, "Host");
-                tab.remove(hostEditor);
+                tab.remove(hostEditorPanel);
                 tab.setSelectedIndex(1);
             }
         });
         contractsButton.addActionListener(new ActionListener() {
             @Override
-
             public void actionPerformed(ActionEvent e) {
                 hUpdateButton.setEnabled(false);
                 addPostButton.setEnabled(false);
@@ -166,7 +148,6 @@ public class App {
             }
         });
         postsButton.addActionListener(new ActionListener() {
-
             @Override
             public void actionPerformed(ActionEvent e) {
                 addReviewButton.setEnabled(false);
@@ -177,7 +158,6 @@ public class App {
             }
         });
         reviewsButton.addActionListener(new ActionListener() {
-
             @Override
             public void actionPerformed(ActionEvent e) {
                 hUpdateButton.setEnabled(false);
@@ -219,7 +199,6 @@ public class App {
             }
         });
         addPostButton.addActionListener(new ActionListener() {
-
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (fromDatePicker.getDate() == null || toDatePicker.getDate() == null) {
@@ -267,6 +246,9 @@ public class App {
                 }
             }
         });
+
+        //</editor-fold>
+
         //<editor-fold desc="Register Events">
         rSignUpButton.addActionListener(new ActionListener() {
             @Override
@@ -299,7 +281,7 @@ public class App {
                     int result = SQLUtil.addHost(cID, roomNo, residence, dailyRate);
                     if (result == 1) {
                         JOptionPane.showMessageDialog(null, "Registration successful. Please log in.", "Register Message", JOptionPane.INFORMATION_MESSAGE);
-                        tab.remove(register);
+                        tab.remove(registerPanel);
                     } else {
                         JOptionPane.showMessageDialog(null, "Registration failed. Please try again", "Register Message", JOptionPane.ERROR_MESSAGE);
                     }
@@ -308,18 +290,19 @@ public class App {
                 }
             }
         });
+
+        //</editor-fold>
+
         //<editor-fold desc="Host Events">
         hSignUpButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                tab.add(register);
+                tab.add(registerPanel);
                 tab.setTitleAt(4, "Register");
                 tab.setSelectedIndex(4);
             }
         });
-
         hSignInButton.addActionListener(new ActionListener() {
-
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
@@ -339,9 +322,9 @@ public class App {
                     if (SQLUtil.hasCorrectPassword(hid, pw)) {
                         hidTextField.setText("");
                         hPasswordField.setText("");
-                        tab.add(hostEditor, 1);
+                        tab.add(hostEditorPanel, 1);
                         tab.setTitleAt(1, "Host Editor");
-                        tab.remove(hostLogin);
+                        tab.remove(hostPanel);
                         tab.setSelectedIndex(1);
                     } else {
                         JOptionPane.showMessageDialog(null, "Invalid password. Try again.", "Error Message", JOptionPane.ERROR_MESSAGE);
@@ -354,6 +337,8 @@ public class App {
         });
 
         //</editor-fold>
+
+        //<editor-fold desc="Admin Editor Events">
         /*
         Functions for Admin
          */
@@ -375,7 +360,7 @@ public class App {
                 if (aidTextField.getText().equals(String.valueOf(pw))) {
                     tab.add(AdminEditor, 0);
                     tab.setTitleAt(0, "AdminEditor");
-                    tab.remove(adminLogin);
+                    tab.remove(adminPanel);
                     tab.setSelectedIndex(0);
                 } else {
                     AdminLoginText.setText("Invalid password. Try again.");
@@ -397,13 +382,12 @@ public class App {
         A_Logout.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                tab.add(adminLogin, 0);
+                tab.add(adminPanel, 0);
                 tab.setTitleAt(0, "Admin");
                 tab.remove(AdminEditor);
                 tab.setSelectedIndex(0);
             }
         });
-        //</editor-fold>
 
         //A1
         FindHost.addActionListener(new ActionListener() {
@@ -439,7 +423,6 @@ public class App {
 
         //A3: Delete a Host
         A_Delete.addActionListener(new ActionListener() {
-
             @Override
 
             public void actionPerformed(ActionEvent actionEvent) {
@@ -518,7 +501,6 @@ public class App {
         }
     }
 
-    //</editor-fold>
     public int isIdValid(String id) {
         int cid = -1;
         try {
@@ -542,5 +524,7 @@ public class App {
         }
         return selection;
     }
+
+    //</editor-fold>
 }
 
