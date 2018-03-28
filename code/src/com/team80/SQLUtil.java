@@ -565,17 +565,11 @@ public class SQLUtil {
     /**
      * A3. an administrator can delete a host
      */
-    public static int deleteHost(final int hostid) {
-        try {
+    public static int deleteHost(final int hostid) throws SQLException {
             final PreparedStatement ps = getConnection().prepareStatement(
                     DELETE_FROM + "Hosts WHERE cid = ?");
             ps.setInt(1, hostid);
             return ps.executeUpdate();
-        } catch (final SQLException e) {
-            System.err.println("An error occurred while executing query.");
-            System.err.println(e.getMessage());
-        }
-        return -1;
     }
 
     /**
