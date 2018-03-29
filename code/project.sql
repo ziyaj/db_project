@@ -14,7 +14,8 @@ drop view HostInfo;
 CREATE TABLE University (
 unid INTEGER,
 name CHAR(50),
-PRIMARY KEY (unid)
+PRIMARY KEY (unid),
+CHECK (unid > 0)
 );
 grant select on University to public;
 
@@ -27,7 +28,7 @@ unid INTEGER NOT NULL,
 password CHAR(10) NOT NULL,
 PRIMARY KEY (cid),
 FOREIGN KEY (unid) REFERENCES University,
-CHECK (gender = 'M' OR gender = 'F')
+CHECK (cid > 0 AND (gender = 'M' OR gender = 'F'))
 );
 grant select on Student to public;
 
@@ -104,62 +105,6 @@ FOREIGN KEY (travelerid) REFERENCES Traveler (cid),
 CHECK (contractid > 0 AND fromdate < todate AND hostid <> travelerid)
 );
 grant select on Contract_Signs to public;
-
-
--- CREATE OR REPLACE TRIGGER No_Overlap_Posting
--- BEFORE INSERT OR UPDATE ON Posting
--- FOR EACH ROW
-
--- DECLARE
---     NumExists         NUMBER;
---     Overlap_Posting   EXCEPTION;
-
--- BEGIN
-
---     SELECT COUNT(*) INTO NumExists FROM Posting
---     WHERE :new.hostid = :old.hostid AND :new.pid <> :old.pid
---           AND ((:new.fromdate >= :old.fromdate AND :new.fromdate <= :old.todate)
---           OR (:new.todate >= :old.fromdate AND :new.todate <= :old.todate));
-
---     IF (NumExists > 0) THEN
---         RAISE Overlap_Posting;
---     END IF;
-
--- EXCEPTION
---    WHEN Overlap_Posting THEN
---       Raise_application_error (-20301,
---          'The posting is overlapped with an existing one for that host');
--- END;
-
--- /
-
-
--- CREATE OR REPLACE TRIGGER No_Overlap_Contracts
--- BEFORE INSERT OR UPDATE ON Contract_Signs
--- FOR EACH ROW
-
--- DECLARE
---     NumExists          NUMBER;
---     Overlap_Contract   EXCEPTION;
-
--- BEGIN
-
---     SELECT COUNT(*) INTO NumExists FROM Contract_Signs CS
---     WHERE :new.hostid = CS.hostid AND :new.contractid <> CS.contractid
---           AND ((:new.fromdate >= CS.fromdate AND :new.fromdate <= CS.todate)
---           OR (:new.todate >= CS.fromdate AND :new.todate <= CS.todate));
-
---     IF (NumExists > 0) THEN
---         RAISE Overlap_Contract;
---     END IF;
-
--- EXCEPTION
---    WHEN Overlap_Contract THEN
---       Raise_application_error (-20300,
---          'The contract is overlapped with an existing one');
--- END;
-
--- /
 
 -- special view for posting info
 CREATE VIEW PostingInfo(pid, fromdate, todate, hostid, hostname, roomno, residencename, university, dailyrate, description) AS
