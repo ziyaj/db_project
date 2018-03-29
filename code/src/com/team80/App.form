@@ -24,7 +24,9 @@
             <constraints>
               <tabbedpane title="Admin"/>
             </constraints>
-            <properties/>
+            <properties>
+              <name value="aPanel"/>
+            </properties>
             <border type="none" title=""/>
             <children>
               <grid id="7d820" layout-manager="GridLayoutManager" row-count="3" column-count="4" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
@@ -142,7 +144,9 @@
             <constraints>
               <tabbedpane title="Host"/>
             </constraints>
-            <properties/>
+            <properties>
+              <name value="hPanel"/>
+            </properties>
             <border type="none" title=""/>
             <children>
               <grid id="2866b" layout-manager="GridLayoutManager" row-count="2" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
@@ -250,7 +254,9 @@
             <constraints>
               <tabbedpane title="Traveller"/>
             </constraints>
-            <properties/>
+            <properties>
+              <name value="tPanel"/>
+            </properties>
             <border type="none" title=""/>
             <children>
               <grid id="942fe" layout-manager="GridLayoutManager" row-count="2" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
@@ -353,7 +359,9 @@
             <constraints>
               <tabbedpane title="Register"/>
             </constraints>
-            <properties/>
+            <properties>
+              <name value="rPanel"/>
+            </properties>
             <border type="none" title=""/>
             <children>
               <grid id="4b48d" layout-manager="GridLayoutManager" row-count="2" column-count="3" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
@@ -515,7 +523,9 @@
             <constraints>
               <tabbedpane title="HostEditor"/>
             </constraints>
-            <properties/>
+            <properties>
+              <name value="hEditorPanel"/>
+            </properties>
             <border type="none"/>
             <children>
               <grid id="a1fb7" layout-manager="GridLayoutManager" row-count="6" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
@@ -748,7 +758,9 @@
             <constraints>
               <tabbedpane title="AdminPanel"/>
             </constraints>
-            <properties/>
+            <properties>
+              <name value="aEditorPanel"/>
+            </properties>
             <border type="none"/>
             <children>
               <grid id="d2106" layout-manager="GridLayoutManager" row-count="3" column-count="10" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
@@ -964,7 +976,9 @@
             <constraints>
               <tabbedpane title="TravellerEditor"/>
             </constraints>
-            <properties/>
+            <properties>
+              <name value="tEditorPanel"/>
+            </properties>
             <border type="none"/>
             <children>
               <grid id="6e11b" layout-manager="GridLayoutManager" row-count="13" column-count="3" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">

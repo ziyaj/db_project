@@ -1,5 +1,7 @@
 package com.team80;
 
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.*;
 import java.awt.*;
@@ -16,6 +18,7 @@ import static java.sql.Types.*;
 public class App {
 
     //<editor-fold desc="Fields">
+
     JPanel panelMain;
     private JPanel adminPanel;
     private JPanel hostPanel;
@@ -118,13 +121,17 @@ public class App {
     private int hid;
     private int tid;
 
+    private final Dimension LARGE = new Dimension(1200, 600);
+    private final Dimension MEDIUM = new Dimension(400, 250);
+    private final Dimension SMALL = new Dimension(400, 150);
+
     //</editor-fold>
 
     public App() {
 
         //<editor-fold desc="Init">
 
-        panelMain.setPreferredSize(new Dimension(1200, 600));
+        panelMain.setPreferredSize(SMALL);
         hTable.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
         hTable.setFillsViewportHeight(true);
 
@@ -360,7 +367,8 @@ public class App {
                 hUpdateButton.setEnabled(true);
                 addPostButton.setEnabled(true);
                 hDeleteButton.setEnabled(true);
-                refreshAllPosts();
+                ResultSet rs = SQLUtil.findHostsPostings(hid);
+                printTable(hTable, hModel, rs);
             }
         });
 
@@ -402,7 +410,7 @@ public class App {
                         }
 
                         final int result = SQLUtil.updatePost(selectedRows, hModel, fromDate, toDate, description);
-                        refreshAllPosts();
+                        postsButton.doClick();
 
                         if (result > 0) {
                             JOptionPane.showMessageDialog(null, "Update successful.", "Update Message", JOptionPane.INFORMATION_MESSAGE);
@@ -434,7 +442,7 @@ public class App {
                 } else {
                     JOptionPane.showMessageDialog(null, "Insert failed. Post overlaps with others. Please try again.", "New Posting Message", JOptionPane.ERROR_MESSAGE);
                 }
-                refreshAllPosts();
+                postsButton.doClick();
             }
         });
 
@@ -473,7 +481,7 @@ public class App {
                 int dialogResult = JOptionPane.showConfirmDialog (null, "Delete selected records?","Warning", JOptionPane.YES_NO_OPTION);
                 if(dialogResult == JOptionPane.YES_OPTION){
                     int[] result = SQLUtil.deletePost(selectedRows, hModel);
-                    refreshAllPosts();
+                    postsButton.doClick();
                     if(result.length > 0) {
                         JOptionPane.showMessageDialog(null, "Selected records have been removed.", "Deletion Message", JOptionPane.INFORMATION_MESSAGE);
                     } else {
@@ -726,8 +734,6 @@ public class App {
                             JOptionPane.showMessageDialog(null, "Contract successfully generated!", "Contract Message", JOptionPane.INFORMATION_MESSAGE);
                         }
                     }
-
-
                 }
             }
         });
@@ -754,10 +760,35 @@ public class App {
 
         //</editor-fold>
 
+        //<editor-fold desc="Tab Change Event">
+
+        tab.addChangeListener(new ChangeListener() {
+            @Override
+            public void stateChanged(ChangeEvent changeEvent) {
+                JTabbedPane sourceTabbedPane = (JTabbedPane) changeEvent.getSource();
+                switch (sourceTabbedPane.getSelectedComponent().getName()) {
+                    case "aPanel":
+                    case "hPanel":
+                    case "tPanel":
+                        panelMain.setPreferredSize(SMALL);
+                        break;
+                    case "rPanel":
+                        panelMain.setPreferredSize(MEDIUM);
+                        break;
+                    default:
+                        panelMain.setPreferredSize(LARGE);
+                }
+                SwingUtilities.getWindowAncestor(panelMain).pack();
+            }
+        });
+
+        //</editor-fold>
+
         PersistenceLayer.getInstance();
+
     }
 
-    //<editor-fold desc="Helper">
+    //<editor-fold desc="Helpers">
 
     /**
      * Create a new table model in which data is not editable
@@ -850,14 +881,6 @@ public class App {
         } catch (Exception e1) {
         }
         return cid;
-    }
-
-    /**
-     * Used to fresh all posts after add, update, and delete action.
-     */
-    private void refreshAllPosts () {
-        ResultSet rs = SQLUtil.findHostsPostings(hid);
-        printTable(hTable, hModel, rs);
     }
 
     private void pleaseEnterUsername() {
