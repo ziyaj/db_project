@@ -691,7 +691,8 @@ public class SQLUtil {
                 return false;
             } else {
                 final int pid = (Integer) model.getValueAt(selection[0], 0);
-                final String sql = SELECT_COUNT + " FROM Posting WHERE hostid = ? AND pid <> ? AND ((? >= fromdate AND ? <= todate) OR (? >= fromdate AND ? <= todate))";
+                final String sql = SELECT_COUNT + " FROM Posting WHERE hostid = ? AND pid <> ? " +
+                        "AND (((? >= fromdate AND ? <= todate) OR (? >= fromdate AND ? <= todate)) OR (? <= fromdate AND ? >= todate))";
                 final PreparedStatement ps = getConnection().prepareStatement(sql);
                 ps.setInt(1, hid);
                 ps.setInt(2, pid);
@@ -699,6 +700,8 @@ public class SQLUtil {
                 ps.setDate(4, fDate);
                 ps.setDate(5, tDate);
                 ps.setDate(6, tDate);
+                ps.setDate(7, fDate);
+                ps.setDate(8, tDate);
                 ResultSet rs = ps.executeQuery();
                 return rs.next() && rs.getInt(1) > 0;
             }

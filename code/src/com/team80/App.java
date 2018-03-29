@@ -62,6 +62,7 @@ public class App {
     private JButton tCancelContractButton;
     private JButton tFindCheapestPostingsButton;
     private JButton tFindMostExpensivePostings;
+    private JButton rCancelButton;
 
     private JTextField descriptionTextField;
     private JTextField aidTextField;
@@ -324,6 +325,11 @@ public class App {
                     int result = SQLUtil.addHost(cID, roomNo, residence, dailyRate);
                     if (result == 1) {
                         JOptionPane.showMessageDialog(null, "Registration successful. Please log in.", "Register Message", JOptionPane.INFORMATION_MESSAGE);
+                        rTextField.setText("");
+                        rPasswordField.setText("");
+                        residenceTextField.setText("");
+                        roomTextField.setText("");
+                        dailyRateTextField.setText("");
                         tab.remove(registerPanel);
                     } else {
                         JOptionPane.showMessageDialog(null, "Registration failed. Please try again", "Register Message", JOptionPane.ERROR_MESSAGE);
@@ -331,6 +337,18 @@ public class App {
                 } else {
                     JOptionPane.showMessageDialog(null, "Invalid username. No such student", "Error Message", JOptionPane.ERROR_MESSAGE);
                 }
+            }
+        });
+
+        rCancelButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                rTextField.setText("");
+                rPasswordField.setText("");
+                residenceTextField.setText("");
+                roomTextField.setText("");
+                dailyRateTextField.setText("");
+                tab.remove(registerPanel);
             }
         });
 
