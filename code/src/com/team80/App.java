@@ -599,7 +599,13 @@ public class App {
         A_awardButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                JOptionPane.showMessageDialog(null, "You have awarded this amazing traveller!!!", "Award Message", JOptionPane.INFORMATION_MESSAGE);
+                int[] selectedRows = getSelected(A_Table);
+                if (selectedRows.length == 0) {
+                    JOptionPane.showMessageDialog(null, "Please select a record", "Award Message", JOptionPane.WARNING_MESSAGE);
+                    return;
+                } else {
+                    JOptionPane.showMessageDialog(null, "You have awarded this amazing traveller!!!", "Award Message", JOptionPane.INFORMATION_MESSAGE);
+                }
             }
         });
 
@@ -659,9 +665,18 @@ public class App {
                 Date fromDate = (tFromDatePanel.getDate() == null) ? null : new Date(tFromDatePanel.getDate().getTime());
                 Date toDate = (tToDatePanel.getDate() == null) ? null : new Date(tToDatePanel.getDate().getTime());
                 String tUniversity = (universityTextField.getText() == null) ? null : new String(universityTextField.getText());
+                int tLowestPriceVal = 0;
+                int tHighestPriceVal = 200;
+                try {
+                     tLowestPriceVal= (tLowestPrice.getText().equals("")) ? 0 : Integer.parseInt(tLowestPrice.getText());
+                    tHighestPriceVal = (tHighestPrice.getText().equals("")) ? 200 : Integer.parseInt(tHighestPrice.getText());
+                }
+                catch (Exception e1) {
+                    JOptionPane.showMessageDialog(null, "Please input a valid number!", "Warning!", JOptionPane.WARNING_MESSAGE);
+                    return;
+                }
 
-                int tLowestPriceVal = (tLowestPrice.getText().equals("")) ? 0 : Integer.parseInt(tLowestPrice.getText());
-                int tHighestPriceVal = (tHighestPrice.getText().equals("")) ? 200 : Integer.parseInt(tHighestPrice.getText());
+
 
                 ResultSet rs = SQLUtil.findPostsWithCondition(tUniversity, fromDate, toDate,
                         tLowestPriceVal, tHighestPriceVal,
