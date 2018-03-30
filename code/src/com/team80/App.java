@@ -67,7 +67,6 @@ public class App {
     private JTextField descriptionTextField;
     private JTextField aidTextField;
     private JTextField ratingTextField;
-    private JTextField hostMsg;
     private JTextField hidTextField;
     private JTextField roomTextField;
     private JTextField residenceTextField;
@@ -122,7 +121,7 @@ public class App {
     private int hid;
     private int tid;
 
-    private final Dimension LARGE = new Dimension(1200, 600);
+    private final Dimension LARGE = new Dimension(1400, 700);
     private final Dimension MEDIUM = new Dimension(400, 250);
     private final Dimension SMALL = new Dimension(400, 150);
 
@@ -801,18 +800,14 @@ public class App {
         tab.addChangeListener(new ChangeListener() {
             @Override
             public void stateChanged(ChangeEvent changeEvent) {
-                JTabbedPane sourceTabbedPane = (JTabbedPane) changeEvent.getSource();
-                switch (sourceTabbedPane.getSelectedComponent().getName()) {
-                    case "aPanel":
-                    case "hPanel":
-                    case "tPanel":
-                        panelMain.setPreferredSize(SMALL);
-                        break;
-                    case "rPanel":
-                        panelMain.setPreferredSize(MEDIUM);
-                        break;
-                    default:
-                        panelMain.setPreferredSize(LARGE);
+                final JTabbedPane sourceTabbedPane = (JTabbedPane) changeEvent.getSource();
+                final String sourceTabName = sourceTabbedPane.getSelectedComponent().getName();
+                if (sourceTabName.equals("aPanel") || sourceTabName.equals("hPanel") || sourceTabName.equals("tPanel")) {
+                    panelMain.setPreferredSize(SMALL);
+                } else if (sourceTabName.equals("rPanel")) {
+                    panelMain.setPreferredSize(SMALL);
+                } else {
+                    panelMain.setPreferredSize(LARGE);
                 }
                 SwingUtilities.getWindowAncestor(panelMain).pack();
             }
