@@ -535,9 +535,15 @@ public class App {
                 } else if (searchByIDRadioButton.isSelected()) {
                     final String hidText = A_hidTextfield.getText();
                     if (hidText == null || hidText.isEmpty()) {
-                        JOptionPane.showMessageDialog(null, "Please input a hostid.", "Warning", JOptionPane.INFORMATION_MESSAGE);
+                        JOptionPane.showMessageDialog(null, "Please input a hostid.", "Warning", JOptionPane.WARNING_MESSAGE);
                     } else {
-                        hid = Integer.parseInt(hidText);
+                        try {
+                            hid = Integer.parseInt(hidText);
+                        }
+                        catch (Exception e) {
+                            JOptionPane.showMessageDialog(null, "Please input a valid hostid.", "Warning", JOptionPane.WARNING_MESSAGE);
+                            return;
+                        }
                         // host does not exist, send error message
                         if (!SQLUtil.hostExists(hid)) {
                             hostNotExist();
@@ -568,8 +574,12 @@ public class App {
                 if (A_DeleteText.getText().equals("")) {
                     JOptionPane.showMessageDialog(null, "Please input hostid.", "Deletion Message", JOptionPane.INFORMATION_MESSAGE);
                 } else {
-
-                    hid = Integer.parseInt(A_DeleteText.getText());
+                    try{
+                        hid = Integer.parseInt(A_DeleteText.getText());
+                    } catch (Exception e) {
+                        JOptionPane.showMessageDialog(null, "Please input valid hostid.", "Warning Message", JOptionPane.WARNING_MESSAGE);
+                        return;
+                    }
 
                     //host does not exist,send error message
                     if (!SQLUtil.hostExists(hid)) {
