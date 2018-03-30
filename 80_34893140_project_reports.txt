@@ -1,0 +1,141 @@
+group number:   80
+student name:   Ziyang Jin
+student cs id:  f4a0b
+student number: 34893140
+
+== Assessment of the group's final achievement ==
+
+a) Did you fall short of expectations?
+  No. We completed our project with good pace and reasonable but limited 
+amout of time. The final product is a fully functional application that has 
+3 roles and supports about 30 different queries. The application is small 
+but meets the fundamental needs of the project.
+
+b) Did you exceed your initial predictions?
+  Yes. In the beginning, I did not expect that using SWING can make a pretty
+ app, however, we managed to adopt some 3rd party SWING extension that gives
+ us really nice date picker and other GUI's that goes beyond the original 
+SWING provided in standard JDK. We also eneded up with more queries to fit
+the needs of different roles than we originally designed.
+
+c) How well did you work together?
+  Working with my teammates, Amanda, Joyal, and Shirley is one of the most 
+successful project experience among my CS courses. We meet together very
+frequently and exchanges our thoughts and update others with new discoveries
+, and sometimes we fix each other's bugs. It was fun working with my kind
+and hardworking teammates.
+
+d) What areas could have been improved?
+  The amount of sample data we put in the database is far from reality, and
+the quantity of data could be larger to fully exploit the power of database.
+The database design is also simplified to reduce our work on writing too
+complicated queries that go beyond the scope of the course. If we were given
+more time and we had more knowledge, we could implment better business logic
+for our application and have some really complicated constraints.
+
+e) Were group roles and responsibilities clearly defined?
+  Yes. Amanda works mainly on the adminitrator panel, Joyal works mainly on
+host panel and explores technologies in making more interactive GUI, Shirley
+mainly works on the traveler panel. I mainly works on the database design,
+SQL queries, and JDBC implementation. However, the project is consistent
+and viewed as whole so we ended up work together and know each other's code
+quite well.
+
+== Individual assesment ==
+
+a) What were your contributions in terms of code, design, group moral, etc?
+  I implemented most of the JDBC queries, and all the SQL DDL's to create tables and inserted the sample data. I simplified the database design and 
+wrote the most complicated queries, such as division query. During group 
+meeting, I carefully consider other member's idea and validate them. 
+
+b) Specifically, what did you do for the group and for yourself?
+  For the group, I wrote the SQL DDL in 80_project_final_sql.sql and also 
+the sample queries in 80_project_final_sample_queries.sql. I implemented 
+most of the SQLUtil Java class; I wrote the PersistenceLayer Java class. I 
+fixed some bugs in App.java to make the application robust.
+
+c) What aspects, if any, or your effort and work are you most proud of?
+  The work I am most proud of is the design of sample queries that meet
+the specification and suit the application. I deisgned 2 views to simplify
+the frequent queries. 
+
+d) What aspects, if any, are most in need of improvement?
+  We need better designs of the system structure; currently all the front-
+end code are set in the file App.java so we had to resolve a lot of merge
+conflicts. Also, the exception handle mechanism is not carefully designed
+so the backend SQL exception cannot communicate efficiently with the front-
+end user interface.
+
+e) What do you think your fellow team members will say about your achieve-
+ments and efforts?
+  My team members will recognize my substantial contributions for database
+design as well as backend implementation. They also found a few bugs during
+test but I fixed them in time. I also helped them will git and overall pace
+control of development.
+
+== Assessment of Teammates ==
+
+For each group member, evaluate performance, effort, accomplishments on 
+a scale of 1 - 5 where 1 is "met them once, I think, they weren't around"
+and 5 is "captain, CEO, chief-architect, cheer-leader, all-round good person
+and the project would have been significantly less without them."
+
+student# name               score
+23323141 Jiayi (Amanda) Bao 5
+20724143 Sheng (Shirley) Di 5
+34893140 Ziyang Jin         5
+10953157 Zi Wen (Joyal) Li  5
+
+Amanda: She has made substantial contribution to the admin panel. She design
+ed the entire GUI for the admin panel and worked closely with me on logic of
+admin panel. The project cannot be completed without her!
+
+Shirley: She has made substantial contribution to the traveler panel of our
+application, and she designed the entire GUI of the traveler panel; also, 
+she worked closely with me on the logic of the traveler functions. The proj-
+ect could not completed without her!
+
+Joyal: He has made great contributions to the overall of the frontend GUI
+design. He created the methods for dynamically fill in the table with the 
+given ResultSet. Joyal also helped me with JDBC and fixed some bugs on our 
+application. He has written the most number of lines in the project.
+
+Ziyang: I have lead the discussion of the group and spent a lot of time
+working on designing and re-designing the database. I implemented the JDBC
+part of the project, writing up all the queries and test them. My teammates
+trust me and love the JDBC API I provided.
+
+== Assessment of the project ==
+
+a) Roughly how much time did you spend on the project?
+  I have spent over 35 hours on the project. I spent 20+ hours coding the 
+database and the java code. I spent about 5 hours re-design and simplify 
+our database and more than 10 hours in meeting and help other team members 
+with bugs and merge issues.
+
+b) What did you like the best about the project?
+  The best part of the project is to work with my amazing teammates. They
+are hardworking, creative, and very helpful. We had great fun in every 
+project meeting.
+
+c) What did you like the least about the project?
+  The worst part is solving merge conflicts. We put all the front-end code
+in a single file called App.java, so it really messed up every time we 
+merge our code. After the merge, there are always some minor bugs here and
+there.
+
+d) What helped you learn the best in the project?
+  I looked at the JDBC tutorials on Youtube and setted up the connection, 
+from "Telusko Learnings". With the help of these video tutorials, I am able
+to set up the connection to the Oracle database within 3 hours and make 
+the very first steps of our project.
+
+e) If you could change the way that the project was organized, what would 
+you change?
+  I hope the phases can be more detailed. Separated them to be database 
+design -> JDBC code implementation -> frontend deisgn -> frontend implement-ation, so that we can be more organied and the pace will be more controlled.
+
+
+
+
+
