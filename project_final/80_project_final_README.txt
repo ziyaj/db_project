@@ -1,7 +1,8 @@
 == Changes in database schema ==
 
-a) We merged "Residence" with "Host" because we assume that each host, who is a university student, can only live in one place. So "Host" and
-"Residence" have a one-to-one relationship. In order to simplify database design, we deicided to merge "Residence" to "Host".
+a) We merged "Residence" with "Host" because we assume that each host, who is a university student, can only live in one place. 
+So "Host" and "Residence" have a one-to-one relationship. 
+In order to simplify database design, we deicided to merge "Residence" to "Host".
 
 b) We removed "credit" and "is_active" attributes from "Student" relation because "is_active" provides extra complexity in query impelmentation, and due to the limited amount of time, we decided not to deal with "credit" and money associated with it.
 
