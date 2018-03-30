@@ -1,3 +1,26 @@
+== Short descriptions of project ==
+
+We designed and implemented an application for university students to exchange eaach other's residence.
+
+== Accomplishment ==
+
+a) Our application enables users to log in as traveler, host or Administrator. Users can also register as a host.
+b) After successfully loging in, travellers can 
+   - Find postings with different criteria
+   - Sign/Cancel contracts 
+   - Rate Hosts  
+c) After successfully loging in, Hosts can 
+   - Make a post
+   - Manage his own posts
+   - See his own contracts
+   - Rate a traveler
+d) After successfully loging in, Administrator can do basic management tasks such as 
+   - Browsing host/traveller info, 
+   - Search hosts 
+   - Delete hosts by ID
+   - Award travelers who has have been to every universities
+
+
 == Changes in database schema ==
 
 a) We merged "Residence" with "Host" because we assume that each host, who is a university student, can only live in one place. 
