@@ -1,0 +1,44 @@
+== Functional dependencies ==
+
+University:
+unid -> name
+The university's id determines the university's name because id is the primary key.
+
+Student:
+cid -> name
+cid -> gender
+cid -> unid
+cid -> password
+Because "cid" is the primary key of the "Student" relation, it determines all other attributes in "Student" relation.
+
+Hosts:
+cid -> roomno
+cid -> residencename
+cid -> dailyrate
+(roomno, residencename) -> dailyrate
+Since "cid" is the primary key of the "Hosts" relation, it determines all other attributes in "Hosts" relation.
+Each roomno and residencename uniquely determine a residence, and the residence should have a single daily renting rate.
+
+Host_Reviews:
+(travelerid, hostid) -> rating
+(travelerid, hostid) is the primary key of "Host_Reviews"; it means each host should have one review of the traveler,
+which can be updated over time.
+
+Traveler_Reviews:
+(travelerid, hostid) -> rating
+(travelerid, hostid) is the primary key of "Traveler_Reviews"; it means each traveler should have one review of the host,
+which can be updated over time.
+
+Posting:
+pid -> fromdate
+pid -> todate
+pid -> description
+pid -> hostid
+Since pid is the primary key of "Posting", it determines all other attributes in "Posting" relation.
+
+Contract_Signs:
+contractid -> fromdate
+contractid -> todate
+contractid -> hostid
+contractid -> travelerid
+Since contractid is the primary key of "Contract_Signs", it determines all other attributes in "Contract_Signs" relation.

@@ -40,6 +40,7 @@ residencename CHAR(30),
 dailyrate INTEGER NOT NULL,
 PRIMARY KEY (cid),
 FOREIGN KEY (cid) REFERENCES Student,
+UNIQUE(roomno, residencename),
 CHECK (dailyrate BETWEEN 0 AND 200)
 );
 grant select on Hosts to public;
