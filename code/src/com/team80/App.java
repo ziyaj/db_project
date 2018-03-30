@@ -79,7 +79,6 @@ public class App {
     private JTextField universityTextField;
     private JTextField tLowestPrice;
     private JTextField tHighestPrice;
-    private JTextField tHostID;
 
     private JPasswordField aPasswordField;
     private JPasswordField hPasswordField;
@@ -118,6 +117,7 @@ public class App {
     private JCheckBox tUniversityCheckBox;
     private JCheckBox tHostCheckBox;
     private JCheckBox tRateCheckBox;
+    private JButton tFindAllReviewsButton;
 
     private int hid;
     private int tid;
@@ -654,6 +654,7 @@ public class App {
         tFindPostingsButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                tReviewHost.setEnabled(false);
                 tSignContractButton.setEnabled(true);
                 tCancelContractButton.setEnabled(false);
                 Date fromDate = (tFromDatePanel.getDate() == null) ? null : new Date(tFromDatePanel.getDate().getTime());
@@ -676,25 +677,31 @@ public class App {
             public void actionPerformed(ActionEvent e) {
                 tSignContractButton.setEnabled(false);
                 tCancelContractButton.setEnabled(false);
-                int hostID = 0;
-                int rating = travellerReviewSlider.getValue();
-                if (tHostID.getText().equals("")) {
-                    JOptionPane.showMessageDialog(null, "Please enter a host ID to find your review", "Error Message", JOptionPane.ERROR_MESSAGE);
+                int[] selectedRows = getSelected(tTable);
+                if (selectedRows.length == 0) {
+                    JOptionPane.showMessageDialog(null, "Please select a record", "Add Review Message", JOptionPane.WARNING_MESSAGE);
+                } else if (selectedRows.length > 1) {
+                    JOptionPane.showMessageDialog(null, "Please select only one record at a time", "Add Review Message", JOptionPane.WARNING_MESSAGE);
                 } else {
-                    hostID = Integer.parseInt(tHostID.getText());
+                    int rating = travellerReviewSlider.getValue();
+                    int hid = (Integer) tModel.getValueAt(selectedRows[0], 3);
+                    int dialogResult = JOptionPane.showConfirmDialog(null, "Add a host review?", "Warning", JOptionPane.YES_NO_OPTION);
+                    if (dialogResult == JOptionPane.YES_OPTION) {
+                        int result = SQLUtil.addTravelerReview(tid, hid, rating);
+                        if (result > 0) {
+                            JOptionPane.showMessageDialog(null, "Review successfully added!", "Review Message", JOptionPane.INFORMATION_MESSAGE);
+                        } else {
+                            JOptionPane.showMessageDialog(null, "Review not successful. Please try again.", "Error Message", JOptionPane.ERROR_MESSAGE);
+                        }
+                    }
                 }
-                if (SQLUtil.addTravelerReview(tid, hostID, rating) == -1) {
-                    JOptionPane.showMessageDialog(null, "Review not successful. Please try again.", "Error Message", JOptionPane.ERROR_MESSAGE);
-                } else {
-                    JOptionPane.showMessageDialog(null, "Review successfully added!", "Review Message", JOptionPane.INFORMATION_MESSAGE);
-                }
-
             }
         });
 
         tFindAllExistingContractButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                tReviewHost.setEnabled(true);
                 tSignContractButton.setEnabled(false);
                 tCancelContractButton.setEnabled(true);
                 ResultSet rs = SQLUtil.findTravelerContracts(tid);
@@ -759,6 +766,7 @@ public class App {
         tFindCheapestPostingsButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                tReviewHost.setEnabled(false);
                 tSignContractButton.setEnabled(true);
                 tCancelContractButton.setEnabled(false);
                 ResultSet rs = SQLUtil.findCheapestPosts();
@@ -769,9 +777,19 @@ public class App {
         tFindMostExpensivePostings.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                tReviewHost.setEnabled(false);
                 tSignContractButton.setEnabled(true);
                 tCancelContractButton.setEnabled(false);
                 ResultSet rs = SQLUtil.findMostExpensivePosts();
+                printTable(tTable, tModel, rs);
+            }
+        });
+
+        tFindAllReviewsButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                tReviewHost.setEnabled(false);
+                ResultSet rs = SQLUtil.findTravelersReviews(tid);
                 printTable(tTable, tModel, rs);
             }
         });

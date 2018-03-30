@@ -712,5 +712,16 @@ public class SQLUtil {
         return false;
     }
 
+    public static ResultSet findTravelersReviews(final int tid) {
+        try {
+            return getStatement().executeQuery("SELECT TR.hostid, S.name, TR.rating " +
+                    "FROM Traveler_Reviews TR, Hosts H, Student S " +
+                    "WHERE TR.travelerid = " + tid + " AND TR.hostid = H.cid AND H.cid = S.cid");
+        } catch (final SQLException e) {
+            System.err.println("An error occurred while executing query.");
+            System.err.println(e.getMessage());
+        }
+        return null;
+    }
 
 }
