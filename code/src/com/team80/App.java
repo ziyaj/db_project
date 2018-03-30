@@ -830,7 +830,7 @@ public class App {
                 if (sourceTabName.equals("aPanel") || sourceTabName.equals("hPanel") || sourceTabName.equals("tPanel")) {
                     panelMain.setPreferredSize(SMALL);
                 } else if (sourceTabName.equals("rPanel")) {
-                    panelMain.setPreferredSize(SMALL);
+                    panelMain.setPreferredSize(MEDIUM);
                 } else {
                     panelMain.setPreferredSize(LARGE);
                 }
